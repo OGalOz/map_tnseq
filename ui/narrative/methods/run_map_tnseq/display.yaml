@@ -1,0 +1,69 @@
+#
+# define display information
+#
+name: Map-TnSeq
+
+tooltip: |
+    Perform some kind of method
+
+screenshots: []
+
+icon: icon.png
+
+#
+# define a set of similar apps that might be useful to the user
+#
+suggestions:
+    apps:
+        related:
+            [app1, app2]
+        next:
+            [app3, app4]
+
+#
+# Configure the display and description of parameters
+#
+parameters :
+    genome_ref :
+        ui-name : |
+            Genome   
+        short-hint : |
+            The Genome your checking your reads against to find locations of barcodes.
+        long-hint  : |
+            ??
+    fastq_ref :
+        ui-name : |
+            The FastQ file to run hits against
+        short-hint : |
+            The reads in Fastq/a format as a KBase Assembly Object.
+        long-hint  : |
+            ??
+    model_name :
+        ui-name : |
+            First parameter
+        short-hint : |
+            The first parameter
+        long-hint  : |
+            The first parameter that needs to be entered to drive the method. This might be the first of many.
+    custom_model_string :
+        ui-name : |
+            Custom Model Text 
+        short-hint : |
+            The text for your custom model. Must follow the format in description.
+        long-hint  : |
+            If you chose "Custom" as your model, then you must input the text for the model. Examples given
+            in the app description, including format restrictions.
+    output_name :
+        ui-name : |
+            First parameter
+        short-hint : |
+            The first parameter
+        long-hint  : |
+            The first parameter that needs to be entered to drive the method. This might be the first of many.
+
+
+
+description : |
+    <p>A KBase Wrapper for Morgan Prices's <a href="https://bitbucket.org/berkeleylab/feba/src/master/"> MapTnSeq code </a></p>
+
+ 

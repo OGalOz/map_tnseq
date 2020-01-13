@@ -1,0 +1,169 @@
+{
+    "ver": "0.0.1",
+    "authors": [
+        "omreegaloz"
+    ],
+    "contact": "",
+    "categories": ["active"],
+    "widgets": {
+        "input": null,
+        "output": null
+    },
+    "parameters": [ 
+        {
+            "id": "genome_ref",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [""],
+            "field_type" : "text",
+            "text_options": {
+                "valid_ws_types": ["KBaseGenomes.Genome"]
+            }
+        },
+        {
+        "id": "fastq_ref",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [""],
+            "field_type" : "text",
+            "text_options": {
+                "valid_ws_types": ["KBaseFile.SingleEndLibrary"]
+            }
+        },
+        {
+        "id": "model_name",
+        "optional": false,
+        "advanced": false,
+        "allow_multiple": false,
+        "default_values": [""],
+        "field_type": "dropdown",
+        "dropdown_options":{
+                "options": [{
+                    "value": "0",
+                    "display": "Custom - (Advanced)"
+                },
+                {
+                    "value": "1",
+                    "display": "model_Sc_Tn5"
+                },
+                {
+                    "value": "2",
+                    "display": "model_ezTn5_Tet_Bifido"
+                },
+                 {
+                    "value": "3",
+                    "display": "model_ezTn5_kan1"
+                },
+                 {
+                    "value": "4",
+                    "display": "model_ezTn5_kanU"
+                },
+                {
+                    "value": "5",
+                    "display": "model_magic_Tn5"
+                },
+                {
+                    "value": "6",
+                    "display": "model_magic_mariner"
+                },
+                {
+                    "value": "7",
+                    "display": "model_magic_mariner.2"
+                },
+                {
+                    "value": "8",
+                    "display": "model_pHIMAR_kan"
+                },
+                {
+                    "value": "9",
+                    "display": "model_pKMW3"
+                },
+                {
+                    "value": "10",
+                    "display": "model_pKMW3_universal"
+                },
+                {
+                    "value": "11",
+                    "display": "model_pKMW7"
+                },
+                {
+                    "value": "12",
+                    "display": "model_pKMW7_U"
+                }]
+            }
+
+
+        },
+        {
+            "id": "custom_model_string", 
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "textarea",
+            "textarea_options" : {
+                "n_rows" : 2
+
+            }
+        },
+        {
+        "id": "output_name",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "text"
+        }
+    ],
+    "behavior": {
+        "service-mapping": {
+            "url": "",
+            "name": "map_tnseq",
+            "method": "run_map_tnseq",
+            "input_mapping": [
+                {
+                    "narrative_system_variable": "workspace",
+                    "target_property": "workspace_name"
+                },{
+                    "narrative_system_variable": "workspace_id",
+                    "target_property": "workspace_id"
+                },{
+                    "input_parameter": "genome_ref",
+                    "target_property": "genome_ref",
+                    "target_type_transform": "resolved-ref"
+                },
+                {
+                    "input_parameter": "fastq_ref",
+                    "target_property": "fastq_ref",
+                    "target_type_transform": "resolved-ref"
+                },
+                {
+                    "input_parameter": "model_name",
+                    "target_property": "model_name"
+                },
+                {
+                    "input_parameter": "custom_model_string",
+                    "target_property": "custom_model_string"
+
+                },
+                {
+                    "input_parameter": "output_name",
+                    "target_property": "output_name"
+
+                }
+            ],
+            "output_mapping": [
+                {
+                    "service_method_output_path": [0,"report_name"],
+                    "target_property": "report_name"
+                },{
+                    "service_method_output_path": [0,"report_ref"],
+                    "target_property": "report_ref"
+                }
+            ]
+        }
+    },
+    "job_id_output_field": "docker"
+}
