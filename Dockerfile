@@ -21,8 +21,10 @@ RUN apt-get install --yes apt-utils \
     cpanminus 
 
 RUN cpanm Getopt::Long \
-    FindBin 
+    FindBin \
+    File::stat
 
+RUN apt-get install --yes r-base
 
 # -----------------------------------------
 

@@ -10,6 +10,7 @@ from installed_clients.AssemblyUtilClient import AssemblyUtil
 from installed_clients.DataFileUtilClient import DataFileUtil
 from installed_clients.WorkspaceClient import Workspace
 from Bio import SeqIO
+from my_util.conversions import convert_genbank_to_genome_table
 #END_HEADER
 
 
@@ -109,12 +110,14 @@ class map_tnseq:
         else:
             output_name = "Untitled"
 
+        main_output_name = output_name
+
         """REAL
         #Downloading genome in genbank format and converting it to fna:
         gf_tool = GenomeFileUtil(self.callback_url)
         genome_nucleotide_meta = gf_tool.genome_to_genbank({'genome_ref': genome_ref})
         genome_genbank_filepath = genome_nucleotide_meta['genbank_file']['file_path']
-        genome_fna_file_name = "genome_fna"
+        genome_fna_fp = "genome_fna"
         SeqIO.convert(genome_genbank_filepath, "genbank", os.path.join(self.shared_folder, genome_fna_file_name, "fasta"))
         genome_nucleotide_file_path = os.path.join(self.shared_folder, genome_fna_file_name)
 
@@ -132,41 +135,101 @@ class map_tnseq:
 
         """
 
-        #Essential
+        #Essential - Only done once
         init_dir = os.getcwd()
         os.chdir("/kb/module")
         cwd = "/kb/module"
         logging.critical(cwd)
         Map_Tnseq_dir = os.path.join(cwd, 'lib/map_tnseq/MapTnSeq_Program')
-        logging.critical(os.listdir(cwd))
-        logging.critical(os.listdir('/kb/module'))
+        run_dir = os.path.join(Map_Tnseq_dir, 'bin') 
+        #We make a return directory for all files:
+        return_dir = os.path.join(self.shared_folder,"return_dir")
+        os.mkdir(return_dir)
+        #We make a directory for the Map TnSeq Files:
+        map_tnseq_dir = os.path.join(return_dir, 'map_tnseq_dir')
+        os.mkdir(map_tnseq_dir)
+        #We make a directory for the gene tables:
+        gene_tables_dir = os.path.join(return_dir,'gene_tables_dir')
+        os.mkdir(gene_tables_dir)
+        #We make a directory for the pool files:
+        design_pool_dir = os.path.join(return_dir, 'design_pool_dir')
+        os.mkdir(design_pool_dir)
 
 
         #"""Test
-        genome_nucleotide_file_path = os.path.join(Map_Tnseq_dir, 'Test_Files/Ecoli_genome.fna')
-        fastq_file_path = os.path.join(Map_Tnseq_dir,'Test_Files/fastq_test')
+        genome_genbank_filepath = os.path.join(Map_Tnseq_dir, 'Test_Files/E_Coli_BW25113.gbk')
+        genome_fna_fp = os.path.join(self.shared_folder, 'E_Coli_genbank.fna')
+        SeqIO.convert(genome_genbank_filepath, "genbank", genome_fna_fp, "fasta")
+        fastq_file_path = os.path.join(Map_Tnseq_dir,'Test_Files/fastq_test.fastq')
         model_file_path = os.path.join(Map_Tnseq_dir, 'Models/' + model_name)
         logging.critical(model_file_path)
         tmp_dir = self.shared_folder
-        out_filepath = os.path.join(self.shared_folder, "out_1_test.txt")
+        out_base = "tests_115"
         #"""
-        #Running MapTnseq.pl
-        # normal run: perl MapTnSeq.pl -tmpdir tmp -genome Test_Files/Ecoli_genome.fna -model Models/model_ezTn5_kan1 -first Test_Files/fastq_test > out1.txt
-        os.chdir(Map_Tnseq_dir)
-        cmnds = ["perl", "MapTnSeq.pl", "-tmpdir", tmp_dir, "-genome", genome_nucleotide_file_path, "-model", model_file_path, '-first', fastq_file_path]
 
-        with open(out_filepath,"w") as outfile:
-            subprocess.call(cmnds, stdout=outfile)
+        
 
 
-        #Returning file in zipped format:
+        #For each fastq reads file we run both MapTnSeq and Design Random Pool
+
+        #Running MapTnseq.pl------------------------------------------------------------------
+
+        """
+        A normal run would look like: 
+        perl MapTnSeq.pl -tmpdir tmp -genome Test_Files/Ecoli_genome.fna -model Models/model_ezTn5_kan1 -first Test_Files/fastq_test > out1.txt
+        """
+        map_tn_seq_out =  os.path.join(map_tnseq_dir, out_base + "map_tn_seq.tsv")
+        os.chdir(run_dir)
+        map_tnseq_cmnds = ["perl", "MapTnSeq.pl", "-tmpdir", tmp_dir, "-genome", genome_fna_fp, "-model", model_file_path, '-first', fastq_file_path]
+
+        with open(map_tn_seq_out, "w") as outfile:
+            subprocess.call(map_tnseq_cmnds, stdout=outfile)
+
+
+
+
+        #running Design Random Pool------------------------------------------------------------------
+        gene_table_fp = os.path.join(gene_tables_dir, out_base + "gene_table.tsv")
+        #We need a config_dict that depends on the genbank file.
+        #For now we'll make it simply empty.
+        config_dict = {}
+
+        #This function makes the gene_table at the location gene_table_fp
+        convert_genbank_to_genome_table(genome_genbank_filepath,gene_table_fp,config_dict)
+
+        pool_fp = os.path.join(design_pool_dir, out_base + "pool.tsv")
+        # -pool ../tmp/115_pool -genes ../Test_Files/new_gt.tsv ../Test_Files/MapTnSeq_File1.tsv
+        design_r_pool_cmnds = ["perl","DesignRandomPool.pl","-pool",pool_fp, "-genes", gene_table_fp, map_tn_seq_out]
+        design_response = subprocess.run(design_r_pool_cmnds)
+        logging.info("DesignRandomPool response: {}".format(str(design_response)))
+
+
+        
+        #Returning file in zipped format:------------------------------------------------------------------
+        
         dfu = DataFileUtil(self.callback_url)
+        file_zip_shock_id = dfu.file_to_shock({'file_path': return_dir,
+                                              'pack': 'zip'})['shock_id']
+        dir_link = {
+                'shock_id': file_zip_shock_id, 
+               'name': main_output_name + '.zip', 
+               'label':'map_tnseq_output_dir', 
+               'description': 'The directory of outputs from running Map TnSeq and Design Random Pool'
+               }
+
+        """
         file_to_shock_params = {'file_path': out_filepath, 'pack': 'gzip'}
         file_to_shock_output = dfu.file_to_shock(file_to_shock_params)
         shock_id = file_to_shock_output['shock_id']
         File_params = {'shock_id': shock_id, 'name': output_name}
         report_params = {'workspace_name' : params['workspace_name'], 
                 'file_links' : [File_params]
+                }
+        """
+        report_params = {
+                'workspace_name' : params['workspace_name'],
+                'file_links' : [dir_link]
+                
                 }
 
         report_info = report_util.create_extended_report(report_params)

@@ -4,11 +4,12 @@
 name: Map-TnSeq
 
 tooltip: |
-    Perform some kind of method
+    Run Morgan Price's Programs Map-TnSeq and Design Random Pool
+
 
 screenshots: []
 
-icon: icon.png
+icon: kb-yellow.png
 
 #
 # define a set of similar apps that might be useful to the user

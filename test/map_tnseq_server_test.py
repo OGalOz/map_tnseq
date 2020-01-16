@@ -64,8 +64,8 @@ class map_tnseqTest(unittest.TestCase):
         # Check returned data with
         # self.assertEqual(ret[...], ...) or other unittest methods
         
-        genome_ref = "53572/5/1"
-        fastq_ref = "53572/3/1"
+        genome_ref = "35912/5/1"
+        fastq_ref = "35912/2/1"
         model_name = "model_ezTn5_kan1"
         custom_model_string = ""
         output_name = "init_test"
