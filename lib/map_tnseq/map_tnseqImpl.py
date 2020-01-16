@@ -112,36 +112,52 @@ class map_tnseq:
 
         main_output_name = output_name
 
-        """REAL
         #Downloading genome in genbank format and converting it to fna:
         gf_tool = GenomeFileUtil(self.callback_url)
         genome_nucleotide_meta = gf_tool.genome_to_genbank({'genome_ref': genome_ref})
         genome_genbank_filepath = genome_nucleotide_meta['genbank_file']['file_path']
-        genome_fna_fp = "genome_fna"
-        SeqIO.convert(genome_genbank_filepath, "genbank", os.path.join(self.shared_folder, genome_fna_file_name, "fasta"))
-        genome_nucleotide_file_path = os.path.join(self.shared_folder, genome_fna_file_name)
+        genome_fna_fn = "genome_fna"
+        genome_fna_fp = os.path.join(self.shared_folder, genome_fna_fn)
+
+        SeqIO.convert(genome_genbank_filepath, "genbank", genome_fna_fp, "fasta")
+
+
 
         #Downloading fastq/a file using DataFileUtil
+        fastq_fn = "downloaded_fastq_file"
+        fastq_fp = os.path.join(self.shared_folder, fastq_fn)
         dfu_tool = DataFileUtil(self.callback_url)
-        fastq_download_params = {"object_refs": [fastq_ref], "ignore_errors": False}
-        get_objects_results = dfu_tool.get_objects(fastq_download_params)
-        logging.critical(get_objects_results)
-        raise Exception("Stop")
+        get_shock_id_params = {"object_refs": [fastq_ref], "ignore_errors": False}
+        get_objects_results = dfu_tool.get_objects(get_shock_id_params)
+        
+        fq_shock_id = get_objects_results['data'][0]['data']['lib']['file']['id']
+        fastq_download_params = {'shock_id': fq_shock_id,'file_path': fastq_fp, 'unpack':'unpack'}
+        file_info = dfu_tool.shock_to_file(fastq_download_params)
+        logging.info(file_info)
 
-        if model_name != "Custom":
-            model_file_path = os.path.join(Map_Tnseq_dir, 'Models/' + model_name)
-        else:
-            raise Exception("Program doesn't allow custom models as inputs yet.")
-
-        """
 
         #Essential - Only done once
         init_dir = os.getcwd()
         os.chdir("/kb/module")
         cwd = "/kb/module"
-        logging.critical(cwd)
-        Map_Tnseq_dir = os.path.join(cwd, 'lib/map_tnseq/MapTnSeq_Program')
-        run_dir = os.path.join(Map_Tnseq_dir, 'bin') 
+
+        map_tnseq_dir = os.path.join(cwd, 'lib/map_tnseq/MapTnSeq_Program')
+        run_dir = os.path.join(map_tnseq_dir, 'bin') 
+        out_base = "test116"
+        tmp_dir = self.shared_folder
+
+        if model_name != "Custom":
+            model_fp = os.path.join(map_tnseq_dir, 'primers/' + model_name)
+            #Check if model file exists
+            logging.critical("We check if model file exists:")
+            logging.critical(os.path.exists(model_fp))
+        else:
+            raise Exception("Program doesn't allow custom models as inputs yet.")
+
+
+ 
+
+        # CREATING DIRS
         #We make a return directory for all files:
         return_dir = os.path.join(self.shared_folder,"return_dir")
         os.mkdir(return_dir)
@@ -154,14 +170,15 @@ class map_tnseq:
         #We make a directory for the pool files:
         design_pool_dir = os.path.join(return_dir, 'design_pool_dir')
         os.mkdir(design_pool_dir)
+        
 
 
-        #"""Test
-        genome_genbank_filepath = os.path.join(Map_Tnseq_dir, 'Test_Files/E_Coli_BW25113.gbk')
+        """Test Files (No online)
+        genome_genbank_filepath = os.path.join(map_tnseq_dir, 'Test_Files/E_Coli_BW25113.gbk')
         genome_fna_fp = os.path.join(self.shared_folder, 'E_Coli_genbank.fna')
         SeqIO.convert(genome_genbank_filepath, "genbank", genome_fna_fp, "fasta")
-        fastq_file_path = os.path.join(Map_Tnseq_dir,'Test_Files/fastq_test.fastq')
-        model_file_path = os.path.join(Map_Tnseq_dir, 'Models/' + model_name)
+        fastq_file_path = os.path.join(map_tnseq_dir,'Test_Files/fastq_test.fastq')
+        model_file_path = os.path.join(map_tnseq_dir, 'Models/' + model_name)
         logging.critical(model_file_path)
         tmp_dir = self.shared_folder
         out_base = "tests_115"
@@ -180,7 +197,7 @@ class map_tnseq:
         """
         map_tn_seq_out =  os.path.join(map_tnseq_dir, out_base + "map_tn_seq.tsv")
         os.chdir(run_dir)
-        map_tnseq_cmnds = ["perl", "MapTnSeq.pl", "-tmpdir", tmp_dir, "-genome", genome_fna_fp, "-model", model_file_path, '-first', fastq_file_path]
+        map_tnseq_cmnds = ["perl", "MapTnSeq.pl", "-tmpdir", tmp_dir, "-genome", genome_fna_fp, "-model", model_fp, '-first', fastq_fp]
 
         with open(map_tn_seq_out, "w") as outfile:
             subprocess.call(map_tnseq_cmnds, stdout=outfile)
