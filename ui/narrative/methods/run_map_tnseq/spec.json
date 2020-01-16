@@ -45,51 +45,51 @@
                     "display": "Custom - (Advanced)"
                 },
                 {
-                    "value": "1",
+                    "value": "model_Sc_Tn5",
                     "display": "model_Sc_Tn5"
                 },
                 {
-                    "value": "2",
+                    "value": "model_ezTn5_Tet_Bifido",
                     "display": "model_ezTn5_Tet_Bifido"
                 },
                  {
-                    "value": "3",
+                    "value": "model_ezTn5_kan1",
                     "display": "model_ezTn5_kan1"
                 },
                  {
-                    "value": "4",
+                    "value": "model_ezTn5_kanU",
                     "display": "model_ezTn5_kanU"
                 },
                 {
-                    "value": "5",
+                    "value": "model_magic_Tn5",
                     "display": "model_magic_Tn5"
                 },
                 {
-                    "value": "6",
+                    "value": "model_magic_mariner",
                     "display": "model_magic_mariner"
                 },
                 {
-                    "value": "7",
+                    "value": "model_magic_mariner.2",
                     "display": "model_magic_mariner.2"
                 },
                 {
-                    "value": "8",
+                    "value": "model_pHIMAR_kan",
                     "display": "model_pHIMAR_kan"
                 },
                 {
-                    "value": "9",
+                    "value": "model_pKMW3",
                     "display": "model_pKMW3"
                 },
                 {
-                    "value": "10",
+                    "value": "model_pKMW3_universal",
                     "display": "model_pKMW3_universal"
                 },
                 {
-                    "value": "11",
+                    "value": "model_pKMW7",
                     "display": "model_pKMW7"
                 },
                 {
-                    "value": "12",
+                    "value": "model_pKMW7_U",
                     "display": "model_pKMW7_U"
                 }]
             }

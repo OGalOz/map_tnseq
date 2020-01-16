@@ -41,11 +41,12 @@ parameters :
             ??
     model_name :
         ui-name : |
-            First parameter
+            Model Name 
         short-hint : |
-            The first parameter
+            The name of the model file you'll be using.
         long-hint  : |
-            The first parameter that needs to be entered to drive the method. This might be the first of many.
+            The model file has a specific format. You may be able to use one of the existing models,
+            or you can upload a custom one by choosing Custom.
     custom_model_string :
         ui-name : |
             Custom Model Text 
@@ -56,11 +57,11 @@ parameters :
             in the app description, including format restrictions.
     output_name :
         ui-name : |
-            First parameter
+           Output Name 
         short-hint : |
-            The first parameter
+            The name of your output files.
         long-hint  : |
-            The first parameter that needs to be entered to drive the method. This might be the first of many.
+            Give a name with no spaces or special characters.
 
 
 
