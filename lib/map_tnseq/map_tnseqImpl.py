@@ -85,9 +85,13 @@ class map_tnseq:
         #We need the workspace object to get info on the workspace the app is running in.
         #token = os.environ.get('KB_AUTH_TOKEN', None)
         #ws = Workspace(self.ws_url, token=token)
-        
+
+    
+        logging.info(params)
+
         #Check params: Genome_Ref, Assembly_Ref, model_name, 
         # [optional] model_string
+
         if 'genome_ref' in params:
             genome_ref = params['genome_ref']
         else:
