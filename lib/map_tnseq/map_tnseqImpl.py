@@ -81,13 +81,41 @@ class map_tnseq:
         #BEGIN run_map_tnseq
         report_util = KBaseReport(self.callback_url)
         logging.basicConfig(level=logging.DEBUG)
-        
+        dfu_tool = DataFileUtil(self.callback_url)
+
         #We need the workspace object to get info on the workspace the app is running in.
         #token = os.environ.get('KB_AUTH_TOKEN', None)
         #ws = Workspace(self.ws_url, token=token)
 
-    
+
+        init_dir = os.getcwd()
+        os.chdir("/kb/module")
+        cwd = "/kb/module"
+
+        map_tnseq_dir = os.path.join(cwd, 'lib/map_tnseq/MapTnSeq_Program')
+        run_dir = os.path.join(map_tnseq_dir, 'bin') 
+        tmp_dir = self.shared_folder
+
+
+
+        # CREATING DIRS
+        #We make a return directory for all files:
+        return_dir = os.path.join(self.shared_folder,"return_dir")
+        os.mkdir(return_dir)
+        #We make a directory for the Map TnSeq Files:
+        map_tnseq_return_dir = os.path.join(return_dir, 'map_tnseq_return_dir')
+        os.mkdir(map_tnseq_return_dir)
+        #We make a directory for the gene tables:
+        gene_tables_dir = os.path.join(return_dir,'gene_tables_dir')
+        os.mkdir(gene_tables_dir)
+        #We make a directory for the pool files:
+        design_pool_dir = os.path.join(return_dir, 'design_pool_dir')
+        os.mkdir(design_pool_dir)
+
         logging.info(params)
+
+
+
 
         #Check params: Genome_Ref, Assembly_Ref, model_name, 
         # [optional] model_string
@@ -97,7 +125,8 @@ class map_tnseq:
         else:
             raise Exception("Genome Ref not passed in params.")
         if 'fastq_ref' in params:
-            fastq_ref = params['fastq_ref']
+            #fastq_ref will be a list since there can be multiple.
+            fastq_ref_list = params['fastq_ref']
         else:
             raise Exception("Fastq Ref not passed in params.")
         if "model_name" in params:
@@ -125,92 +154,11 @@ class map_tnseq:
 
         SeqIO.convert(genome_genbank_filepath, "genbank", genome_fna_fp, "fasta")
 
-
-
-        #Downloading fastq/a file using DataFileUtil
-        fastq_fn = "downloaded_fastq_file"
-        fastq_fp = os.path.join(self.shared_folder, fastq_fn)
-        dfu_tool = DataFileUtil(self.callback_url)
-        get_shock_id_params = {"object_refs": [fastq_ref], "ignore_errors": False}
-        get_objects_results = dfu_tool.get_objects(get_shock_id_params)
-        
-        fq_shock_id = get_objects_results['data'][0]['data']['lib']['file']['id']
-        fastq_download_params = {'shock_id': fq_shock_id,'file_path': fastq_fp, 'unpack':'unpack'}
-        file_info = dfu_tool.shock_to_file(fastq_download_params)
-        logging.info(file_info)
-
-
-        #Essential - Only done once
-        init_dir = os.getcwd()
-        os.chdir("/kb/module")
-        cwd = "/kb/module"
-
-        map_tnseq_dir = os.path.join(cwd, 'lib/map_tnseq/MapTnSeq_Program')
-        run_dir = os.path.join(map_tnseq_dir, 'bin') 
-        out_base = "test116"
-        tmp_dir = self.shared_folder
-
-        if model_name != "Custom":
-            model_fp = os.path.join(map_tnseq_dir, 'primers/' + model_name)
-            #Check if model file exists
-            logging.critical("We check if model file exists:")
-            logging.critical(os.path.exists(model_fp))
-        else:
-            raise Exception("Program doesn't allow custom models as inputs yet.")
-
-
- 
-
-        # CREATING DIRS
-        #We make a return directory for all files:
-        return_dir = os.path.join(self.shared_folder,"return_dir")
-        os.mkdir(return_dir)
-        #We make a directory for the Map TnSeq Files:
-        map_tnseq_dir = os.path.join(return_dir, 'map_tnseq_dir')
-        os.mkdir(map_tnseq_dir)
-        #We make a directory for the gene tables:
-        gene_tables_dir = os.path.join(return_dir,'gene_tables_dir')
-        os.mkdir(gene_tables_dir)
-        #We make a directory for the pool files:
-        design_pool_dir = os.path.join(return_dir, 'design_pool_dir')
-        os.mkdir(design_pool_dir)
-        
-
-
-        """Test Files (No online)
-        genome_genbank_filepath = os.path.join(map_tnseq_dir, 'Test_Files/E_Coli_BW25113.gbk')
-        genome_fna_fp = os.path.join(self.shared_folder, 'E_Coli_genbank.fna')
-        SeqIO.convert(genome_genbank_filepath, "genbank", genome_fna_fp, "fasta")
-        fastq_file_path = os.path.join(map_tnseq_dir,'Test_Files/fastq_test.fastq')
-        model_file_path = os.path.join(map_tnseq_dir, 'Models/' + model_name)
-        logging.critical(model_file_path)
-        tmp_dir = self.shared_folder
-        out_base = "tests_115"
-        #"""
-
-        
-
-
-        #For each fastq reads file we run both MapTnSeq and Design Random Pool
-
-        #Running MapTnseq.pl------------------------------------------------------------------
-
-        """
-        A normal run would look like: 
-        perl MapTnSeq.pl -tmpdir tmp -genome Test_Files/Ecoli_genome.fna -model Models/model_ezTn5_kan1 -first Test_Files/fastq_test > out1.txt
-        """
-        map_tn_seq_out =  os.path.join(map_tnseq_dir, out_base + "map_tn_seq.tsv")
-        os.chdir(run_dir)
-        map_tnseq_cmnds = ["perl", "MapTnSeq.pl", "-tmpdir", tmp_dir, "-genome", genome_fna_fp, "-model", model_fp, '-first', fastq_fp]
-
-        with open(map_tn_seq_out, "w") as outfile:
-            subprocess.call(map_tnseq_cmnds, stdout=outfile)
-
-
-
-
-        #running Design Random Pool------------------------------------------------------------------
+        out_base = "map_tn_seq_"
         gene_table_fp = os.path.join(gene_tables_dir, out_base + "gene_table.tsv")
+
+
+
         #We need a config_dict that depends on the genbank file.
         #For now we'll make it simply empty.
         config_dict = {}
@@ -218,18 +166,83 @@ class map_tnseq:
         #This function makes the gene_table at the location gene_table_fp
         convert_genbank_to_genome_table(genome_genbank_filepath,gene_table_fp,config_dict)
 
-        pool_fp = os.path.join(design_pool_dir, out_base + "pool.tsv")
-        # -pool ../tmp/115_pool -genes ../Test_Files/new_gt.tsv ../Test_Files/MapTnSeq_File1.tsv
-        design_r_pool_cmnds = ["perl","DesignRandomPool.pl","-pool",pool_fp, "-genes", gene_table_fp, map_tn_seq_out]
-        design_response = subprocess.run(design_r_pool_cmnds)
-        logging.info("DesignRandomPool response: {}".format(str(design_response)))
+        #Preparing the Model
+        if model_name != "Custom":
+            model_fp = os.path.join(map_tnseq_dir, 'primers/' + model_name)
+            #Check if model file exists
+            logging.critical("We check if model file exists:")
+            if (os.path.exists(model_fp)):
+                logging.critical(os.path.exists(model_fp))
+            else:
+                logging.critical(os.listdir(os.path.join(map_tnseq_dir, "primers")))
+                raise Exception("Could not find model filepath: {}".format(model_fp))
 
+        else:
+            raise Exception("Program doesn't allow custom models as inputs yet.")
+
+       
+
+        #We change to the directory in which the program is run.
+        os.chdir(run_dir)
+
+        #Since there are multiple fastq refs, the rest of the code runs for each item in the fastq refs.
+
+        for i in range(len(fastq_ref_list)):
+            crnt_fastq_ref = fastq_ref_list[i]
+            
+            #Namind and downloading fastq/a file using DataFileUtil
+            fastq_fn = "downloaded_fastq_file" + str(i)
+            fastq_fp = os.path.join(self.shared_folder, fastq_fn)
+            get_shock_id_params = {"object_refs": [crnt_fastq_ref], "ignore_errors": False}
+            get_objects_results = dfu_tool.get_objects(get_shock_id_params)
+            fq_shock_id = get_objects_results['data'][0]['data']['lib']['file']['id']
+            fastq_download_params = {'shock_id': fq_shock_id,'file_path': fastq_fp, 'unpack':'unpack'}
+            #Here we download the fastq file itself:
+            file_info = dfu_tool.shock_to_file(fastq_download_params)
+            logging.info(file_info)
+    
+        
+            """Test Files (Not online)
+            genome_genbank_filepath = os.path.join(map_tnseq_dir, 'Test_Files/E_Coli_BW25113.gbk')
+            genome_fna_fp = os.path.join(self.shared_folder, 'E_Coli_genbank.fna')
+            SeqIO.convert(genome_genbank_filepath, "genbank", genome_fna_fp, "fasta")
+            fastq_file_path = os.path.join(map_tnseq_dir,'Test_Files/fastq_test.fastq')
+            model_file_path = os.path.join(map_tnseq_dir, 'Models/' + model_name)
+            logging.critical(model_file_path)
+            tmp_dir = self.shared_folder
+            out_base = "tests_115"
+            #"""
+        
+            #For each fastq reads file we run both MapTnSeq and Design Random Pool
+    
+            #Running MapTnseq.pl------------------------------------------------------------------
+    
+            """
+            A normal run would look like: 
+            perl MapTnSeq.pl -tmpdir tmp -genome Test_Files/Ecoli_genome.fna -model Models/model_ezTn5_kan1 -first Test_Files/fastq_test > out1.txt
+            """
+            map_tn_seq_out =  os.path.join(map_tnseq_return_dir, out_base + "map_tn_seq" + str(i) + ".tsv")
+            map_tnseq_cmnds = ["perl", "MapTnSeq.pl", "-tmpdir", tmp_dir, "-genome", genome_fna_fp, "-model", model_fp, '-first', fastq_fp]
+    
+            with open(map_tn_seq_out, "w") as outfile:
+                subprocess.call(map_tnseq_cmnds, stdout=outfile)
+    
+    
+    
+    
+            #running Design Random Pool------------------------------------------------------------------
+
+            pool_fp = os.path.join(design_pool_dir, out_base + "pool" + str(i) + ".tsv")
+            # -pool ../tmp/115_pool -genes ../Test_Files/new_gt.tsv ../Test_Files/MapTnSeq_File1.tsv
+            design_r_pool_cmnds = ["perl","DesignRandomPool.pl","-pool",pool_fp, "-genes", gene_table_fp, map_tn_seq_out]
+            design_response = subprocess.run(design_r_pool_cmnds)
+            logging.info("DesignRandomPool response: {}".format(str(design_response)))
+    
 
         
         #Returning file in zipped format:------------------------------------------------------------------
         
-        dfu = DataFileUtil(self.callback_url)
-        file_zip_shock_id = dfu.file_to_shock({'file_path': return_dir,
+        file_zip_shock_id = dfu_tool.file_to_shock({'file_path': return_dir,
                                               'pack': 'zip'})['shock_id']
         dir_link = {
                 'shock_id': file_zip_shock_id, 

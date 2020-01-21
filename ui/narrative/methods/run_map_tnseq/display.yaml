@@ -34,11 +34,11 @@ parameters :
             ??
     fastq_ref :
         ui-name : |
-            The FastQ file to run hits against
+            The FastQ files to run hits against
         short-hint : |
-            The reads in Fastq/a format as a KBase Assembly Object.
+            The reads in Fastq/a format as a KBase Single End Library Object.
         long-hint  : |
-            ??
+            The Map Tn Seq Program takes a set of Reads objects and Analyzes each.
     model_name :
         ui-name : |
             Model Name 
