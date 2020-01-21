@@ -185,8 +185,9 @@ class map_tnseq:
         #We change to the directory in which the program is run.
         os.chdir(run_dir)
 
-        #Since there are multiple fastq refs, the rest of the code runs for each item in the fastq refs.
-
+        #Since there are multiple fastq refs, we download them and run Map Tnseq on each, and store the output files for a single
+        # Design Random Pool Run.
+        map_tnseq_filepaths = []
         for i in range(len(fastq_ref_list)):
             crnt_fastq_ref = fastq_ref_list[i]
             
@@ -198,6 +199,7 @@ class map_tnseq:
             fq_shock_id = get_objects_results['data'][0]['data']['lib']['file']['id']
             fastq_download_params = {'shock_id': fq_shock_id,'file_path': fastq_fp, 'unpack':'unpack'}
             #Here we download the fastq file itself:
+            logging.info("DOWNLOADING FASTQ FILE " + str(i))
             file_info = dfu_tool.shock_to_file(fastq_download_params)
             logging.info(file_info)
     
@@ -221,22 +223,26 @@ class map_tnseq:
             A normal run would look like: 
             perl MapTnSeq.pl -tmpdir tmp -genome Test_Files/Ecoli_genome.fna -model Models/model_ezTn5_kan1 -first Test_Files/fastq_test > out1.txt
             """
-            map_tn_seq_out =  os.path.join(map_tnseq_return_dir, out_base + "map_tn_seq" + str(i) + ".tsv")
+            map_tnseq_out =  os.path.join(map_tnseq_return_dir, out_base + "map_tn_seq" + str(i) + ".tsv")
+            map_tnseq_filepaths.append(map_tnseq_out)
             map_tnseq_cmnds = ["perl", "MapTnSeq.pl", "-tmpdir", tmp_dir, "-genome", genome_fna_fp, "-model", model_fp, '-first', fastq_fp]
-    
-            with open(map_tn_seq_out, "w") as outfile:
+            logging.info("RUNNING MAP TNSEQ ------")
+            with open(map_tnseq_out, "w") as outfile:
                 subprocess.call(map_tnseq_cmnds, stdout=outfile)
     
     
     
     
-            #running Design Random Pool------------------------------------------------------------------
+        #running Design Random Pool------------------------------------------------------------------
 
-            pool_fp = os.path.join(design_pool_dir, out_base + "pool" + str(i) + ".tsv")
-            # -pool ../tmp/115_pool -genes ../Test_Files/new_gt.tsv ../Test_Files/MapTnSeq_File1.tsv
-            design_r_pool_cmnds = ["perl","DesignRandomPool.pl","-pool",pool_fp, "-genes", gene_table_fp, map_tn_seq_out]
-            design_response = subprocess.run(design_r_pool_cmnds)
-            logging.info("DesignRandomPool response: {}".format(str(design_response)))
+        pool_fp = os.path.join(design_pool_dir, out_base + "pool" + str(i) + ".tsv")
+        # -pool ../tmp/115_pool -genes gene_table_filepath MapTnSeq_File1.tsv MapTnSeq_File2.tsv ...
+        design_r_pool_cmnds = ["perl","DesignRandomPool.pl","-pool",pool_fp, "-genes", gene_table_fp]
+        for mts_fp in map_tnseq_filepaths:
+            design_r_pool_cmnds.append(mts_fp)
+        logging.info("RUNNING DESIGN RANDOM POOL ------")
+        design_response = subprocess.run(design_r_pool_cmnds)
+        logging.info("DesignRandomPool response: {}".format(str(design_response)))
     
 
         
