@@ -188,6 +188,25 @@ def type_1_gene_table(gene_table_string):
     return 0
 
 
+"""
+Inputs: custom_model_string
+Outputs: tested_model_string
+"""
+def check_custom_model(custom_model_string):
+
+    if len(custom_model_string) < 2:
+        raise Exception("Custom Model form incorrect, it contains fewer 2 characters while it should be at least 20 bp long.")
+        
+    if len(custom_model_string.split("\n")) > 3:
+        raise Exception("Custom Model form incorrect- max amount of lines is 2.")
+    
+    #For now there is minimal testing. Eventually add specific tests.
+    tested_model_string = custom_model_string
+
+    return tested_model_string
+    
+
+
 
 def main():
     args = sys.argv

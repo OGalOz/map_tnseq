@@ -66,8 +66,8 @@ class map_tnseqTest(unittest.TestCase):
         
         genome_ref = "35912/5/1"
         fastq_ref_list = ["35912/2/1","35912/9/2"]
-        model_name = "model_ezTn5_kan1"
-        custom_model_string = ""
+        model_name = "model_ezTn5_kan1" #"Custom" #
+        custom_model_string = "rndom"
         output_name = "init_test"
 
         ret = self.serviceImpl.run_map_tnseq(self.ctx, {'workspace_name': self.wsName,

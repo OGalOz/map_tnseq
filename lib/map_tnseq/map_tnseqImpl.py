@@ -10,7 +10,7 @@ from installed_clients.AssemblyUtilClient import AssemblyUtil
 from installed_clients.DataFileUtilClient import DataFileUtil
 from installed_clients.WorkspaceClient import Workspace
 from Bio import SeqIO
-from my_util.conversions import convert_genbank_to_genome_table
+from my_util.conversions import convert_genbank_to_genome_table, check_custom_model
 #END_HEADER
 
 
@@ -136,6 +136,9 @@ class map_tnseq:
         if model_name == "Custom":
             if "custom_model_string" in params:
                 custom_model_string = params["custom_model_string"]
+                tested_model_string = check_custom_model(custom_model_string)
+                f = open(os.path.join(map_tnseq_dir, 'primers/Custom'),"w")
+                f.write(tested_model_string)
             else:
                 raise Exception("Model Name is Custom but no custom model string passed in params. Please restart the program with custom model included.")
         if 'output_name' in params:
@@ -167,18 +170,16 @@ class map_tnseq:
         convert_genbank_to_genome_table(genome_genbank_filepath,gene_table_fp,config_dict)
 
         #Preparing the Model
-        if model_name != "Custom":
-            model_fp = os.path.join(map_tnseq_dir, 'primers/' + model_name)
-            #Check if model file exists
-            logging.critical("We check if model file exists:")
-            if (os.path.exists(model_fp)):
-                logging.critical(os.path.exists(model_fp))
-            else:
-                logging.critical(os.listdir(os.path.join(map_tnseq_dir, "primers")))
-                raise Exception("Could not find model filepath: {}".format(model_fp))
-
+        
+        model_fp = os.path.join(map_tnseq_dir, 'primers/' + model_name)
+        #Check if model file exists
+        logging.critical("We check if model file exists:")
+        if (os.path.exists(model_fp)):
+            logging.critical(os.path.exists(model_fp))
         else:
-            raise Exception("Program doesn't allow custom models as inputs yet.")
+            logging.critical(os.listdir(os.path.join(map_tnseq_dir, "primers")))
+            raise Exception("Could not find model filepath: {}".format(model_fp))
+
 
        
 
