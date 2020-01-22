@@ -281,13 +281,13 @@ class map_tnseq:
         design_r_pool_cmnds = ["perl","DesignRandomPool.pl","-pool",pool_fp, "-genes", gene_table_fp]
         if minN_bool:
             design_r_pool_cmnds.append("-minN")
-            design_r_pool_cmnds.append(minN)
+            design_r_pool_cmnds.append(str(minN))
         if minFrac_bool:
             design_r_pool_cmnds.append("-minFrac")
-            design_r_pool_cmnds.append(minFrac)
+            design_r_pool_cmnds.append(str(minFrac))
         if minRatio_bool:
             design_r_pool_cmnds.append("-minRatio")
-            design_r_pool_cmnds.append(minRatio)
+            design_r_pool_cmnds.append(str(minRatio))
 
         for mts_fp in map_tnseq_filepaths:
             design_r_pool_cmnds.append(mts_fp)
