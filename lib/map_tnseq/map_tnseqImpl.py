@@ -10,7 +10,7 @@ from installed_clients.AssemblyUtilClient import AssemblyUtil
 from installed_clients.DataFileUtilClient import DataFileUtil
 from installed_clients.WorkspaceClient import Workspace
 from Bio import SeqIO
-from my_util.conversions import convert_genbank_to_genome_table, check_custom_model
+from my_util.conversions import convert_genbank_to_genome_table, check_custom_model, run_test_mode
 #END_HEADER
 
 
@@ -88,7 +88,6 @@ class map_tnseq:
         #ws = Workspace(self.ws_url, token=token)
 
 
-        init_dir = os.getcwd()
         os.chdir("/kb/module")
         cwd = "/kb/module"
 
@@ -129,10 +128,12 @@ class map_tnseq:
             fastq_ref_list = params['fastq_ref']
         else:
             raise Exception("Fastq Ref not passed in params.")
+
         if "model_name" in params:
             model_name = params["model_name"]
         else:
             raise Exception("Model Name not passed in params.")
+
         if model_name == "Custom":
             if "custom_model_string" in params:
                 custom_model_string = params["custom_model_string"]
@@ -141,6 +142,41 @@ class map_tnseq:
                 f.write(tested_model_string)
             else:
                 raise Exception("Model Name is Custom but no custom model string passed in params. Please restart the program with custom model included.")
+
+        if "test_mode" in params:
+            if params["test_mode"] == "on":
+                test_mode_bool = True
+            else:
+                test_mode_bool = False
+        else:
+            raise Exception("Test Mode not passed in params.")
+
+        if "minN" in params:
+            if params['minN'] != "":
+                minN_bool = True
+                minN = params['minN']
+            else:
+                minN_bool = False
+        else:
+            minN_bool = False
+        if "minFrac" in params:
+            if params['minFrac'] != "":
+                minFrac_bool = True
+                minFrac = params['minFrac']
+            else:
+                minFrac_bool = False
+        else:
+            minFrac_bool = False
+
+        if "minRatio" in params:
+            if params['minFrac'] != "":
+                minRatio_bool = True
+                minRatio = params['minRatio']
+            else:
+                minRatio_bool = False
+        else:
+            minRatio_bool = False
+
         if 'output_name' in params:
             output_name = params['output_name']
         else:
@@ -157,7 +193,7 @@ class map_tnseq:
 
         SeqIO.convert(genome_genbank_filepath, "genbank", genome_fna_fp, "fasta")
 
-        out_base = "map_tn_seq_"
+        out_base = "map_tn_seq_program"
         gene_table_fp = os.path.join(gene_tables_dir, out_base + "gene_table.tsv")
 
 
@@ -189,10 +225,12 @@ class map_tnseq:
         #Since there are multiple fastq refs, we download them and run Map Tnseq on each, and store the output files for a single
         # Design Random Pool Run.
         map_tnseq_filepaths = []
+        if test_mode_bool == True and len(fastq_ref_list) > 1:
+            fastq_ref_list = fastq_ref_list[0:1]
         for i in range(len(fastq_ref_list)):
             crnt_fastq_ref = fastq_ref_list[i]
             
-            #Namind and downloading fastq/a file using DataFileUtil
+            #Naming and downloading fastq/a file using DataFileUtil
             fastq_fn = "downloaded_fastq_file" + str(i)
             fastq_fp = os.path.join(self.shared_folder, fastq_fn)
             get_shock_id_params = {"object_refs": [crnt_fastq_ref], "ignore_errors": False}
@@ -228,6 +266,8 @@ class map_tnseq:
             map_tnseq_filepaths.append(map_tnseq_out)
             map_tnseq_cmnds = ["perl", "MapTnSeq.pl", "-tmpdir", tmp_dir, "-genome", genome_fna_fp, "-model", model_fp, '-first', fastq_fp]
             logging.info("RUNNING MAP TNSEQ ------")
+            if test_mode_bool == True:
+                run_test_mode(fastq_fp)
             with open(map_tnseq_out, "w") as outfile:
                 subprocess.call(map_tnseq_cmnds, stdout=outfile)
     
@@ -239,6 +279,16 @@ class map_tnseq:
         pool_fp = os.path.join(design_pool_dir, out_base + "pool" + str(i) + ".tsv")
         # -pool ../tmp/115_pool -genes gene_table_filepath MapTnSeq_File1.tsv MapTnSeq_File2.tsv ...
         design_r_pool_cmnds = ["perl","DesignRandomPool.pl","-pool",pool_fp, "-genes", gene_table_fp]
+        if minN_bool:
+            design_r_pool_cmnds.append("-minN")
+            design_r_pool_cmnds.append(minN)
+        if minFrac_bool:
+            design_r_pool_cmnds.append("-minFrac")
+            design_r_pool_cmnds.append(minFrac)
+        if minRatio_bool:
+            design_r_pool_cmnds.append("-minRatio")
+            design_r_pool_cmnds.append(minRatio)
+
         for mts_fp in map_tnseq_filepaths:
             design_r_pool_cmnds.append(mts_fp)
         logging.info("RUNNING DESIGN RANDOM POOL ------")

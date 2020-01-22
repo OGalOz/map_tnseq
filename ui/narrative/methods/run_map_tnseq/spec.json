@@ -95,6 +95,25 @@
             }
 
 
+        },          
+        {
+        "id": "test_mode",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": ["Off"],
+            "field_type" : "dropdown",
+            "dropdown_options":{
+                "options": [{
+                    "value": "off",
+                    "display": "Off"
+                },
+                {
+                    "value": "on",
+                    "display": "On"
+                }
+                ]
+                   }
         },
         {
             "id": "custom_model_string", 
@@ -108,6 +127,42 @@
 
             }
         },
+        {
+        "id": "minN",
+            "optional": true,
+            "text_options" : {
+                "validate_as" : "float"
+            },
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "text"
+        },
+        {
+        "id": "minFrac",
+            "optional": true,
+            "text_options" : {
+                "validate_as" : "float"
+            },
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "text"
+        },
+        {
+        "id": "minRatio",
+            "optional": true,
+            "text_options" : {
+                "validate_as" : "float"
+            },
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "text"
+        },
+
+
+ 
         {
         "id": "output_name",
             "optional": false,
@@ -144,10 +199,29 @@
                     "target_property": "model_name"
                 },
                 {
+                    "input_parameter": "test_mode",
+                    "target_property": "test_mode"
+                },
+
+                {
                     "input_parameter": "custom_model_string",
                     "target_property": "custom_model_string"
 
                 },
+                {
+                    "input_parameter": "minN",
+                    "target_property": "minN"
+                },
+                {
+                    "input_parameter": "minFrac",
+                    "target_property": "minFrac"
+                },
+                {
+                    "input_parameter": "minRatio",
+                    "target_property": "minRatio"
+                },
+
+
                 {
                     "input_parameter": "output_name",
                     "target_property": "output_name"

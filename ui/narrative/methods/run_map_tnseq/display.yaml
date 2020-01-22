@@ -47,6 +47,14 @@ parameters :
         long-hint  : |
             The model file has a specific format. You may be able to use one of the existing models,
             or you can upload a custom one by choosing Custom.
+    test_mode :
+        ui-name: |
+            Test Mode?
+        short-hint : |
+            Run the program on the first 100 lines of your reads to check if your model is correct.
+        long-hint : |
+            In order to save time looking for the correct model, simply run Test Mode on various models until 
+            you find one that matches.
     custom_model_string :
         ui-name : |
             Custom Model Text 
@@ -55,6 +63,31 @@ parameters :
         long-hint  : |
             If you chose "Custom" as your model, then you must input the text for the model. Examples given
             in the app description, including format restrictions.
+    minN :
+        ui-name : |
+            minN
+        short-hint : |
+            An integer. minimum number of "good" reads for a barcode supporting its mapping.
+        long-hint : |
+            (Int) An optional input to the Design Random Pool program. minN is the minimum number of "good" reads for a barcode supporting
+            its mapping.  (Good means a unique hit to the genome and qBeg=1.)
+    minFrac :
+        ui-name : |
+            minFrac
+        short-hint : |
+            A float. minFrac is the minimum fraction of input reads for the barcode that
+            agree with the preferred mapping.
+        long-hint : |
+            (Float) An optional input to Design Random Pool. minFrac is the minimum fraction of input reads for the barcode that
+            agree with the preferred mapping.
+    minRatio :
+        ui-name : |
+            minRatio
+        short-hint : |
+            A float. minRatio is the minimum ratio of
+            reads for preferred mapping over the 2nd-most-frequent mapping.
+        long-hint : |
+            (Float) An optional input to Design Random Pool. minRatio is the minimum ratio of reads for preferred mapping over the 2nd-most-frequent mapping.
     output_name :
         ui-name : |
            Output Name 

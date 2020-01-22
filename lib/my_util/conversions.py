@@ -189,8 +189,8 @@ def type_1_gene_table(gene_table_string):
 
 
 """
-Inputs: custom_model_string
-Outputs: tested_model_string
+Inputs: custom_model_string (str) String of custom model. Should look like the other models (2 lines, etc)
+Outputs: tested_model_string (str) String of custom model.
 """
 def check_custom_model(custom_model_string):
 
@@ -205,6 +205,28 @@ def check_custom_model(custom_model_string):
 
     return tested_model_string
     
+
+
+"""
+Info:
+    Test Mode takes only the first 100 lines of the file and runs it against a model.
+
+Inputs: fastq_fp: (str) Fastq filepath
+
+"""
+def run_test_mode(fastq_fp):
+    #First we try to take the first 1000 lines of the file
+    try:
+        with open(fastq_fp) as myfile:
+            first_lines = [next(myfile) for x in range(1000)]
+    except:
+        #There are fewer than a thousand lines in the file.
+        pass
+    new_file_str = "\n".join(first_lines)
+    x = open(fastq_fp, "w")
+    x.write(new_file_str)
+    x.close()
+
 
 
 
