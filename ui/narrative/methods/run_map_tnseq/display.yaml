@@ -70,24 +70,24 @@ parameters :
             An integer. minimum number of "good" reads for a barcode supporting its mapping.
         long-hint : |
             (Int) An optional input to the Design Random Pool program. minN is the minimum number of "good" reads for a barcode supporting
-            its mapping.  (Good means a unique hit to the genome and qBeg=1.)
+            its mapping.  (Good means a unique hit to the genome and qBeg=1.) Must be greater than 1.
     minFrac :
         ui-name : |
             minFrac
         short-hint : |
             A float. minFrac is the minimum fraction of input reads for the barcode that
-            agree with the preferred mapping.
+            agree with the preferred mapping. Must be between 0 and 1
         long-hint : |
             (Float) An optional input to Design Random Pool. minFrac is the minimum fraction of input reads for the barcode that
-            agree with the preferred mapping.
+            agree with the preferred mapping. Must be between 0 and 1.
     minRatio :
         ui-name : |
             minRatio
         short-hint : |
             A float. minRatio is the minimum ratio of
-            reads for preferred mapping over the 2nd-most-frequent mapping.
+            reads for preferred mapping over the 2nd-most-frequent mapping. Must be greater than 0.
         long-hint : |
-            (Float) An optional input to Design Random Pool. minRatio is the minimum ratio of reads for preferred mapping over the 2nd-most-frequent mapping.
+            (Float) An optional input to Design Random Pool. minRatio is the minimum ratio of reads for preferred mapping over the 2nd-most-frequent mapping. Must be greater than 0.
     output_name :
         ui-name : |
            Output Name 

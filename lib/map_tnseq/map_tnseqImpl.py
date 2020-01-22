@@ -155,6 +155,8 @@ class map_tnseq:
             if params['minN'] != "":
                 minN_bool = True
                 minN = params['minN']
+                if minN < 2:
+                    raise Exception("minN must be an integer greater than 1.")
             else:
                 minN_bool = False
         else:
@@ -163,15 +165,19 @@ class map_tnseq:
             if params['minFrac'] != "":
                 minFrac_bool = True
                 minFrac = params['minFrac']
+                if minFrac < 0 or minFrac > 1:
+                    raise Exception("minFrac must be between 0 and 1.")
             else:
                 minFrac_bool = False
         else:
             minFrac_bool = False
 
         if "minRatio" in params:
-            if params['minFrac'] != "":
+            if params['minRatio'] != "":
                 minRatio_bool = True
                 minRatio = params['minRatio']
+                if minRatio < 0:
+                    raise Exception("minRatio must be greater than or equal to 0.")
             else:
                 minRatio_bool = False
         else:
