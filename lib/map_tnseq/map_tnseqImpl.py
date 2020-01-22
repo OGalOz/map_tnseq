@@ -10,7 +10,7 @@ from installed_clients.AssemblyUtilClient import AssemblyUtil
 from installed_clients.DataFileUtilClient import DataFileUtil
 from installed_clients.WorkspaceClient import Workspace
 from Bio import SeqIO
-from my_util.conversions import convert_genbank_to_genome_table, check_custom_model, run_test_mode
+from my_util.conversions import convert_genbank_to_genome_table, check_custom_model #, run_test_mode
 #END_HEADER
 
 
@@ -193,7 +193,7 @@ class map_tnseq:
 
         SeqIO.convert(genome_genbank_filepath, "genbank", genome_fna_fp, "fasta")
 
-        out_base = "map_tn_seq_program"
+        out_base = "map_tn_seq_program_"
         gene_table_fp = os.path.join(gene_tables_dir, out_base + "gene_table.tsv")
 
 
@@ -267,7 +267,8 @@ class map_tnseq:
             map_tnseq_cmnds = ["perl", "MapTnSeq.pl", "-tmpdir", tmp_dir, "-genome", genome_fna_fp, "-model", model_fp, '-first', fastq_fp]
             logging.info("RUNNING MAP TNSEQ ------")
             if test_mode_bool == True:
-                run_test_mode(fastq_fp)
+                map_tnseq_cmnds.append("-limit")
+                map_tnseq_cmnds.append("1000")
             with open(map_tnseq_out, "w") as outfile:
                 subprocess.call(map_tnseq_cmnds, stdout=outfile)
     
@@ -291,8 +292,8 @@ class map_tnseq:
 
         for mts_fp in map_tnseq_filepaths:
             design_r_pool_cmnds.append(mts_fp)
-        logging.info("RUNNING DESIGN RANDOM POOL ------")
         if test_mode_bool == False:
+            logging.info("RUNNING DESIGN RANDOM POOL ------")
             design_response = subprocess.run(design_r_pool_cmnds)
             logging.info("DesignRandomPool response: {}".format(str(design_response)))
     

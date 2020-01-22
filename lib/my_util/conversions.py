@@ -223,6 +223,10 @@ def run_test_mode(fastq_fp):
         #There are fewer than a thousand lines in the file.
         pass
     new_file_str = "\n".join(first_lines)
+    logging.critical("TEST MODE FILE:")
+    for i in range(100):
+        logging.critical(first_lines[i])
+    logging.critical(new_file_str[:1000])
     x = open(fastq_fp, "w")
     x.write(new_file_str)
     x.close()
