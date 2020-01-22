@@ -101,16 +101,16 @@
             "optional": false,
             "advanced": false,
             "allow_multiple": false,
-            "default_values": ["Off"],
+            "default_values": ["no"],
             "field_type" : "dropdown",
             "dropdown_options":{
                 "options": [{
-                    "value": "off",
-                    "display": "Off"
+                    "value": "no",
+                    "display": "No"
                 },
                 {
-                    "value": "on",
-                    "display": "On"
+                    "value": "yes",
+                    "display": "Yes"
                 }
                 ]
                    }

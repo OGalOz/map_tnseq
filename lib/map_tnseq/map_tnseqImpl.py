@@ -144,7 +144,7 @@ class map_tnseq:
                 raise Exception("Model Name is Custom but no custom model string passed in params. Please restart the program with custom model included.")
 
         if "test_mode" in params:
-            if params["test_mode"] == "on":
+            if params["test_mode"] == "yes":
                 test_mode_bool = True
             else:
                 test_mode_bool = False
@@ -292,8 +292,9 @@ class map_tnseq:
         for mts_fp in map_tnseq_filepaths:
             design_r_pool_cmnds.append(mts_fp)
         logging.info("RUNNING DESIGN RANDOM POOL ------")
-        design_response = subprocess.run(design_r_pool_cmnds)
-        logging.info("DesignRandomPool response: {}".format(str(design_response)))
+        if test_mode_bool == False:
+            design_response = subprocess.run(design_r_pool_cmnds)
+            logging.info("DesignRandomPool response: {}".format(str(design_response)))
     
 
         
