@@ -68,7 +68,8 @@ class map_tnseqTest(unittest.TestCase):
         fastq_ref_list = ["35912/2/1", "35912/9/2" ]
         model_name = "model_ezTn5_kan1" #"Custom" #
         custom_model_string = "Arbitrary"
-        test_mode = "yes"
+        # Test mode is yes or no
+        test_mode = "no"
         minN = "" #Restriction: Must be at least 1. 
         minFrac = "" #Range 0-1
         minRatio = "" #Range 0 -inf.

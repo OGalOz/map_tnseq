@@ -1,4 +1,4 @@
-#!/usr/bin/env Rscript
+#!/usr/bin/Rscript
 # This is a command-line R script to analyze pool statistics
 # The main line of analysis is in RunPoolStats()
 

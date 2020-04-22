@@ -389,6 +389,7 @@ sub FindModelEnd($$$) {
 sub BLAT8($$$$$$$$) {
     my ($queriesFile,$dbFile,$tmpdir,$blatcmd,$minScore,$minIdentity,$tileSize,$stepSize) = @_;
 
+    # $$ is current process id?
     my $blat8File = "$tmpdir/MapTnSeq.$$.".rand() . ".psl";
     # prevent writing to stdout by BLAT
     open(OLD_STDOUT, ">&STDOUT");

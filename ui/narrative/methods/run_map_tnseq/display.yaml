@@ -9,7 +9,7 @@ tooltip: |
 
 screenshots: []
 
-icon: kb-yellow.png
+icon: design_pool.png
 
 #
 # define a set of similar apps that might be useful to the user
@@ -27,18 +27,18 @@ suggestions:
 parameters :
     genome_ref :
         ui-name : |
-            Genome   
+            Target Genome   
         short-hint : |
-            The Genome your checking your reads against to find locations of barcodes.
+            The Genome you're checking your reads against to find locations of barcodes.
         long-hint  : |
-            ??
+            This is the genome to whose genes we are going to match barcodes so they can be used to measure the abundance of strains with those genes interrupted.
     fastq_ref :
         ui-name : |
-            The FastQ files to run hits against
+            FastQ Mapping Reads
         short-hint : |
-            The reads in Fastq/a format as a KBase Single End Library Object.
+            The reads in Fastq format as a KBase Single End Library Object.
         long-hint  : |
-            The Map Tn Seq Program takes a set of Reads objects and Analyzes each.
+            The Map Tn Seq Program takes a set of Reads objects and maps the embedded barcodes to a location in the genome.
     model_name :
         ui-name : |
             Model Name 
@@ -99,6 +99,17 @@ parameters :
 
 
 description : |
-    <p>A KBase Wrapper for Morgan Prices's <a href="https://bitbucket.org/berkeleylab/feba/src/master/"> MapTnSeq code </a></p>
+    <p>A KBase Wrapper for Morgan Prices's <a href="https://bitbucket.org/berkeleylab/feba/src/master/"> MapTnSeq code. </a></p>
+    <p> The output map-tnseq files are tab-delimited and contain, for each usable \n
+    read, the read name, the barcode, which scaffold the insertion \n
+    lies in, the position of the insertion, the strand that the read \n
+    matched, a boolean flag for if this mapping location is unique or \n
+    not, the beginning and end of the hit to the genome in the read \n
+    after trimming the transposon sequence, the bit score, and the \n
+    %identity. </p>
+    <p> The gene-table file "map_tn_seq_gene_table.tsv" contains the following columns: \n
+    scaffoldId, (begin) base-pair location for starting, (end) base-pair location for \n
+    the end, strand (+/-), description (free text description), LocusID, and type, \n
+    (for type, "1" means it is a protein coding gene). </p>
 
  

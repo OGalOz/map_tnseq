@@ -10,7 +10,10 @@ from installed_clients.AssemblyUtilClient import AssemblyUtil
 from installed_clients.DataFileUtilClient import DataFileUtil
 from installed_clients.WorkspaceClient import Workspace
 from Bio import SeqIO
-from my_util.conversions import convert_genbank_to_genome_table, check_custom_model #, run_test_mode
+from util.genbank_to_gene_table import convert_genbank_to_gene_table
+from util.conversions import check_custom_model
+from util.validate import validate_init_params
+from util.downloaders import download_genome_convert_to_fna
 #END_HEADER
 
 
@@ -82,7 +85,7 @@ class map_tnseq:
         report_util = KBaseReport(self.callback_url)
         logging.basicConfig(level=logging.DEBUG)
         dfu_tool = DataFileUtil(self.callback_url)
-
+        gfu = GenomeFileUtil(self.callback_url)
         #We need the workspace object to get info on the workspace the app is running in.
         #token = os.environ.get('KB_AUTH_TOKEN', None)
         #ws = Workspace(self.ws_url, token=token)
@@ -115,109 +118,36 @@ class map_tnseq:
 
 
 
+        # The following function validates all the input parameters
+        # and returns a dict of the validated params.
+        val_par = validate_init_params(params, map_tnseq_dir)
 
-        #Check params: Genome_Ref, Assembly_Ref, model_name, 
-        # [optional] model_string
+        logging.info("Validated Params:")
+        logging.info(val_par)
 
-        if 'genome_ref' in params:
-            genome_ref = params['genome_ref']
-        else:
-            raise Exception("Genome Ref not passed in params.")
-        if 'fastq_ref' in params:
-            #fastq_ref will be a list since there can be multiple.
-            fastq_ref_list = params['fastq_ref']
-        else:
-            raise Exception("Fastq Ref not passed in params.")
+        # We get the main output name from the validated params
+        main_output_name = val_par['output_name']
 
-        if "model_name" in params:
-            model_name = params["model_name"]
-        else:
-            raise Exception("Model Name not passed in params.")
-
-        if model_name == "Custom":
-            if "custom_model_string" in params:
-                custom_model_string = params["custom_model_string"]
-                tested_model_string = check_custom_model(custom_model_string)
-                f = open(os.path.join(map_tnseq_dir, 'primers/Custom'),"w")
-                f.write(tested_model_string)
-            else:
-                raise Exception("Model Name is Custom but no custom model string passed in params. Please restart the program with custom model included.")
-
-        if "test_mode" in params:
-            if params["test_mode"] == "yes":
-                test_mode_bool = True
-            else:
-                test_mode_bool = False
-        else:
-            raise Exception("Test Mode not passed in params.")
-
-        if "minN" in params:
-            if params['minN'] != "":
-                minN_bool = True
-                minN = params['minN']
-                if minN < 2:
-                    raise Exception("minN must be an integer greater than 1.")
-            else:
-                minN_bool = False
-        else:
-            minN_bool = False
-        if "minFrac" in params:
-            if params['minFrac'] != "":
-                minFrac_bool = True
-                minFrac = params['minFrac']
-                if minFrac < 0 or minFrac > 1:
-                    raise Exception("minFrac must be between 0 and 1.")
-            else:
-                minFrac_bool = False
-        else:
-            minFrac_bool = False
-
-        if "minRatio" in params:
-            if params['minRatio'] != "":
-                minRatio_bool = True
-                minRatio = params['minRatio']
-                if minRatio < 0:
-                    raise Exception("minRatio must be greater than or equal to 0.")
-            else:
-                minRatio_bool = False
-        else:
-            minRatio_bool = False
-
-        if 'output_name' in params:
-            output_name = params['output_name']
-        else:
-            output_name = "Untitled"
-
-        main_output_name = output_name
+        # We create a filepath for the gene table
+        gene_table_fp = os.path.join(gene_tables_dir, 
+                main_output_name + "_gene_table.tsv")
 
         #Downloading genome in genbank format and converting it to fna:
-        gf_tool = GenomeFileUtil(self.callback_url)
-        genome_nucleotide_meta = gf_tool.genome_to_genbank({'genome_ref': genome_ref})
-        genome_genbank_filepath = genome_nucleotide_meta['genbank_file']['file_path']
-        genome_fna_fn = "genome_fna"
-        genome_fna_fp = os.path.join(self.shared_folder, genome_fna_fn)
-
-        SeqIO.convert(genome_genbank_filepath, "genbank", genome_fna_fp, "fasta")
-
-        out_base = "map_tn_seq_program_"
-        gene_table_fp = os.path.join(gene_tables_dir, out_base + "gene_table.tsv")
+        genome_fna_fp, gt_config_dict, gbk_fp = download_genome_convert_to_fna(
+                gfu, val_par['genome_ref'], self.shared_folder)
 
 
+        # This function makes the gene_table at the location gene_table_fp
+        convert_genbank_to_gene_table(gbk_fp, gene_table_fp,
+                gt_config_dict)
 
-        #We need a config_dict that depends on the genbank file.
-        #For now we'll make it simply empty.
-        config_dict = {}
 
-        #This function makes the gene_table at the location gene_table_fp
-        convert_genbank_to_genome_table(genome_genbank_filepath,gene_table_fp,config_dict)
-
-        #Preparing the Model
-        
-        model_fp = os.path.join(map_tnseq_dir, 'primers/' + model_name)
-        #Check if model file exists
+        # Preparing the Model
+        model_fp = os.path.join(map_tnseq_dir, 'primers/' + val_par['model_name'])
+        # Check if model file exists
         logging.critical("We check if model file exists:")
         if (os.path.exists(model_fp)):
-            logging.critical(os.path.exists(model_fp))
+            logging.critical(model_fp + " does exist")
         else:
             logging.critical(os.listdir(os.path.join(map_tnseq_dir, "primers")))
             raise Exception("Could not find model filepath: {}".format(model_fp))
@@ -230,14 +160,17 @@ class map_tnseq:
 
         #Since there are multiple fastq refs, we download them and run Map Tnseq on each, and store the output files for a single
         # Design Random Pool Run.
+        test_mode_bool = val_par['test_mode_bool']
+        fastq_ref_list = val_par['fastq_ref_list']
+        out_base = val_par['output_name']
         map_tnseq_filepaths = []
-        if test_mode_bool == True and len(fastq_ref_list) > 1:
-            fastq_ref_list = fastq_ref_list[0:1]
+        if test_mode_bool == True:
+            fastq_ref_list = [fastq_ref_list[0]]
         for i in range(len(fastq_ref_list)):
             crnt_fastq_ref = fastq_ref_list[i]
-            
+            logging.critical("crnt fq ref: " + crnt_fastq_ref)
             #Naming and downloading fastq/a file using DataFileUtil
-            fastq_fn = "downloaded_fastq_file" + str(i)
+            fastq_fn = "downloaded_fastq_file_" + str(i)
             fastq_fp = os.path.join(self.shared_folder, fastq_fn)
             get_shock_id_params = {"object_refs": [crnt_fastq_ref], "ignore_errors": False}
             get_objects_results = dfu_tool.get_objects(get_shock_id_params)
@@ -255,22 +188,22 @@ class map_tnseq:
             SeqIO.convert(genome_genbank_filepath, "genbank", genome_fna_fp, "fasta")
             fastq_file_path = os.path.join(map_tnseq_dir,'Test_Files/fastq_test.fastq')
             model_file_path = os.path.join(map_tnseq_dir, 'Models/' + model_name)
-            logging.critical(model_file_path)
-            tmp_dir = self.shared_folder
-            out_base = "tests_115"
-            #"""
+            
+            """
         
-            #For each fastq reads file we run both MapTnSeq and Design Random Pool
-    
+            #For each fastq reads file we run just MapTnSeq     
             #Running MapTnseq.pl------------------------------------------------------------------
     
             """
             A normal run would look like: 
             perl MapTnSeq.pl -tmpdir tmp -genome Test_Files/Ecoli_genome.fna -model Models/model_ezTn5_kan1 -first Test_Files/fastq_test > out1.txt
             """
-            map_tnseq_out =  os.path.join(map_tnseq_return_dir, out_base + "map_tn_seq" + str(i) + ".tsv")
+            map_tnseq_out =  os.path.join(map_tnseq_return_dir, out_base + \
+                    "_MapTnSeq_" + str(i) + ".tsv")
             map_tnseq_filepaths.append(map_tnseq_out)
-            map_tnseq_cmnds = ["perl", "MapTnSeq.pl", "-tmpdir", tmp_dir, "-genome", genome_fna_fp, "-model", model_fp, '-first', fastq_fp]
+            map_tnseq_cmnds = ["perl", "MapTnSeq.pl", "-tmpdir", tmp_dir, 
+                                "-genome", genome_fna_fp, "-model", model_fp, 
+                                '-first', fastq_fp]
             logging.info("RUNNING MAP TNSEQ ------")
             if test_mode_bool == True:
                 map_tnseq_cmnds.append("-limit")
@@ -283,48 +216,44 @@ class map_tnseq:
     
         #running Design Random Pool------------------------------------------------------------------
 
-        pool_fp = os.path.join(design_pool_dir, out_base + "pool" + str(i) + ".tsv")
+        pool_fp = os.path.join(design_pool_dir, out_base + "_pool.n10")
         # -pool ../tmp/115_pool -genes gene_table_filepath MapTnSeq_File1.tsv MapTnSeq_File2.tsv ...
         design_r_pool_cmnds = ["perl","DesignRandomPool.pl","-pool",pool_fp, "-genes", gene_table_fp]
-        if minN_bool:
+        if val_par['minN_bool']:
             design_r_pool_cmnds.append("-minN")
-            design_r_pool_cmnds.append(str(minN))
-        if minFrac_bool:
+            design_r_pool_cmnds.append(str(val_par['minN']))
+        if val_par['minFrac_bool']:
             design_r_pool_cmnds.append("-minFrac")
-            design_r_pool_cmnds.append(str(minFrac))
-        if minRatio_bool:
+            design_r_pool_cmnds.append(str(val_par['minFrac']))
+        if val_par['minRatio_bool']:
             design_r_pool_cmnds.append("-minRatio")
-            design_r_pool_cmnds.append(str(minRatio))
+            design_r_pool_cmnds.append(str(val_par['minRatio']))
 
+        # Adding the map tn seq files to the tail of the command
         for mts_fp in map_tnseq_filepaths:
             design_r_pool_cmnds.append(mts_fp)
-        if test_mode_bool == False:
+
+        if not test_mode_bool:
             logging.info("RUNNING DESIGN RANDOM POOL ------")
             design_response = subprocess.run(design_r_pool_cmnds)
             logging.info("DesignRandomPool response: {}".format(str(design_response)))
-    
 
+        # Above Design Random Pool outputs a file to pool_fp
+        
         
         #Returning file in zipped format:------------------------------------------------------------------
         
         file_zip_shock_id = dfu_tool.file_to_shock({'file_path': return_dir,
                                               'pack': 'zip'})['shock_id']
+
         dir_link = {
                 'shock_id': file_zip_shock_id, 
                'name': main_output_name + '.zip', 
                'label':'map_tnseq_output_dir', 
-               'description': 'The directory of outputs from running Map TnSeq and Design Random Pool'
+               'description': 'The directory of outputs from running' \
+                + ' Map TnSeq and Design Random Pool'
                }
 
-        """
-        file_to_shock_params = {'file_path': out_filepath, 'pack': 'gzip'}
-        file_to_shock_output = dfu.file_to_shock(file_to_shock_params)
-        shock_id = file_to_shock_output['shock_id']
-        File_params = {'shock_id': shock_id, 'name': output_name}
-        report_params = {'workspace_name' : params['workspace_name'], 
-                'file_links' : [File_params]
-                }
-        """
         report_params = {
                 'workspace_name' : params['workspace_name'],
                 'file_links' : [dir_link]
