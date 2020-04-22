@@ -3,6 +3,7 @@
 import logging
 import os
 import subprocess
+import shutil
 
 from installed_clients.KBaseReportClient import KBaseReport
 from installed_clients.GenomeFileUtilClient import GenomeFileUtil
@@ -14,6 +15,7 @@ from util.genbank_to_gene_table import convert_genbank_to_gene_table
 from util.conversions import check_custom_model
 from util.validate import validate_init_params
 from util.downloaders import download_genome_convert_to_fna
+from util.upload_pool import upload_poolfile_to_KBase
 #END_HEADER
 
 
@@ -68,6 +70,7 @@ class map_tnseq:
         self.shared_folder = config['scratch']
         logging.basicConfig(format='%(created)s %(levelname)s: %(message)s',
                             level=logging.INFO)
+        self.ws_url = config['workspace-url']
         #END_CONSTRUCTOR
         pass
 
@@ -87,8 +90,12 @@ class map_tnseq:
         dfu_tool = DataFileUtil(self.callback_url)
         gfu = GenomeFileUtil(self.callback_url)
         #We need the workspace object to get info on the workspace the app is running in.
-        #token = os.environ.get('KB_AUTH_TOKEN', None)
-        #ws = Workspace(self.ws_url, token=token)
+        token = os.environ.get('KB_AUTH_TOKEN', None)
+        ws = Workspace(self.ws_url, token=token)
+        x = ws.get_workspace_info({'workspace': params['workspace_name']})
+        workspace_id = x[0]
+
+
 
 
         os.chdir("/kb/module")
@@ -177,7 +184,7 @@ class map_tnseq:
             fq_shock_id = get_objects_results['data'][0]['data']['lib']['file']['id']
             fastq_download_params = {'shock_id': fq_shock_id,'file_path': fastq_fp, 'unpack':'unpack'}
             #Here we download the fastq file itself:
-            logging.info("DOWNLOADING FASTQ FILE " + str(i))
+            logging.info("DOWNLOADING FASTQ FILE NUMBER " + str(i+1))
             file_info = dfu_tool.shock_to_file(fastq_download_params)
             logging.info(file_info)
     
@@ -216,7 +223,7 @@ class map_tnseq:
     
         #running Design Random Pool------------------------------------------------------------------
 
-        pool_fp = os.path.join(design_pool_dir, out_base + "_pool.n10")
+        pool_fp = os.path.join(design_pool_dir, out_base + ".pool")
         # -pool ../tmp/115_pool -genes gene_table_filepath MapTnSeq_File1.tsv MapTnSeq_File2.tsv ...
         design_r_pool_cmnds = ["perl","DesignRandomPool.pl","-pool",pool_fp, "-genes", gene_table_fp]
         if val_par['minN_bool']:
@@ -239,6 +246,23 @@ class map_tnseq:
             logging.info("DesignRandomPool response: {}".format(str(design_response)))
 
         # Above Design Random Pool outputs a file to pool_fp
+        
+        # Now we upload the pool file to KBase to make a PoolFile Object
+        if val_par['KB_Pool_Bool'] and not test_mode_bool:
+            upload_params = {
+                    'genome_ref': val_par['genome_ref'],
+                    'pool_description': val_par['pool_description'] ,
+                    'run_method': 'poolcount',
+                    'workspace_id': workspace_id,
+                    'ws_obj': ws,
+                    'poolfile_fp': pool_fp,
+                    'poolfile_name': out_base + ".pool",
+                    'dfu': dfu_tool
+                    }
+            logging.info("UPLOADING POOL FILE to KBASE through DFU")
+            upload_poolfile_results = upload_poolfile_to_KBase(upload_params)
+            logging.info("Upload Pool File Results:")
+            logging.info(upload_poolfile_results)
         
         
         #Returning file in zipped format:------------------------------------------------------------------

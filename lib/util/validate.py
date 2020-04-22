@@ -81,6 +81,19 @@ def validate_init_params(params, map_tnseq_dir):
     else:
         vp['minRatio_bool'] = False
 
+    if "pool_description" in params:
+        if params["pool_description"] == '' or params["pool_description"] is None:
+            vp['pool_description'] = 'No description given.'
+        else:
+            vp['pool_description'] = params['pool_description']
+    else:
+        vp['pool_description'] = 'No description given.'
+
+    if params['KB_Pool_Bool'] == 'yes':
+        vp['KB_Pool_Bool'] = True
+    else:
+        vp['KB_Pool_Bool'] = False
+
     if 'output_name' in params:
         if (params['output_name'] != '' and params['output_name'] is not None):
             vp['output_name'] = params['output_name']

@@ -4,7 +4,7 @@
 name: Design Pool 
 
 tooltip: |
-    Run Morgan Price's Programs Map-TnSeq and Design Random Pool
+    Run FEBA Perl Scripts Map-TnSeq and Design Random Pool (Morgan Price)
 
 
 screenshots: []
@@ -53,8 +53,9 @@ parameters :
         short-hint : |
             Run the program on the first 100 lines of your reads to check if your model is correct.
         long-hint : |
-            In order to save time looking for the correct model, simply run Test Mode on various models until 
-            you find one that matches.
+            In order to save time looking for the correct model, simply run 
+            Test Mode on various models until you find one that matches.
+            If Test Mode is on, the program will not create a KBase Pool File.
     custom_model_string :
         ui-name : |
             Custom Model Text 
@@ -88,6 +89,26 @@ parameters :
             reads for preferred mapping over the 2nd-most-frequent mapping. Must be greater than 0.
         long-hint : |
             (Float) An optional input to Design Random Pool. minRatio is the minimum ratio of reads for preferred mapping over the 2nd-most-frequent mapping. Must be greater than 0.
+    pool_description :
+        ui-name : |
+            Pool Description
+        short-hint : |
+            Give a brief description of your poolfile. Only necessary when uploading
+            KBase Pool.
+        long-hint : |
+            This description is used to understand where pool files come from 
+            and their purpose. Please use only letters, spaces, and numbers.
+    KB_Pool_Bool :
+        ui-name : |
+            Create KBase PoolFile Object?
+        short-hint : |
+            Automatically create a KBase Poolfile object to be used in
+            future RBTnSeq analysis programs such as Reads to PoolCount.
+        long-hint : |
+            You can choose to create a KBase Poolfile object to be used in
+            future RBTnSeq analysis runs such as Reads to PoolCount. Select yes
+            if you believe this poolfile is the one you will be using in the 
+            future.
     output_name :
         ui-name : |
            Output Name 
@@ -100,6 +121,13 @@ parameters :
 
 description : |
     <p>A KBase Wrapper for Morgan Prices's <a href="https://bitbucket.org/berkeleylab/feba/src/master/"> MapTnSeq code. </a></p>
+    <p>The specific scripts from the feba code used are </p>
+    <p> bin/MapTnSeq.pl, bin/DesignRandomPool,
+     lib/FEBA_Utils.pm, lib/PoolStats.R</p>
+    <p>The output of the program is a pool file, which you can choose to be 
+    made into a KBase Object. It will be returned to you in a zipped directory
+    either way (as long as you don't choose test-run). </p>
+    <p> Test-run is for checking if the Reads and the Genome are related</p>
     <p> The output map-tnseq files are tab-delimited and contain, for each usable \n
     read, the read name, the barcode, which scaffold the insertion \n
     lies in, the position of the insertion, the strand that the read \n

@@ -149,6 +149,7 @@
             "default_values": [ "" ],
             "field_type": "text"
         },
+
         {
         "id": "minRatio",
             "optional": true,
@@ -160,8 +161,37 @@
             "default_values": [ "" ],
             "field_type": "text"
         },
+        {
+            "id": "pool_description", 
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "textarea",
+            "textarea_options" : {
+                "n_rows" : 3
 
-
+            }
+        },
+        {
+        "id": "KB_Pool_Bool",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": ["no"],
+            "field_type" : "dropdown",
+            "dropdown_options":{
+                "options": [{
+                    "value": "no",
+                    "display": "No"
+                },
+                {
+                    "value": "yes",
+                    "display": "Yes"
+                }
+                ]
+                   }
+        },
  
         {
         "id": "output_name",
@@ -222,6 +252,14 @@
                 {
                     "input_parameter": "minRatio",
                     "target_property": "minRatio"
+                },
+                {
+                    "input_parameter": "pool_description",
+                    "target_property": "pool_description"
+                },
+               {
+                    "input_parameter": "KB_Pool_Bool",
+                    "target_property": "KB_Pool_Bool"
                 },
 
 

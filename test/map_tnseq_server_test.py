@@ -43,7 +43,7 @@ class map_tnseqTest(unittest.TestCase):
         cls.scratch = cls.cfg['scratch']
         cls.callback_url = os.environ['SDK_CALLBACK_URL']
         suffix = int(time.time() * 1000)
-        cls.wsName = "test_ContigFilter_" + str(suffix)
+        cls.wsName = "mapTnSeq_Test_" + str(suffix)
         ret = cls.wsClient.create_workspace({'workspace': cls.wsName})  # noqa
 
     @classmethod
@@ -69,10 +69,12 @@ class map_tnseqTest(unittest.TestCase):
         model_name = "model_ezTn5_kan1" #"Custom" #
         custom_model_string = "Arbitrary"
         # Test mode is yes or no
-        test_mode = "yes"
+        test_mode = "no"
         minN = None #Restriction: Must be at least 1. 
         minFrac = None #Range 0-1
         minRatio = None #Range 0 -inf.
+        pool_description = "Ci Testing"
+        KB_Pool_Bool = "yes"
         output_name = "init_test"
 
         ret = self.serviceImpl.run_map_tnseq(self.ctx, {'workspace_name': self.wsName,
@@ -84,5 +86,7 @@ class map_tnseqTest(unittest.TestCase):
                                                         'minRatio': minRatio,
                                                         'model_name': model_name,
                                                         'custom_model_string' : custom_model_string ,
+                                                        'pool_description': pool_description,
+                                                        'KB_Pool_Bool': KB_Pool_Bool,
                                                         'output_name': output_name,
                                                             })
