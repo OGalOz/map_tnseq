@@ -47,7 +47,7 @@ def validate_init_params(params, map_tnseq_dir):
         raise Exception("Test Mode not passed in params.")
 
     if "minN" in params:
-        if params['minN'] != "":
+        if (params['minN'] != "" and params['minN'] is not None):
             vp['minN_bool'] = True
             vp['minN'] = params['minN']
             if vp['minN'] < 2:
@@ -58,7 +58,7 @@ def validate_init_params(params, map_tnseq_dir):
     else:
         vp['minN_bool'] = False
     if "minFrac" in params:
-        if params['minFrac'] != "":
+        if (params['minFrac'] != ""and params['minFrac'] is not None):
             vp['minFrac_bool'] = True
             vp['minFrac'] = params['minFrac']
             if vp['minFrac'] < 0 or vp['minFrac'] > 1:
@@ -70,7 +70,7 @@ def validate_init_params(params, map_tnseq_dir):
         vp['minFrac_bool'] = False
 
     if "minRatio" in params:
-        if params['minRatio'] != "":
+        if (params['minRatio'] != "" and params['minRatio'] is not None):
             vp['minRatio_bool'] = True
             vp['minRatio'] = params['minRatio']
             if vp['minRatio'] < 0:
@@ -82,7 +82,10 @@ def validate_init_params(params, map_tnseq_dir):
         vp['minRatio_bool'] = False
 
     if 'output_name' in params:
-        vp['output_name'] = params['output_name']
+        if (params['output_name'] != '' and params['output_name'] is not None):
+            vp['output_name'] = params['output_name']
+        else:
+            vp['output_name'] = "Untitled"
     else:
         vp['output_name'] = "Untitled"
 

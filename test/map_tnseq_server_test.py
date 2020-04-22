@@ -64,15 +64,15 @@ class map_tnseqTest(unittest.TestCase):
         # Check returned data with
         # self.assertEqual(ret[...], ...) or other unittest methods
         
-        genome_ref = "35912/5/1"
-        fastq_ref_list = ["35912/2/1", "35912/9/2" ]
+        genome_ref = "49371/5/1" 
+        fastq_ref_list = ["49371/2/1"]
         model_name = "model_ezTn5_kan1" #"Custom" #
         custom_model_string = "Arbitrary"
         # Test mode is yes or no
-        test_mode = "no"
-        minN = "" #Restriction: Must be at least 1. 
-        minFrac = "" #Range 0-1
-        minRatio = "" #Range 0 -inf.
+        test_mode = "yes"
+        minN = None #Restriction: Must be at least 1. 
+        minFrac = None #Range 0-1
+        minRatio = None #Range 0 -inf.
         output_name = "init_test"
 
         ret = self.serviceImpl.run_map_tnseq(self.ctx, {'workspace_name': self.wsName,
