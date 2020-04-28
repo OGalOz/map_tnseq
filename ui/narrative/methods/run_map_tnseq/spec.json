@@ -178,7 +178,7 @@
             "optional": false,
             "advanced": false,
             "allow_multiple": false,
-            "default_values": ["no"],
+            "default_values": ["yes"],
             "field_type" : "dropdown",
             "dropdown_options":{
                 "options": [{

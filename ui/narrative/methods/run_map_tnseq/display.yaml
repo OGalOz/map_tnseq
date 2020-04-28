@@ -4,7 +4,7 @@
 name: Design Pool 
 
 tooltip: |
-    Run FEBA Perl Scripts Map-TnSeq and Design Random Pool (Morgan Price)
+    Give a Genome and Related Reads with Barcodes and Get a Pool File.
 
 
 screenshots: []
@@ -124,9 +124,10 @@ description : |
     <p>The specific scripts from the feba code used are </p>
     <p> bin/MapTnSeq.pl, bin/DesignRandomPool,
      lib/FEBA_Utils.pm, lib/PoolStats.R</p>
-    <p>The output of the program is a pool file, which you can choose to be 
+    <p>The output of the program is a pool file (TSV), which you can choose to be 
     made into a KBase Object. It will be returned to you in a zipped directory
     either way (as long as you don't choose test-run). </p>
+    <p>The format of the pool file will be described at the end of this page.</p>
     <p> Test-run is for checking if the Reads and the Genome are related</p>
     <p> The output map-tnseq files are tab-delimited and contain, for each usable \n
     read, the read name, the barcode, which scaffold the insertion \n
@@ -139,5 +140,6 @@ description : |
     scaffoldId, (begin) base-pair location for starting, (end) base-pair location for \n
     the end, strand (+/-), description (free text description), LocusID, and type, \n
     (for type, "1" means it is a protein coding gene). </p>
+    <p>It is used by</p>
 
  

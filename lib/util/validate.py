@@ -96,7 +96,7 @@ def validate_init_params(params, map_tnseq_dir):
 
     if 'output_name' in params:
         if (params['output_name'] != '' and params['output_name'] is not None):
-            vp['output_name'] = params['output_name']
+            vp['output_name'] = check_output_name(params['output_name'])
         else:
             vp['output_name'] = "Untitled"
     else:
@@ -125,3 +125,13 @@ def validate_custom_model(custom_model_string):
     tested_model_string = custom_model_string
 
     return tested_model_string
+
+
+# op_name is string, (output_name for app)
+def check_output_name(op_name):
+    op_name = op_name.replace(' ', '_')
+    rgx = re.search(r'[^\w]', op_name)
+    if rgx:
+        logging.warning("Non-alphanumeric character in output name: " + rgx[0])
+        op_name = "Default_Name_Check_Chars"
+    return op_name
