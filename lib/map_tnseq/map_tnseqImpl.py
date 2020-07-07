@@ -11,11 +11,8 @@ from installed_clients.AssemblyUtilClient import AssemblyUtil
 from installed_clients.DataFileUtilClient import DataFileUtil
 from installed_clients.WorkspaceClient import Workspace
 from Bio import SeqIO
-from util.genbank_to_gene_table import convert_genbank_to_gene_table
-from util.conversions import check_custom_model
-from util.validate import validate_init_params
-from util.downloaders import download_genome_convert_to_fna
-from util.upload_pool import upload_poolfile_to_KBase
+from full.FullProgram import CompleteRun
+from util.PrepareIO import PrepareProgramInputs, PrepareUserOutputs
 #END_HEADER
 
 
@@ -23,7 +20,7 @@ from util.upload_pool import upload_poolfile_to_KBase
 In this file we first download a genome fna using Genome file utils.
 We also enable the user to submit an option of a model from 
 existing models in 
-https://bitbucket.org/berkeleylab/feba/src/master/bin/MapTnSeq.pl.
+https://bitbucket.org/berkeleylab/feba/src/master/primers
 They also upload one fastq file (or many) and that's enough to run
 Map TnSeq, the script only cares about a single end read.
 
@@ -88,13 +85,78 @@ class map_tnseq:
         report_util = KBaseReport(self.callback_url)
         logging.basicConfig(level=logging.DEBUG)
         dfu_tool = DataFileUtil(self.callback_url)
+        dfu = dfu_tool
         gfu = GenomeFileUtil(self.callback_url)
-        #We need the workspace object to get info on the workspace the app is running in.
+        # We need the workspace object to get info on the workspace the app is running in.
         token = os.environ.get('KB_AUTH_TOKEN', None)
         ws = Workspace(self.ws_url, token=token)
         x = ws.get_workspace_info({'workspace': params['workspace_name']})
         workspace_id = x[0]
+        td = self.shared_folder
 
+        # Initializing config info 
+        cfg_d = {
+                "gfu": gfu,
+                "dfu": dfu,
+                "ws": ws,
+                "ws_id": workspace_id,
+                "username" : ctx['user_id'],
+                "tmp_dir": td,
+                "custom_model_fp": os.path.join(td,"custom_model.txt"), 
+                "gene_table_fp": os.path.join(td, "genes.GC"),
+                "blat_cmd": "/kb/module/lib/map_tnseq/blat",
+                "unmapped_fp": os.path.join(td, "UNMAPPED.fna"),
+                "tmpFNA_fp": os.path.join(td,"TMP.fna")
+                "trunc_fp": os.path.join(td, "TRUNC.fna"),
+                "endFNA_fp": os.path.join(td, "END.fna"),
+                "R_fp": "/kb/module/lib/map_tnseq/PoolStats.R",
+                "R_op_fp": os.path.join(td, "R_results.txt."),
+                "MTS_cfg_fp": os.path.join(td, "maptnseqconfig.json"),
+                "DRP_cfg_fp": os.path.join(td, "designRPconfig.json"),
+                }
+        
+        # We divide the program into 3 parts:
+        # Part 1: Prepare to run program: Download necessary files, create configs
+        pool_op_fp, vp = PrepareProgramInputs(params, cfg_d)
+
+        # Part 2: Run the program using recently created config files
+        models_dir = "/kb/module/lib/map_tnseq/models"
+        html_fp = CompleteRun(cfg_d["MTS_cfg_fp"], cfg_d["DRP_cfg_fp"],
+                    cfg_d["tmp_dir"], pool_op_fp, )
+
+        # Part 3: Prepare output to return to user
+        cfg_d['pool_fp'] = pool_op_fp
+        report_params = PrepareUserOutputs(vp)
+
+        #Returning file in zipped format:------------------------------------------------------------------
+        report_info = report_util.create_extended_report(report_params)
+
+        output = {
+            'report_name': report_info['name'],
+            'report_ref': report_info['ref'],
+        }
+        #END run_map_tnseq
+
+        # At some point might do deeper type checking...
+        if not isinstance(output, dict):
+            raise ValueError('Method run_map_tnseq return value ' +
+                             'output is not type dict as required.')
+        # return the results
+        return [output]
+    def status(self, ctx):
+        #BEGIN_STATUS
+        returnVal = {'state': "OK",
+                     'message': "",
+                     'version': self.VERSION,
+                     'git_url': self.GIT_URL,
+                     'git_commit_hash': self.GIT_COMMIT_HASH}
+        #END_STATUS
+        return [returnVal]
+
+
+
+def old():
+    """
 
 
 
@@ -108,26 +170,28 @@ class map_tnseq:
 
 
         # CREATING DIRS
-        #We make a return directory for all files:
+        # We make a return directory for all files:
         return_dir = os.path.join(self.shared_folder,"return_dir")
         os.mkdir(return_dir)
-        #We make a directory for the Map TnSeq Files:
+        # We make a directory for the Map TnSeq Files:
         map_tnseq_return_dir = os.path.join(return_dir, 'map_tnseq_return_dir')
         os.mkdir(map_tnseq_return_dir)
-        #We make a directory for the gene tables:
+        # We make a directory for the gene table:
         gene_tables_dir = os.path.join(return_dir,'gene_tables_dir')
         os.mkdir(gene_tables_dir)
-        #We make a directory for the pool files:
+        # We make a directory for the pool files:
         design_pool_dir = os.path.join(return_dir, 'design_pool_dir')
         os.mkdir(design_pool_dir)
 
-        logging.info(params)
+        logging.debug(params)
 
 
 
         # The following function validates all the input parameters
         # and returns a dict of the validated params.
         val_par = validate_init_params(params, map_tnseq_dir)
+        # We create username param
+        val_par['username'] = ctx['user_id']
 
         logging.info("Validated Params:")
         logging.info(val_par)
@@ -139,14 +203,18 @@ class map_tnseq:
         gene_table_fp = os.path.join(gene_tables_dir, 
                 main_output_name + "_gene_table.tsv")
 
-        #Downloading genome in genbank format and converting it to fna:
+        # Download genome in genbank format and convert it to fna:
+        # gt stands for genome table
         genome_fna_fp, gt_config_dict, gbk_fp = download_genome_convert_to_fna(
                 gfu, val_par['genome_ref'], self.shared_folder)
 
 
         # This function makes the gene_table at the location gene_table_fp
+        # *This function may not work properly
         convert_genbank_to_gene_table(gbk_fp, gene_table_fp,
                 gt_config_dict)
+
+
 
 
         # Preparing the Model
@@ -160,12 +228,11 @@ class map_tnseq:
             raise Exception("Could not find model filepath: {}".format(model_fp))
 
 
-       
-
-        #We change to the directory in which the program is run.
+        # We change to the directory in which the program is run.
         os.chdir(run_dir)
 
-        #Since there are multiple fastq refs, we download them and run Map Tnseq on each, and store the output files for a single
+        # Since there are multiple fastq refs, we download them and run Map Tnseq on each, 
+        # and store the output files for a single
         # Design Random Pool Run.
         test_mode_bool = val_par['test_mode_bool']
         fastq_ref_list = val_par['fastq_ref_list']
@@ -189,22 +256,22 @@ class map_tnseq:
             logging.info(file_info)
     
         
-            """Test Files (Not online)
+            # Test Files (Not online)
             genome_genbank_filepath = os.path.join(map_tnseq_dir, 'Test_Files/E_Coli_BW25113.gbk')
             genome_fna_fp = os.path.join(self.shared_folder, 'E_Coli_genbank.fna')
             SeqIO.convert(genome_genbank_filepath, "genbank", genome_fna_fp, "fasta")
             fastq_file_path = os.path.join(map_tnseq_dir,'Test_Files/fastq_test.fastq')
             model_file_path = os.path.join(map_tnseq_dir, 'Models/' + model_name)
             
-            """
+            
         
             #For each fastq reads file we run just MapTnSeq     
             #Running MapTnseq.pl------------------------------------------------------------------
     
-            """
+            
             A normal run would look like: 
             perl MapTnSeq.pl -tmpdir tmp -genome Test_Files/Ecoli_genome.fna -model Models/model_ezTn5_kan1 -first Test_Files/fastq_test > out1.txt
-            """
+            
             map_tnseq_out =  os.path.join(map_tnseq_return_dir, out_base + \
                     "_MapTnSeq_" + str(i) + ".tsv")
             map_tnseq_filepaths.append(map_tnseq_out)
@@ -245,65 +312,6 @@ class map_tnseq:
             design_response = subprocess.run(design_r_pool_cmnds)
             logging.info("DesignRandomPool response: {}".format(str(design_response)))
 
-        # Above Design Random Pool outputs a file to pool_fp
-        
-        # Now we upload the pool file to KBase to make a PoolFile Object
-        if val_par['KB_Pool_Bool'] and not test_mode_bool:
-            upload_params = {
-                    'genome_ref': val_par['genome_ref'],
-                    'pool_description': val_par['pool_description'] ,
-                    'run_method': 'poolcount',
-                    'workspace_id': workspace_id,
-                    'ws_obj': ws,
-                    'poolfile_fp': pool_fp,
-                    'poolfile_name': out_base + ".pool",
-                    'dfu': dfu_tool
-                    }
-            logging.info("UPLOADING POOL FILE to KBASE through DFU")
-            upload_poolfile_results = upload_poolfile_to_KBase(upload_params)
-            logging.info("Upload Pool File Results:")
-            logging.info(upload_poolfile_results)
-        
-        
-        #Returning file in zipped format:------------------------------------------------------------------
-        
-        file_zip_shock_id = dfu_tool.file_to_shock({'file_path': return_dir,
-                                              'pack': 'zip'})['shock_id']
 
-        dir_link = {
-                'shock_id': file_zip_shock_id, 
-               'name': main_output_name + '.zip', 
-               'label':'map_tnseq_output_dir', 
-               'description': 'The directory of outputs from running' \
-                + ' Map TnSeq and Design Random Pool'
-               }
-
-        report_params = {
-                'workspace_name' : params['workspace_name'],
-                'file_links' : [dir_link]
-                
-                }
-
-        report_info = report_util.create_extended_report(report_params)
-
-        output = {
-            'report_name': report_info['name'],
-            'report_ref': report_info['ref'],
-        }
-        #END run_map_tnseq
-
-        # At some point might do deeper type checking...
-        if not isinstance(output, dict):
-            raise ValueError('Method run_map_tnseq return value ' +
-                             'output is not type dict as required.')
-        # return the results
-        return [output]
-    def status(self, ctx):
-        #BEGIN_STATUS
-        returnVal = {'state': "OK",
-                     'message': "",
-                     'version': self.VERSION,
-                     'git_url': self.GIT_URL,
-                     'git_commit_hash': self.GIT_COMMIT_HASH}
-        #END_STATUS
-        return [returnVal]
+    """
+    return None

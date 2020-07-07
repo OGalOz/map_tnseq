@@ -2,7 +2,36 @@
 import os
 import logging
 
-def validate_init_params(params, map_tnseq_dir):
+def validate_init_params(params, cfg_d):
+    """
+    params: (d)
+        Must contain all the parameters passed in
+        as shown in function.
+    cfg_d: (d)
+        custom_model_fp: (s) Path to custom model: Should always be
+            scratch_dir/custom_model.txt
+    Outputs:
+        vp: (d) "Validated Params"
+            genome_ref: (s)
+            fastq_ref_list: (list<s>)
+            model_fp: (s)
+            model_test: (b) True if don't know model
+
+            (MapTnSeq vars)
+            maxReads: (i)
+            minQuality: (i)
+            minIdentity: (f)
+            minScore: (f)
+
+            (Design Random Pool vars)
+            minN: (i)
+            minRatio: (f)
+            minFrac: (f)
+            maxQBeg: (i)
+            pool_description: (s)
+            KB_Pool_Bool: (b) Whether or not to create KBase pool object
+            output_name: (s)
+    """
 
     #Validated params dict
     vp = {}
@@ -11,75 +40,169 @@ def validate_init_params(params, map_tnseq_dir):
         vp['genome_ref'] = params['genome_ref']
     else:
         raise Exception("Genome Ref not passed in params.")
-    if 'fastq_ref' in params:
+    if 'fastq_ref_list' in params:
         #fastq_ref will be a list since there can be multiple.
-        fq_ref_list = params['fastq_ref']
+        fq_ref_list = params['fastq_ref_list']
         if len(fq_ref_list) == 0:
             raise Exception("There must be at least 1 FASTQ file. None found.")
-        vp['fastq_ref_list'] = params['fastq_ref']
+        vp['fastq_ref_list'] = params['fastq_ref_list']
     else:
         raise Exception("Fastq Ref not passed in params.")
 
+    # MODEL TEST
     if "model_name" in params:
         vp['model_name'] = params["model_name"]
     else:
         raise Exception("Model Name not passed in params.")
-
+    vp["model_test"] = False
     if vp['model_name'] == "Custom":
         if "custom_model_string" in params:
             vp['custom_model_string'] = params["custom_model_string"]
             vp['tested_model_string'] = validate_custom_model(vp[
                 'custom_model_string'])
-            f = open(os.path.join(map_tnseq_dir, 'primers/Custom'),"w")
+            f = open(cfg_d['custom_model_fp'],"w")
             f.write(vp['tested_model_string'])
+            f.close()
+            vp['model_fp'] = cfg_d['custom_model_fp']
         else:
             raise Exception("Model Name is Custom but no custom model string "
             "passed in params.\n Please restart the program with "
             "custom model included.")
-
+    elif vp['model_name'] == "Unknown":
+        vp['model_test'] = True
+        vp["model_fp"] = None
+        # If model_test is true, we run through all the models
+    else:
+        model_fp = os.path.join(map_tnseq_dir, 'primers/' + val_par['model_name'])
+        # Check if model file exists
+        logging.critical("We check if model file exists:")
+        if (os.path.exists(model_fp)):
+            logging.critical(model_fp + " does exist")
+            vp['model_fp'] = model_fp
+        else:
+            logging.critical(os.listdir(os.path.join(map_tnseq_dir, "primers")))
+            raise Exception("Could not find model filepath: {}".format(model_fp))
     if "test_mode" in params:
         if params["test_mode"] == "yes":
             vp['test_mode_bool'] = True
+            # We know the model, we test out the fastq
         else:
-            # no
+            # We run the entire program
             vp['test_mode_bool'] = False
     else:
         raise Exception("Test Mode not passed in params.")
 
+    
+    #MapTnSeq variables
+    if "maxReads" in params:
+        mR = params["maxReads"]
+        if mR is None:
+            # There is no limit to number of reads to go through
+            # We set maxReads to 10 billion
+            vp["maxReads"] = 10*10
+        elif not isinstance(mR, int):
+            vp["maxReads"] = int(mR)
+        else:
+            vp["maxReads"] = mR
+    else:
+        raise Exception("maxReads not passed in params")
+
+    if "minQuality" in params:
+        mQ = params["minQuality"]
+        if mQ is None:
+            # there is no minQuality
+            vp["minQuality"] = 0
+        elif not isinstance(mQ, int):
+            vp["minQuality"] = int(mQ)
+        else:
+            vp["minQuality"] = mQ
+    else:
+        raise Exception("minQuality not passed in params")
+
+    if "minIdentity" in params:
+        mI = params["minIdentity"]
+        if mI is None:
+            # there is no minIdentity - set to default 90
+            vp["minIdentity"] = 90
+        elif not isinstance(mI, float):
+            # It's string not float?
+            vp["minIdentity"] = float(mI)
+        else:
+            vp["minIdentity"] = mI
+    else:
+        raise Exception("minIdentity not passed in params")
+
+    if "minScore" in params:
+        mS = params["minScore"]
+        if mS is None:
+            vp["minScore"] = 15.0 
+        elif not isinstance(mS, float):
+            # It's string not float?
+            vp["minScore"] = float(mS)
+        else:
+            vp["minScore"] = mS
+    else:
+        raise Exception("minScore not passed in params")
+
     if "minN" in params:
-        if (params['minN'] != "" and params['minN'] is not None):
-            vp['minN_bool'] = True
-            vp['minN'] = params['minN']
-            if vp['minN'] < 2:
-                raise Exception("minN must be an integer greater than 1.\n" 
-                        "Instead {}".format(vp['minN']))
+        # For Design Random Pool: minimum number of good reads for a barcode with
+        # a specific mapping
+        mN = params["minN"]
+        if mN is None:
+            vp["minN"] = 5 
+        elif not isinstance(mN, int):
+            # It's string not int?
+            mN = int(mN)
+            vp["minN"] = mN
         else:
-            vp['minN_bool'] = False
+            vp["minN"] = mN
     else:
-        vp['minN_bool'] = False
+        raise Exception("minN not passed in params")
+
     if "minFrac" in params:
-        if (params['minFrac'] != ""and params['minFrac'] is not None):
-            vp['minFrac_bool'] = True
-            vp['minFrac'] = params['minFrac']
-            if vp['minFrac'] < 0 or vp['minFrac'] > 1:
-                raise Exception("minFrac must be between 0 and 1.\n"
-                        "Instead {}".format(vp['minFrac']))
+        # For Design Random Pool: Minimum fraction of reads w/ barcode that 
+        # agree with preferred mapping
+        mF = params["minFrac"]
+        if mF is None:
+            vp["minFrac"] = 0.75 
+        elif not isinstance(mF, float):
+            # It's string not float?
+            mF = float(mF)
+            vp["minFrac"] = float(mF)
         else:
-            vp['minFrac_bool'] = False
+            vp["minFrac"] = mF
     else:
-        vp['minFrac_bool'] = False
+        raise Exception("minFrac not passed in params")
 
     if "minRatio" in params:
-        if (params['minRatio'] != "" and params['minRatio'] is not None):
-            vp['minRatio_bool'] = True
-            vp['minRatio'] = params['minRatio']
-            if vp['minRatio'] < 0:
-                raise Exception("minRatio must be greater than or equal to 0.\n"
-                        "Instead {}".format(vp['minRatio']))
+        # For Design Random Pool: Minimum ratio of reads for preferred mapping over
+        # 2nd-most-frequent mapping (2nd most-preferred mapping)
+
+        mR = params["minRatio"]
+        if mR is None:
+            vp["minRatio"] = 8.0 
+        elif not isinstance(mR, float):
+            # It's string not float?
+            mR = float(mR)
+            vp["minRatio"] = float(mR)
         else:
-            vp['minRatio_bool'] = False
+            vp["minRatio"] = mR
     else:
-        vp['minRatio_bool'] = False
+        raise Exception("minRatio not passed in params")
+
+    if "maxQBeg" in params:
+        #  Maximum location index in query where hit to genome can occur
+        mN = params["maxQBeg"]
+        if mN is None:
+            vp["maxQBeg"] = 3 
+        elif not isinstance(mN, int):
+            # It's string not int?
+            mN = int(mN)
+            vp["maxQBeg"] = mN
+        else:
+            vp["maxQBeg"] = mN
+    else:
+        raise Exception("maxQBeg not passed in params")
 
     if "pool_description" in params:
         if params["pool_description"] == '' or params["pool_description"] is None:
@@ -102,17 +225,16 @@ def validate_init_params(params, map_tnseq_dir):
     else:
         vp['output_name'] = "Untitled"
 
-
     return vp
 
 
 
-"""
-Inputs: custom_model_string (str) String of custom model. 
-    Should look like the other models (2 lines, etc)
-Outputs: tested_model_string (str) String of custom model.
-"""
 def validate_custom_model(custom_model_string):
+    """
+    Inputs: custom_model_string (str) String of custom model. 
+        Should look like the other models (2 lines, etc)
+    Outputs: tested_model_string (str) String of custom model.
+    """
 
     if len(custom_model_string) < 2:
         raise Exception("Custom Model form incorrect, it contains fewer than 2 "
@@ -135,3 +257,5 @@ def check_output_name(op_name):
         logging.warning("Non-alphanumeric character in output name: " + rgx[0])
         op_name = "Default_Name_Check_Chars"
     return op_name
+
+

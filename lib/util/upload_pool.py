@@ -3,21 +3,23 @@
 
 import logging
 import re
+import datetime
 
 
 def upload_poolfile_to_KBase(up):
     '''
-    upload params (up) must include:
-    {
-    genome_ref,
-    pool_description,
-    run_method,
-    workspace_id,
-    ws_obj,
-    poolfile_fp
-    poolfile_name
-    dfu
-       }
+    Inputs:
+        up: d,
+            username:
+            genome_ref,:
+            pool_description:
+            fastq_refs (list):
+            workspace_id:
+            ws_obj:
+            poolfile_fp: 
+            poolfile_name:
+            dfu:
+
     '''
     # We check correctness of pool file
     column_header_list = check_pool_file(up['poolfile_fp'])
@@ -34,6 +36,11 @@ def upload_poolfile_to_KBase(up):
     # The following var res_handle only created for simplification of code
     res_handle = file_to_shock_result["handle"]
 
+    #util_die We create an updated description (prefix) with username and time.
+    date_time = datetime.datetime.utcnow() 
+    updated_description = "\nCreated by {} on {}\n".format(up['username'],
+        str(date_time))
+
     # We create the data for the object
     pool_data = {
         "file_type": "KBasePoolTSV.PoolFile",
@@ -45,19 +52,17 @@ def upload_poolfile_to_KBase(up):
         "compression_type": "gzip",
         "column_header_list": column_header_list,
         "file_name": res_handle["file_name"],
-        "run_method": up["run_method"],
+        "utc_created": str(date_time),
         "related_genome_ref": up["genome_ref"],
         "related_organism_scientific_name": get_genome_organism_name(
             up["genome_ref"],
             up['ws_obj']
         ),
-        "description": up["pool_description"],
+        "description": updated_description + up["pool_description"],
     }
 
-    # To get workspace id:
-    ws_id = up["workspace_id"]
     save_object_params = {
-        "id": ws_id,
+        "id": up["workspace_id"],
         "objects": [
             {
                 "type": "KBasePoolTSV.PoolFile",

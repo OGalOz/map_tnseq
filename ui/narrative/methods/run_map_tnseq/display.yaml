@@ -32,7 +32,7 @@ parameters :
             The Genome you're checking your reads against to find locations of barcodes.
         long-hint  : |
             This is the genome to whose genes we are going to match barcodes so they can be used to measure the abundance of strains with those genes interrupted.
-    fastq_ref :
+    fastq_ref_list :
         ui-name : |
             FastQ Mapping Reads
         short-hint : |
@@ -71,7 +71,7 @@ parameters :
             An integer. minimum number of "good" reads for a barcode supporting its mapping.
         long-hint : |
             (Int) An optional input to the Design Random Pool program. minN is the minimum number of "good" reads for a barcode supporting
-            its mapping.  (Good means a unique hit to the genome and qBeg=1.) Must be greater than 1.
+ ;;;;;;           its mapping.  (Good means a unique hit to the genome and qBeg=1.) Must be greater than 1.
     minFrac :
         ui-name : |
             minFrac
@@ -141,5 +141,9 @@ description : |
     the end, strand (+/-), description (free text description), LocusID, and type, \n
     (for type, "1" means it is a protein coding gene). </p>
     <p>It is used by</p>
+    <h2>Example Models</h2>
+    <h4>model_ezTn5_kan</h4>
+    <p>nnnnnnCTAAGATGTCCACGAGGTCTCTNNNNNNNNNNNNNNNNNNNNCGTACGCTGCAGGTCGACAGATGTGTATAAGAGACAG</p>
+
 
  

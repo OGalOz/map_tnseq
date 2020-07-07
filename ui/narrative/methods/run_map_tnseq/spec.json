@@ -22,7 +22,7 @@
             }
         },
         {
-        "id": "fastq_ref",
+        "id": "fastq_ref_list",
             "optional": false,
             "advanced": false,
             "allow_multiple": true,
@@ -223,8 +223,8 @@
                     "target_type_transform": "resolved-ref"
                 },
                 {
-                    "input_parameter": "fastq_ref",
-                    "target_property": "fastq_ref",
+                    "input_parameter": "fastq_ref_list",
+                    "target_property": "fastq_ref_list",
                     "target_type_transform": "resolved-ref"
                 },
                 {
