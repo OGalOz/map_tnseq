@@ -109,6 +109,7 @@ class map_tnseq:
                 "tmpFNA_fp": os.path.join(td,"TMP.fna")
                 "trunc_fp": os.path.join(td, "TRUNC.fna"),
                 "endFNA_fp": os.path.join(td, "END.fna"),
+                "models_dir": "/kb/module/lib/map_tnseq/models",
                 "R_fp": "/kb/module/lib/map_tnseq/PoolStats.R",
                 "R_op_fp": os.path.join(td, "R_results.txt."),
                 "MTS_cfg_fp": os.path.join(td, "maptnseqconfig.json"),
@@ -120,9 +121,8 @@ class map_tnseq:
         pool_op_fp, vp = PrepareProgramInputs(params, cfg_d)
 
         # Part 2: Run the program using recently created config files
-        models_dir = "/kb/module/lib/map_tnseq/models"
         html_fp = CompleteRun(cfg_d["MTS_cfg_fp"], cfg_d["DRP_cfg_fp"],
-                    cfg_d["tmp_dir"], pool_op_fp, )
+                    cfg_d["tmp_dir"], pool_op_fp, cfg_d["models_dir"] )
 
         # Part 3: Prepare output to return to user
         cfg_d['pool_fp'] = pool_op_fp

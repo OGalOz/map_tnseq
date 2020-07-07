@@ -47,15 +47,6 @@ parameters :
         long-hint  : |
             The model file has a specific format. You may be able to use one of the existing models,
             or you can upload a custom one by choosing Custom.
-    test_mode :
-        ui-name: |
-            Test Mode?
-        short-hint : |
-            Run the program on the first 100 lines of your reads to check if your model is correct.
-        long-hint : |
-            In order to save time looking for the correct model, simply run 
-            Test Mode on various models until you find one that matches.
-            If Test Mode is on, the program will not create a KBase Pool File.
     custom_model_string :
         ui-name : |
             Custom Model Text 
@@ -64,14 +55,37 @@ parameters :
         long-hint  : |
             If you chose "Custom" as your model, then you must input the text for the model. Examples given
             in the app description, including format restrictions.
+    maxReads :
+        ui-name : |
+            max Reads per FASTQ
+        short-hint : |
+            An integer. The total number of reads to parse in the FASTQ input files.
+        long-hint : |
+    minQuality :
+        ui-name : |
+            min Quality
+        short-hint : |
+            An integer. The minimum quality (from Illumina) for all nucleotides for a barcode to pass.
+        long-hint : |
+    minIdentity :
+        ui-name : |
+            min Identity
+        short-hint : |
+            A float. Minimum Identity for read against genome to be counted as a map to the location.
+        long-hint : |
+    minScore :
+        ui-name : |
+            min Score
+        short-hint : |
+            minimum length of mapping to genome or past-end of model
+        long-hint : |
     minN :
         ui-name : |
             minN
         short-hint : |
             An integer. minimum number of "good" reads for a barcode supporting its mapping.
         long-hint : |
-            (Int) An optional input to the Design Random Pool program. minN is the minimum number of "good" reads for a barcode supporting
- ;;;;;;           its mapping.  (Good means a unique hit to the genome and qBeg=1.) Must be greater than 1.
+            (Int) An optional input to the Design Random Pool program. minN is the minimum number of "good" reads for a barcode supporting its mapping.  (Good means a unique hit to the genome) Must be greater than 1.
     minFrac :
         ui-name : |
             minFrac
@@ -89,6 +103,12 @@ parameters :
             reads for preferred mapping over the 2nd-most-frequent mapping. Must be greater than 0.
         long-hint : |
             (Float) An optional input to Design Random Pool. minRatio is the minimum ratio of reads for preferred mapping over the 2nd-most-frequent mapping. Must be greater than 0.
+    maxQBeg :
+        ui-name : |
+           max Query Beginning 
+        short-hint : |
+            The max location index within the query for which the query can be matched to genome.
+        long-hint : |
     pool_description :
         ui-name : |
             Pool Description
@@ -116,8 +136,6 @@ parameters :
             The name of your output files.
         long-hint  : |
             Give a name with no spaces or special characters.
-
-
 
 description : |
     <p>A KBase Wrapper for Morgan Prices's <a href="https://bitbucket.org/berkeleylab/feba/src/master/"> MapTnSeq code. </a></p>

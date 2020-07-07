@@ -68,24 +68,31 @@ class map_tnseqTest(unittest.TestCase):
         fastq_ref_list = ["49371/2/1"]
         model_name = "model_ezTn5_kan1" #"Custom" #
         custom_model_string = "Arbitrary"
-        # Test mode is yes or no
-        test_mode = "no"
-        minN = None #Restriction: Must be at least 1. 
-        minFrac = None #Range 0-1
-        minRatio = None #Range 0 -inf.
+        maxReads = 10000
+        minQuality = 5
+        minIdentity = 90.0
+        minScore = 15
+        minN = 5 #Restriction: Must be at least 1. 
+        minFrac = 0.75 #Range 0-1
+        minRatio = 8.0 #Range 0 -inf.
+        maxQBeg = 3.0
         pool_description = "Ci Testing"
         KB_Pool_Bool = "yes"
         output_name = "init_test"
 
         ret = self.serviceImpl.run_map_tnseq(self.ctx, {'workspace_name': self.wsName,
                                                         'genome_ref': genome_ref ,
-                                                        'fastq_ref': fastq_ref_list,
-                                                        'test_mode': test_mode,
+                                                        'fastq_ref_list': fastq_ref_list,
+                                                        'model_name': model_name,
+                                                        'custom_model_string' : custom_model_string,
+                                                        'maxReads': maxReads,
+                                                        'minQuality': minQuality,
+                                                        'minIdentity': minIdentity,
+                                                        'minScore': minScore,
                                                         'minN': minN,
                                                         'minFrac': minFrac,
                                                         'minRatio': minRatio,
-                                                        'model_name': model_name,
-                                                        'custom_model_string' : custom_model_string ,
+                                                        'maxQBeg': maxQBeg,
                                                         'pool_description': pool_description,
                                                         'KB_Pool_Bool': KB_Pool_Bool,
                                                         'output_name': output_name,

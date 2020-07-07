@@ -10,6 +10,7 @@ def validate_init_params(params, cfg_d):
     cfg_d: (d)
         custom_model_fp: (s) Path to custom model: Should always be
             scratch_dir/custom_model.txt
+        models_dir: (s) Path to all models
     Outputs:
         vp: (d) "Validated Params"
             genome_ref: (s)
@@ -73,15 +74,15 @@ def validate_init_params(params, cfg_d):
         vp["model_fp"] = None
         # If model_test is true, we run through all the models
     else:
-        model_fp = os.path.join(map_tnseq_dir, 'primers/' + val_par['model_name'])
+        model_fp = os.path.join(cfg_d["models_dir"], val_par['model_name'])
         # Check if model file exists
         logging.critical("We check if model file exists:")
         if (os.path.exists(model_fp)):
             logging.critical(model_fp + " does exist")
             vp['model_fp'] = model_fp
         else:
-            logging.critical(os.listdir(os.path.join(map_tnseq_dir, "primers")))
-            raise Exception("Could not find model filepath: {}".format(model_fp))
+            logging.critical(os.listdir(cfg_d["models_dir"]))
+            raise Exception("Could not find model within directory: {}".format(model_fp))
     if "test_mode" in params:
         if params["test_mode"] == "yes":
             vp['test_mode_bool'] = True
@@ -96,7 +97,7 @@ def validate_init_params(params, cfg_d):
     #MapTnSeq variables
     if "maxReads" in params:
         mR = params["maxReads"]
-        if mR is None:
+        if mR is None or mR == "":
             # There is no limit to number of reads to go through
             # We set maxReads to 10 billion
             vp["maxReads"] = 10*10
@@ -109,7 +110,7 @@ def validate_init_params(params, cfg_d):
 
     if "minQuality" in params:
         mQ = params["minQuality"]
-        if mQ is None:
+        if mQ is None or mQ == "":
             # there is no minQuality
             vp["minQuality"] = 0
         elif not isinstance(mQ, int):
@@ -120,10 +121,11 @@ def validate_init_params(params, cfg_d):
         raise Exception("minQuality not passed in params")
 
     if "minIdentity" in params:
+
         mI = params["minIdentity"]
-        if mI is None:
+        if mI is None or mI == "":
             # there is no minIdentity - set to default 90
-            vp["minIdentity"] = 90
+            vp["minIdentity"] = 90.0
         elif not isinstance(mI, float):
             # It's string not float?
             vp["minIdentity"] = float(mI)
@@ -134,7 +136,7 @@ def validate_init_params(params, cfg_d):
 
     if "minScore" in params:
         mS = params["minScore"]
-        if mS is None:
+        if mS is None or mS == "":
             vp["minScore"] = 15.0 
         elif not isinstance(mS, float):
             # It's string not float?
@@ -148,7 +150,7 @@ def validate_init_params(params, cfg_d):
         # For Design Random Pool: minimum number of good reads for a barcode with
         # a specific mapping
         mN = params["minN"]
-        if mN is None:
+        if mN is None or mN == "":
             vp["minN"] = 5 
         elif not isinstance(mN, int):
             # It's string not int?
@@ -163,7 +165,7 @@ def validate_init_params(params, cfg_d):
         # For Design Random Pool: Minimum fraction of reads w/ barcode that 
         # agree with preferred mapping
         mF = params["minFrac"]
-        if mF is None:
+        if mF is None or mF == "":
             vp["minFrac"] = 0.75 
         elif not isinstance(mF, float):
             # It's string not float?
@@ -179,7 +181,7 @@ def validate_init_params(params, cfg_d):
         # 2nd-most-frequent mapping (2nd most-preferred mapping)
 
         mR = params["minRatio"]
-        if mR is None:
+        if mR is None or mR == "":
             vp["minRatio"] = 8.0 
         elif not isinstance(mR, float):
             # It's string not float?
@@ -193,7 +195,7 @@ def validate_init_params(params, cfg_d):
     if "maxQBeg" in params:
         #  Maximum location index in query where hit to genome can occur
         mN = params["maxQBeg"]
-        if mN is None:
+        if mN is None or mN == "":
             vp["maxQBeg"] = 3 
         elif not isinstance(mN, int):
             # It's string not int?

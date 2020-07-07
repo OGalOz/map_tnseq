@@ -45,6 +45,10 @@
                     "display": "Custom - (Advanced)"
                 },
                 {
+                    "value": "Unknown",
+                    "display": "Unknown - (Find)"
+                }
+                {
                     "value": "model_Sc_Tn5",
                     "display": "model_Sc_Tn5"
                 },
@@ -97,25 +101,6 @@
 
         },          
         {
-        "id": "test_mode",
-            "optional": false,
-            "advanced": false,
-            "allow_multiple": false,
-            "default_values": ["no"],
-            "field_type" : "dropdown",
-            "dropdown_options":{
-                "options": [{
-                    "value": "no",
-                    "display": "No"
-                },
-                {
-                    "value": "yes",
-                    "display": "Yes"
-                }
-                ]
-                   }
-        },
-        {
             "id": "custom_model_string", 
             "optional": true,
             "advanced": true,
@@ -126,6 +111,47 @@
                 "n_rows" : 2
 
             }
+        }, 
+        {
+        "id": "maxReads",
+            "optional": true,
+            "text_options" : {
+                "validate_as" : "int"
+            },
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "text"
+        },{
+        "id": "minQuality",
+            "optional": true,
+            "text_options" : {
+                "validate_as" : "int"
+            },
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "0" ],
+            "field_type": "text"
+        },       {
+        "id": "minIdentity",
+            "optional": true,
+            "text_options" : {
+                "validate_as" : "float"
+            },
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "90.0" ],
+            "field_type": "text"
+        },       {
+        "id": "minScore",
+            "optional": true,
+            "text_options" : {
+                "validate_as" : "float"
+            },
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "15.0" ],
+            "field_type": "text"
         },
         {
         "id": "minN",
@@ -135,7 +161,7 @@
             },
             "advanced": true,
             "allow_multiple": false,
-            "default_values": [ "" ],
+            "default_values": [ "5" ],
             "field_type": "text"
         },
         {
@@ -146,7 +172,7 @@
             },
             "advanced": true,
             "allow_multiple": false,
-            "default_values": [ "" ],
+            "default_values": [ "0.75" ],
             "field_type": "text"
         },
 
@@ -158,7 +184,18 @@
             },
             "advanced": true,
             "allow_multiple": false,
-            "default_values": [ "" ],
+            "default_values": [ "8.0" ],
+            "field_type": "text"
+        },
+        {
+        "id": "maxQBeg",
+            "optional": true,
+            "text_options" : {
+                "validate_as" : "int"
+            },
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "3" ],
             "field_type": "text"
         },
         {
@@ -235,11 +272,25 @@
                     "input_parameter": "test_mode",
                     "target_property": "test_mode"
                 },
-
                 {
                     "input_parameter": "custom_model_string",
                     "target_property": "custom_model_string"
-
+                },
+                {
+                    "input_parameter": "maxReads",
+                    "target_property": "maxReads"
+                },
+                {
+                    "input_parameter": "minQuality",
+                    "target_property": "minQuality"
+                },
+                {
+                    "input_parameter": "minIdentity",
+                    "target_property": "minIdentity"
+                },
+                {
+                    "input_parameter": "minScore",
+                    "target_property": "minScore"
                 },
                 {
                     "input_parameter": "minN",
@@ -254,19 +305,18 @@
                     "target_property": "minRatio"
                 },
                 {
+                    "input_parameter": "maxQBeg",
+                    "target_property": "maxQBeg"
+                },
+                {
                     "input_parameter": "pool_description",
                     "target_property": "pool_description"
-                },
-               {
+                }, {
                     "input_parameter": "KB_Pool_Bool",
                     "target_property": "KB_Pool_Bool"
-                },
-
-
-                {
+                }, {
                     "input_parameter": "output_name",
                     "target_property": "output_name"
-
                 }
             ],
             "output_mapping": [
