@@ -8,6 +8,7 @@ import datetime
 
 def upload_poolfile_to_KBase(up):
     '''
+<<<<<<< Updated upstream
     Inputs:
         up: d,
             username:
@@ -20,6 +21,20 @@ def upload_poolfile_to_KBase(up):
             poolfile_name:
             dfu:
 
+=======
+    upload params (up) must include:
+    {
+    username,
+    genome_ref,
+    pool_description,
+    fastq_refs (list),
+    workspace_id,
+    ws_obj,
+    poolfile_fp
+    poolfile_name
+    dfu
+       }
+>>>>>>> Stashed changes
     '''
     # We check correctness of pool file
     column_header_list = check_pool_file(up['poolfile_fp'])

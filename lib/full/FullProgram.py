@@ -118,7 +118,7 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, models_dir):
 
     HTML_str = CreateHTMLString(pre_HTML_d)
     # Print out HTML
-    html_fp = os.path.join("tmp", randomString(6) + ".html")
+    html_fp = os.path.join(tmp_dir, randomString(6) + ".html")
     with open(html_fp, "w") as f:
         f.write(HTML_str)
     logging.info("Wrote html file to " + html_fp)

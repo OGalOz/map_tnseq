@@ -18,14 +18,17 @@ def PrepareUserOutputs(vp, cfg_d):
         username: s,
         ws_id:
         ws_obj:
+        workspace_name: s,
         pool_fp: s,
         dfu:
+        css_style_fp: s
+        Main_HTML_report_fp: s
+
     vp:
         genome_ref: s,
         fastq_ref_list: list<s>,
         pool_description: s,
         KB_Pool_Bool: b,
-
         
     """
 
@@ -50,12 +53,12 @@ def PrepareUserOutputs(vp, cfg_d):
     
     
     # Here we decide which files to return to User and place in a directory
-    # Pool File, ".surprise?"
+    # Pool File, ".surprise?", "html?"
     res_dir = os.path.join(cfg_d['tmp_dir'], "results")
     os.mkdir(res_dir)
     shutil.move(cfg_d['pool_fp'], res_dir)
 
-    #Returning file in zipped format:-------------------------------
+    # Returning file in zipped format:-------------------------------
     file_zip_shock_id = cfg_d['dfu'].file_to_shock({'file_path': res_dir,
                                           'pack': 'zip'})['shock_id']
 
@@ -67,13 +70,41 @@ def PrepareUserOutputs(vp, cfg_d):
             + ' Map TnSeq and Design Random Pool'
            }
 
+    
+    # Preparing HTML output
+    html_dir = os.path.join(cfg_d["tmp_dir"], "HTML")
+    os.mkdir(html_dir)
+    shutil.move(cfg_d['css_style_fp'], html_dir)
+    shutil.move(cfg_d['Main_HTML_report_fp'], html_dir)
+
+    HTML_report_shock_id = cfg_d['dfu'].file_to_shock({
+            "file_path": html_dir,
+            "pack": "zip"
+            })['shock_id']
+
+    HTML_report_d_l = [{"shock_id": HTML_report_shock_id,
+                        "name": "HTML_Report",
+                        "label": "HTML_Report",
+                        "description": "HTML Summary Report for MapTnSeq and Design Random Pool app"
+                        }]
+
+
+
+
     report_params = {
-            'workspace_name' : params['workspace_name'],
-            'file_links' : [dir_link]
+            'workspace_name' : cfg_d['workspace_name'],
+            'file_links' : [dir_link],
+            "html_links": HTML_report_d_l,
+            "direct_html_link_index": 0,
+            "html_window_height": 333,
+            "report_object_name": "KB_MTS_DRP_Report",
+            "message": ""
             }
 
 
     return report_params
+
+
 
 
 
@@ -106,29 +137,28 @@ def PrepareProgramInputs(params, cfg_d):
         R_op_fp: (s) Path to write R
         MTS_cfg_fp: (s) Path to write MapTnSeq Config
         DRP_cfg_fp: (s) Path to write Design Random Pool Config
+        gffToGeneTable_perl_fp: (s) Path to perl script
     """
 
     # validated params
     vp = validate_init_params(params, cfg_d)
 
 
-    # Download genome in genbank format and convert it to fna:
+    # Download genome in GBK format and convert it to fna:
     # gt stands for genome table
-    genome_fna_fp, gt_config_dict, gbk_fp = DownloadGenomeToFNA(
+    genome_fna_fp, gbk_fp = DownloadGenomeToFNA(
             cfg_d['gfu'], vp['genome_ref'], cfg_d['tmp_dir'])
     cfg_d['genome_fna_fp'] = genome_fna_fp
 
     # FASTQs output dir
     fq_dir = os.path.join(cfg_d['tmp_dir'], "FASTQs")
-    fastq_fp_l = DownloadFASTQs(cfg_d['dfu'], vp['fastq_ref_list'], 
-                                cfg_d['tmp_dir'], fq_dir )
+    fastq_fp_l = DownloadFASTQs(cfg_d['dfu'], vp['fastq_ref_list'], fq_dir )
 
     cfg_d['fastq_fp_l'] = fastq_fp_l
 
     # This function creates the gene_table at the location gene_table_fp
-    # *This function may not work properly
     convert_genbank_to_gene_table(gbk_fp, cfg_d['gene_table_fp'],
-                                    gt_config_dict)
+                                    cfg_d["gffToGeneTable_perl_fp"])
 
 
 
@@ -172,8 +202,9 @@ def Create_MTS_DRP_config(cfg_d, vp):
             "debug": False,
             "keepblat8": True,
             "keepTMPfna": True,
-            "flanking": 5
+            "flanking": 5,
             "wobbleAllowed": 2,
+            "tmp_dir": cfg_d["tmp_dir"],
             "delta": 5,
             "tileSize": 11,
             "stepSize": 11,
@@ -186,7 +217,7 @@ def Create_MTS_DRP_config(cfg_d, vp):
             "model_fp": vp["model_fp"],
             "maxReads": vp["maxReads"],
             "minQuality": vp["minQuality"],
-            "minIdentity": vp["minIdentity"]
+            "minIdentity": vp["minIdentity"],
             "minScore": vp["minScore"],
             "fastq_fp_list":  cfg_d['fastq_fp_l'],
             "genome_fp": cfg_d['genome_fna_fp']
@@ -201,8 +232,8 @@ def Create_MTS_DRP_config(cfg_d, vp):
                 "minRatio": vp["minRatio"],
                 "maxQBeg": vp["maxQBeg"],
                 "tmp_dir": cfg_d["tmp_dir"],
-                "R_fp": cfg_d["R_fp"] ,
-                "R_op_fp": cfg_d["R_op_fp"]
+                "R_fp": cfg_d["R_fp"],
+                "R_op_fp": cfg_d["R_op_fp"],
                 "genes_table_fp": cfg_d["gene_table_fp"]
                 }
             }

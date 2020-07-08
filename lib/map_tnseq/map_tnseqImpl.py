@@ -74,7 +74,6 @@ class map_tnseq:
 
     def run_map_tnseq(self, ctx, params):
         """
-        This example function accepts any number of parameters and returns results in a KBaseReport
         :param params: instance of mapping from String to unspecified object
         :returns: instance of type "ReportResults" -> structure: parameter
            "report_name" of String, parameter "report_ref" of String
@@ -106,7 +105,7 @@ class map_tnseq:
                 "gene_table_fp": os.path.join(td, "genes.GC"),
                 "blat_cmd": "/kb/module/lib/map_tnseq/blat",
                 "unmapped_fp": os.path.join(td, "UNMAPPED.fna"),
-                "tmpFNA_fp": os.path.join(td,"TMP.fna")
+                "tmpFNA_fp": os.path.join(td,"TMP.fna"),
                 "trunc_fp": os.path.join(td, "TRUNC.fna"),
                 "endFNA_fp": os.path.join(td, "END.fna"),
                 "models_dir": "/kb/module/lib/map_tnseq/models",
@@ -114,6 +113,8 @@ class map_tnseq:
                 "R_op_fp": os.path.join(td, "R_results.txt."),
                 "MTS_cfg_fp": os.path.join(td, "maptnseqconfig.json"),
                 "DRP_cfg_fp": os.path.join(td, "designRPconfig.json"),
+                "gffToGeneTable_perl_fp": "/kb/module/lib/map_tnseq/gffToGenes.pl",
+                "css_style_fp": "/kb/module/lib/map_tnseq/style.css"
                 }
         
         # We divide the program into 3 parts:
@@ -126,7 +127,9 @@ class map_tnseq:
 
         # Part 3: Prepare output to return to user
         cfg_d['pool_fp'] = pool_op_fp
-        report_params = PrepareUserOutputs(vp)
+        cfg_d["workspace_name"] = params["workspace_name"]
+        cfg_d["Main_HTML_report_fp"] = html_fp
+        report_params = PrepareUserOutputs(vp, cfg_d)
 
         #Returning file in zipped format:------------------------------------------------------------------
         report_info = report_util.create_extended_report(report_params)
@@ -312,6 +315,50 @@ def old():
             design_response = subprocess.run(design_r_pool_cmnds)
             logging.info("DesignRandomPool response: {}".format(str(design_response)))
 
+<<<<<<< Updated upstream
+=======
+        # Above Design Random Pool outputs a file to pool_fp
+        
+        # Now we upload the pool file to KBase to make a PoolFile Object
+        if val_par['KB_Pool_Bool'] and not test_mode_bool:
+            upload_params = {
+                    'username': val_par['username'],
+                    'genome_ref': val_par['genome_ref'],
+                    'fastq_refs': fastq_ref_list,
+                    'pool_description': val_par['pool_description'] ,
+                    'workspace_id': workspace_id,
+                    'ws_obj': ws,
+                    'poolfile_fp': pool_fp,
+                    'poolfile_name': out_base + ".pool",
+                    'dfu': dfu_tool
+                    }
+            logging.info("UPLOADING POOL FILE to KBASE through DFU")
+            upload_poolfile_results = upload_poolfile_to_KBase(upload_params)
+            logging.info("Upload Pool File Results:")
+            logging.info(upload_poolfile_results)
+        
+        
+        #Returning file in zipped format:------------------------------------------------------------------
+        
+        file_zip_shock_id = dfu_tool.file_to_shock({'file_path': return_dir,
+                                              'pack': 'zip'})['shock_id']
+
+        dir_link = {
+                'shock_id': file_zip_shock_id, 
+               'name': main_output_name + '.zip', 
+               'label':'map_tnseq_output_dir', 
+               'description': 'The directory of outputs from running' \
+                + ' Map TnSeq and Design Random Pool'
+               }
+
+        report_params = {
+                'workspace_name' : params['workspace_name'],
+                'file_links' : [dir_link]
+                
+                }
+
+        report_info = report_util.create_extended_report(report_params)
+>>>>>>> Stashed changes
 
     """
     return None

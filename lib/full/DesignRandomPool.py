@@ -114,7 +114,7 @@ def ParseInputs(input_dict):
         minN: (int)
         minFrac: (float)
         minRatio: (float)
-        maxQBeg: (float)
+        maxQBeg: (int)
         map_tnseq_table_fps: (list of str)
     """
     
@@ -124,7 +124,7 @@ def ParseInputs(input_dict):
             raise Exception(x + " must be an argument and must be string")
 
     # Check floats
-    for x in ["minFrac", "minRatio", "maxQBeg"]:
+    for x in ["minFrac", "minRatio"]:
         if x not in input_dict or not isinstance(input_dict[x],float):
             raise Exception(x + " must be an argument and must be float")
     # Check input files
@@ -136,9 +136,11 @@ def ParseInputs(input_dict):
     else:
         raise Exception("map_tnseq_table_fps not found as input to Design Random Pool")
 
-    # minN
-    if "minN" not in input_dict or not isinstance(input_dict["minN"], int):
-        raise Exception("minN input to Design RandomPool incorrect")
+    # ints
+    for x in ["minN", "maxQBeg"]:
+        if x not in input_dict or not isinstance(input_dict[x],int):
+            raise Exception(x + " must be an argument and must be int")
+
 
     logging.info("All input parameters to Design Random Pool passed")
 
@@ -153,6 +155,7 @@ def RunPoolStatsR(inp_d):
         genes_table_fp (str) genes table file path
         nMapped (int) 
         R_op_fp: (str) Path to R log
+        tmp_dir: (str) Path to tmp_dir
     """
 
     R_executable = "Rscript"
@@ -166,8 +169,9 @@ def RunPoolStatsR(inp_d):
 
     logging.info("Running R PoolStats")
 
+    std_op = os.path.join(inp_d["tmp_dir"], "R_STD_OP.txt")
     with open(inp_d["R_op_fp"], "w") as f:
-        with open("./tmp/R_std_op.txt", "w") as g:
+        with open(std_op, "w") as g:
             subprocess.call(RCmds, stderr=f, stdout=g)
 
     if os.path.exists(inp_d["R_op_fp"]):
@@ -277,7 +281,7 @@ def RlogToDict(R_log_fp):
     Outputs:
         res_d: (dict) 'results dict'
             failed: (bool) True if failed.
-            [Error_str]: existant if failed=True
+            [Error_str]: exists if failed=True
             insertions: (int)
             diff_loc: (int)
             nPrtn_cntrl: (int)

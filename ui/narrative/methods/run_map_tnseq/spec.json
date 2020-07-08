@@ -47,7 +47,7 @@
                 {
                     "value": "Unknown",
                     "display": "Unknown - (Find)"
-                }
+                },
                 {
                     "value": "model_Sc_Tn5",
                     "display": "model_Sc_Tn5"
@@ -136,21 +136,21 @@
         "id": "minIdentity",
             "optional": true,
             "text_options" : {
-                "validate_as" : "float"
+                "validate_as" : "int"
             },
             "advanced": true,
             "allow_multiple": false,
-            "default_values": [ "90.0" ],
+            "default_values": [ "90" ],
             "field_type": "text"
         },       {
         "id": "minScore",
             "optional": true,
             "text_options" : {
-                "validate_as" : "float"
+                "validate_as" : "int"
             },
             "advanced": true,
             "allow_multiple": false,
-            "default_values": [ "15.0" ],
+            "default_values": [ "15" ],
             "field_type": "text"
         },
         {
@@ -267,10 +267,6 @@
                 {
                     "input_parameter": "model_name",
                     "target_property": "model_name"
-                },
-                {
-                    "input_parameter": "test_mode",
-                    "target_property": "test_mode"
                 },
                 {
                     "input_parameter": "custom_model_string",

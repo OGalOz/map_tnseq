@@ -1,6 +1,7 @@
 #python3
 import os
 import logging
+import re
 
 def validate_init_params(params, cfg_d):
     """
@@ -21,8 +22,8 @@ def validate_init_params(params, cfg_d):
             (MapTnSeq vars)
             maxReads: (i)
             minQuality: (i)
-            minIdentity: (f)
-            minScore: (f)
+            minIdentity: (i)
+            minScore: (i)
 
             (Design Random Pool vars)
             minN: (i)
@@ -74,7 +75,7 @@ def validate_init_params(params, cfg_d):
         vp["model_fp"] = None
         # If model_test is true, we run through all the models
     else:
-        model_fp = os.path.join(cfg_d["models_dir"], val_par['model_name'])
+        model_fp = os.path.join(cfg_d["models_dir"], vp['model_name'])
         # Check if model file exists
         logging.critical("We check if model file exists:")
         if (os.path.exists(model_fp)):
@@ -83,6 +84,7 @@ def validate_init_params(params, cfg_d):
         else:
             logging.critical(os.listdir(cfg_d["models_dir"]))
             raise Exception("Could not find model within directory: {}".format(model_fp))
+    """
     if "test_mode" in params:
         if params["test_mode"] == "yes":
             vp['test_mode_bool'] = True
@@ -92,6 +94,7 @@ def validate_init_params(params, cfg_d):
             vp['test_mode_bool'] = False
     else:
         raise Exception("Test Mode not passed in params.")
+    """
 
     
     #MapTnSeq variables
@@ -125,10 +128,10 @@ def validate_init_params(params, cfg_d):
         mI = params["minIdentity"]
         if mI is None or mI == "":
             # there is no minIdentity - set to default 90
-            vp["minIdentity"] = 90.0
-        elif not isinstance(mI, float):
-            # It's string not float?
-            vp["minIdentity"] = float(mI)
+            vp["minIdentity"] = 90
+        elif not isinstance(mI, int):
+            # It's string not int?
+            vp["minIdentity"] = int(mI)
         else:
             vp["minIdentity"] = mI
     else:
@@ -137,10 +140,10 @@ def validate_init_params(params, cfg_d):
     if "minScore" in params:
         mS = params["minScore"]
         if mS is None or mS == "":
-            vp["minScore"] = 15.0 
-        elif not isinstance(mS, float):
-            # It's string not float?
-            vp["minScore"] = float(mS)
+            vp["minScore"] = 15 
+        elif not isinstance(mS, int):
+            # It's string not int?
+            vp["minScore"] = int(mS)
         else:
             vp["minScore"] = mS
     else:

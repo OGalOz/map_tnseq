@@ -63,22 +63,23 @@ class map_tnseqTest(unittest.TestCase):
         #
         # Check returned data with
         # self.assertEqual(ret[...], ...) or other unittest methods
-        
-        genome_ref = "49371/5/1" 
-        fastq_ref_list = ["49371/2/1"]
-        model_name = "model_ezTn5_kan1" #"Custom" #
+       
+        # Acido
+        genome_ref = "52075/9/1" 
+        fastq_ref_list = ["52075/4/1"] # Short: 52075/4/1 # Long 52075/12/1
+        model_name = "model_pKMW3_universal" #"Custom" #
         custom_model_string = "Arbitrary"
-        maxReads = 10000
+        maxReads = 2500 
         minQuality = 5
-        minIdentity = 90.0
+        minIdentity = 90
         minScore = 15
         minN = 5 #Restriction: Must be at least 1. 
         minFrac = 0.75 #Range 0-1
         minRatio = 8.0 #Range 0 -inf.
         maxQBeg = 3.0
         pool_description = "Ci Testing"
-        KB_Pool_Bool = "yes"
-        output_name = "init_test"
+        KB_Pool_Bool = "no"
+        output_name = "Valid Acido test"
 
         ret = self.serviceImpl.run_map_tnseq(self.ctx, {'workspace_name': self.wsName,
                                                         'genome_ref': genome_ref ,

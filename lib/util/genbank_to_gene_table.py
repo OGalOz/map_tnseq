@@ -2,7 +2,30 @@
 import logging
 import os
 import sys
-from Bio import SeqIO
+import subprocess
+# from Bio import SeqIO
+
+
+
+
+
+
+def convert_genbank_to_gene_table(genbank_filepath, gt_filepath, gffPrlScriptPath):
+    """
+    All inputs are str paths
+    """
+    genbank_filepath = os.path.abspath(genbank_filepath)
+    gt_filepath = os.path.abspath(gt_filepath)
+    gffPrlScriptPath = os.path.abspath(gffPrlScriptPath)
+    gbkTogff_command_l = ["biopython.convert", genbank_filepath, "genbank", 
+                                                gt_filepath + ".gff", "gff3"]
+    subprocess.call(gbkTogff_command_l)
+    gffToGeneTable_command = "perl " + gffPrlScriptPath + " < " + gt_filepath + ".gff > " + gt_filepath
+    subprocess.call(gffToGeneTable_command, shell=True)
+    logging.debug("Wrote Gene Table file to " + gt_filepath)
+    return 0
+
+
 
 
 
@@ -23,7 +46,7 @@ The genes table must include the fields
     other fields:
         sysName, name, GC, nTA
 """
-def convert_genbank_to_gene_table(genbank_filepath, output_filepath, config_dict):
+def OLD_convert_genbank_to_gene_table(genbank_filepath, output_filepath, config_dict):
 
     # This is the output file start line:
     output_file_string = "scaffoldId\tbegin\tend\tstrand\tdesc\t" \
@@ -241,14 +264,16 @@ def test(args):
     logging.basicConfig(level=logging.DEBUG)
     gb_fp = args[1]
     op_fp = args[2]
-    config_dict = {"keep_types": ["1","5","6"]}
+    prlScript = args[3]
+
+    #config_dict = {"keep_types": ["1","5","6"]}
     convert_genbank_to_gene_table(gb_fp, 
                                     op_fp, 
-                                    config_dict)
+                                    prlScript)
 
 def main():
     """
-    args should be genbank, output
+    args should be genbank_to_gene_table.py genbank, output, gffPrlScript
     """
     args = sys.argv
     test(args)

@@ -126,8 +126,8 @@ def ValidateInputs(input_args):
         minQuality: (int)
         flanking: (int)
         wobbleAllowed: (int)
-        minIdentity: (int)
-        minScore: (int)
+        minIdentity: (float)
+        minScore: (float)
         delta: (int)
         tileSize: (int)
         stepSize: (int)
@@ -154,9 +154,9 @@ def ValidateInputs(input_args):
 
     # Checking ints
     for v in ["maxReads", "minQuality", "flanking",
-            "wobbleAllowed", "minIdentity", "minScore", "delta",
-            "tileSize", "stepSize", "nMapped", "nMapUnique",
-            "nPastEndIgnored", "nPastEndTrumps"]:
+            "wobbleAllowed", "delta",
+            "tileSize", "stepSize",
+            "minIdentity", "minScore"]:
         if v not in input_args or not isinstance(input_args[v], int):
             if v == "maxReads" and input_args[v] is None:
                 continue

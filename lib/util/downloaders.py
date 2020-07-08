@@ -1,12 +1,25 @@
 #python3
 import os
 import logging
+import sys
 from Bio import SeqIO
 
 # We download Genome Files: gfu is Genome File Util
 def DownloadGenomeToFNA(gfu, genome_ref, scratch_dir):
+    """
+    Inputs: GFU Object, str (A/B/C), str path
+    Outputs: [fna_fp (str), gbk_fp (str)]
+    """
+
     GenomeToGenbankResult = gfu.genome_to_genbank({'genome_ref': genome_ref})
     genbank_fp = GenomeToGenbankResult['genbank_file']['file_path']
+
+    genome_fna_fp = get_fa_from_scratch(scratch_dir)
+
+    if genome_fna_fp is None:
+        raise Exception("GFU Genome To Genbank did not download Assembly file in expected Manner.")
+
+    """
     genome_fna_filename = "genome_fna"
     genome_fna_fp = os.path.join(scratch_dir, genome_fna_filename)
 
@@ -15,8 +28,30 @@ def DownloadGenomeToFNA(gfu, genome_ref, scratch_dir):
 
     #Following gets important info from genbank file
     gt_config_dict = get_gene_table_config_dict(genbank_fp)
+    """
 
-    return [genome_fna_fp, gt_config_dict, genbank_fp]
+    return [genome_fna_fp, genbank_fp]
+
+
+def get_fa_from_scratch(scratch_dir):
+    """
+    Careful... May not work in the Future
+    Inputs:
+        scratch_dir: (str) Path to work dir/ tmp etc..
+    Outputs:
+        FNA fp: (str) Automatic download through GenbankToGenome
+    """
+    
+    fna_fp = None
+    scratch_files = os.listdir(scratch_dir)
+    for f in scratch_files:
+        if f[-2:] == "fa":
+            fna_fp = os.path.join(scratch_dir, f)
+            break
+
+    return fna_fp
+
+
 
 
 def download_fastq(dfu, fastq_refs_list, scratch_dir, output_fp):

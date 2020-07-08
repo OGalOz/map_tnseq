@@ -233,25 +233,37 @@ def Create_HTML_DRP(DRP_report_dict):
     css_tbl_cls = "dataTable__table table table-striped table-bordered dataTable no-footer"
     HTML_l += ['<table class="{}">'.format(css_tbl_cls)]
 
-    for info in [
-            ['# Usable Barcodes ', prep_int(rd['nUsableBarcodes'])],
-            ['% Coverage of mapped reads by usable barcodes', 
-                Prc(float(rd['nReadsForUsable'])/(float(rd['nMapped']) + 10**-6)) + "%" ],
-            ['# Protein-Coding Genes with Central Insertion(s)', prep_int(rl['nPrtn_cntrl']) ],
-            ['# Central Insertions in Protein Coding Genes ', prep_int(rl['cntrl_ins'])],
-            ['# Putatively Essential Genes with Insertions', prep_int(rl['num_surp'])],
-            ['Reads per Protein: Mean ', rl['reads_per_prtn_mean']],
-            ['Reads per Protein: Median', prep_int(rl['reads_per_prtn_median'])],
-            ['Reads per Protein: Bias (mean/median)',
-                str(round(float(rl['reads_per_prtn_mean'])/float(rl['reads_per_prtn_median']), 3)) ],
-            ['% Of Insertions in Protein-Coding Genes on the Coding Strand', 
-                str(round(rl['gene_trspsn_same_prcnt'],3)) + "%"]
-            ]:
-        html_str = '<tr role="row" class="DRP_row">\n' \
-                + '<td class="DRP_col_1">' + info[0] + '</td>\n' \
-                + '<td class="DRP_col_2">' + str(info[1]) + '</td>\n' \
-                + '</tr>'
-        HTML_l.append(html_str)
+    if rl["failed"]:
+        for info in [
+                ['# Usable Barcodes ', prep_int(rd['nUsableBarcodes'])],
+                ['% Coverage of mapped reads by usable barcodes', 
+                    Prc(float(rd['nReadsForUsable'])/(float(rd['nMapped']) + 10**-6)) + "%" ]
+                ]:
+            html_str = '<tr role="row" class="DRP_row">\n' \
+                    + '<td class="DRP_col_1">' + info[0] + '</td>\n' \
+                    + '<td class="DRP_col_2">' + str(info[1]) + '</td>\n' \
+                    + '</tr>'
+            HTML_l.append(html_str)
+    else:
+        for info in [
+                ['# Usable Barcodes ', prep_int(rd['nUsableBarcodes'])],
+                ['% Coverage of mapped reads by usable barcodes', 
+                    Prc(float(rd['nReadsForUsable'])/(float(rd['nMapped']) + 10**-6)) + "%" ],
+                ['# Protein-Coding Genes with Central Insertion(s)', prep_int(rl['nPrtn_cntrl']) ],
+                ['# Central Insertions in Protein Coding Genes ', prep_int(rl['cntrl_ins'])],
+                ['# Putatively Essential Genes with Insertions', prep_int(rl['num_surp'])],
+                ['Reads per Protein: Mean ', rl['reads_per_prtn_mean']],
+                ['Reads per Protein: Median', prep_int(rl['reads_per_prtn_median'])],
+                ['Reads per Protein: Bias (mean/median)',
+                    str(round(float(rl['reads_per_prtn_mean'])/float(rl['reads_per_prtn_median']), 3)) ],
+                ['% Of Insertions in Protein-Coding Genes on the Coding Strand', 
+                    str(round(rl['gene_trspsn_same_prcnt'],3)) + "%"]
+                ]:
+            html_str = '<tr role="row" class="DRP_row">\n' \
+                    + '<td class="DRP_col_1">' + info[0] + '</td>\n' \
+                    + '<td class="DRP_col_2">' + str(info[1]) + '</td>\n' \
+                    + '</tr>'
+            HTML_l.append(html_str)
 
     HTML_l.append('</table>\n')
     HTML_l.append("</div>\n")
