@@ -81,7 +81,6 @@ class map_tnseq:
         # ctx is the context object
         # return variables are: output
         #BEGIN run_map_tnseq
-        report_util = KBaseReport(self.callback_url)
         logging.basicConfig(level=logging.DEBUG)
         dfu_tool = DataFileUtil(self.callback_url)
         dfu = dfu_tool
@@ -133,6 +132,7 @@ class map_tnseq:
         report_params = PrepareUserOutputs(vp, cfg_d)
 
         #Returning file in zipped format:------------------------------------------------------------------
+        report_util = KBaseReport(self.callback_url)
         report_info = report_util.create_extended_report(report_params)
 
         output = {

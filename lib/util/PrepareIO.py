@@ -93,7 +93,7 @@ def PrepareUserOutputs(vp, cfg_d):
 
     HTML_report_d_l = [{"shock_id": HTML_report_shock_id,
                         "name": os.path.basename(cfg_d['Main_HTML_report_fp']),
-                        "label": os.path.basename(cfg_d['Main_HTML_report_fp']),
+                        "label": "MutantReport",
                         "description": "HTML Summary Report for MapTnSeq and Design Random Pool app"
                         }]
 

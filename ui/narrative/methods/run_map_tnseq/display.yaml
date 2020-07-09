@@ -1,7 +1,7 @@
 #
 # define display information
 #
-name: Design Pool 
+name: Barcoded Reads To Mutants 
 
 tooltip: |
     Give a Genome and Related Reads with Barcodes and Get a Pool File.
