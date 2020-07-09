@@ -120,7 +120,7 @@
             },
             "advanced": true,
             "allow_multiple": false,
-            "default_values": [ "" ],
+            "default_values": [ "20000000" ],
             "field_type": "text"
         },{
         "id": "minQuality",
