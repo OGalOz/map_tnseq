@@ -24,6 +24,7 @@ def PrepareUserOutputs(vp, cfg_d):
         css_style_fp: s
         Main_HTML_report_fp: s
         model_test: b
+        gene_table_fp: s
 
     vp:
         genome_ref: s,
@@ -51,26 +52,33 @@ def PrepareUserOutputs(vp, cfg_d):
         upload_poolfile_results = upload_poolfile_to_KBase(upload_params)
         logging.info("Upload Pool File Results:")
         logging.info(upload_poolfile_results)
-    
+   
+
+    # We make a directory containing the resultant files
+    res_dir = os.path.join(cfg_d['tmp_dir'], "results")
+    os.mkdir(res_dir)
+    shutil.copy(cfg_d["Main_HTML_report_fp"], res_dir)
+
     if not cfg_d["model_test"]: 
-        # Here we decide which files to return to User and place in a directory
+        # Here we decide which files besides HTML to return to User and place in a directory
         # Pool File, ".surprise?", "html?"
-        res_dir = os.path.join(cfg_d['tmp_dir'], "results")
-        os.mkdir(res_dir)
         shutil.move(cfg_d['pool_fp'], res_dir)
+        shutil.move(cfg_d["gene_table_fp"], res_dir)
 
-        # Returning file in zipped format:-------------------------------
-        file_zip_shock_id = cfg_d['dfu'].file_to_shock({'file_path': res_dir,
-                                              'pack': 'zip'})['shock_id']
 
-        dir_link = {
-                'shock_id': file_zip_shock_id, 
-               'name':  'results.zip', 
-               'label':'map_tnseq_output_dir', 
-               'description': 'The directory of outputs from running' \
-                + ' Map TnSeq and Design Random Pool'
-               }
 
+
+    # Returning file in zipped format:-------------------------------
+    file_zip_shock_id = cfg_d['dfu'].file_to_shock({'file_path': res_dir,
+                                          'pack': 'zip'})['shock_id']
+
+    dir_link = {
+            'shock_id': file_zip_shock_id, 
+           'name':  'results.zip', 
+           'label':'map_tnseq_output_dir', 
+           'description': 'The directory of outputs from running' \
+            + ' Map TnSeq and Design Random Pool'
+           }
     
     # Preparing HTML output
     html_dir = os.path.join(cfg_d["tmp_dir"], "HTML")
@@ -84,8 +92,8 @@ def PrepareUserOutputs(vp, cfg_d):
             })['shock_id']
 
     HTML_report_d_l = [{"shock_id": HTML_report_shock_id,
-                        "name": "HTML_Report",
-                        "label": "HTML_Report",
+                        "name": os.path.basename(cfg_d['Main_HTML_report_fp']),
+                        "label": os.path.basename(cfg_d['Main_HTML_report_fp']),
                         "description": "HTML Summary Report for MapTnSeq and Design Random Pool app"
                         }]
 

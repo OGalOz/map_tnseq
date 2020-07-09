@@ -67,9 +67,9 @@ class map_tnseqTest(unittest.TestCase):
         # Acido
         genome_ref = "52075/9/1" 
         fastq_ref_list = ["52075/4/1"] # Short: 52075/4/1 # Long 52075/12/1
-        model_name = "Unknown" #"Custom" #Unknown # model_pKMW3_universal
+        model_name = "model_pKMW3_universal" #"Custom" #Unknown # model_pKMW3_universal
         custom_model_string = "Arbitrary"
-        maxReads = 2500 
+        maxReads = 30000 
         minQuality = 5
         minIdentity = 90
         minScore = 15
