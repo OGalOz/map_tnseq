@@ -48,6 +48,9 @@ def get_fa_from_scratch(scratch_dir):
         if f[-2:] == "fa":
             fna_fp = os.path.join(scratch_dir, f)
             break
+    
+    if fna_fp is None:
+        logging.warning("Could not find Assembly FNA file in scratch (work) dir")
 
     return fna_fp
 
@@ -108,12 +111,31 @@ def DownloadFASTQs(dfu, fastq_ref_list, output_dir):
 
 
 
+def GetGenomeOrganismName(ws, genome_ref):
+    """
+    # Getting the organism name using WorkspaceClient
+    ws: workspace client object
+    genome_ref: (str) A/B/C
+    """
+    res = ws.get_objects2(
+        {
+            "objects": [
+                {
+                    "ref": genome_ref,
+                    "included": ["scientific_name"],
+                }
+            ]
+        }
+    )
+    scientific_name = res["data"][0]["data"]["scientific_name"]
+    return scientific_name
 
 
 
 
 
-# We want scaff ld_name and description_name
+# We want scaffold_name and description_name
+# Following function is out of use right now
 def get_gene_table_config_dict(genbank_fp):
     record = SeqIO.read(genbank_fp, "genbank") 
     print(record.description)

@@ -7,7 +7,7 @@ import logging
 import json
 import shutil
 from util.validate import validate_init_params
-from util.downloaders import DownloadGenomeToFNA , DownloadFASTQs
+from util.downloaders import DownloadGenomeToFNA , DownloadFASTQs, GetGenomeOrganismName
 from util.genbank_to_gene_table import convert_genbank_to_gene_table
 from util.upload_pool import upload_poolfile_to_KBase
 
@@ -149,6 +149,7 @@ def PrepareProgramInputs(params, cfg_d):
         MTS_cfg_fp: (s) Path to write MapTnSeq Config
         DRP_cfg_fp: (s) Path to write Design Random Pool Config
         gffToGeneTable_perl_fp: (s) Path to perl script
+        ws: Workspace Object
     """
 
     # validated params
@@ -160,6 +161,7 @@ def PrepareProgramInputs(params, cfg_d):
     genome_fna_fp, gbk_fp = DownloadGenomeToFNA(
             cfg_d['gfu'], vp['genome_ref'], cfg_d['tmp_dir'])
     cfg_d['genome_fna_fp'] = genome_fna_fp
+    genome_scientific_name = GetGenomeOrganismName(cfg_d['ws'], vp['genome_ref'])
 
     # FASTQs output dir
     fq_dir = os.path.join(cfg_d['tmp_dir'], "FASTQs")
@@ -190,7 +192,7 @@ def PrepareProgramInputs(params, cfg_d):
 
     pool_op_fp = os.path.join( cfg_d["tmp_dir"] ,vp["output_name"] + ".pool")
 
-    return [pool_op_fp, vp]
+    return [pool_op_fp, vp, genome_scientific_name]
 
 
 
@@ -216,7 +218,6 @@ def Create_MTS_DRP_config(cfg_d, vp):
             "flanking": 5,
             "wobbleAllowed": 2,
             "tmp_dir": cfg_d["tmp_dir"],
-            "delta": 5,
             "tileSize": 11,
             "stepSize": 11,
             "blatcmd": cfg_d["blat_cmd"],
@@ -230,6 +231,7 @@ def Create_MTS_DRP_config(cfg_d, vp):
             "minQuality": vp["minQuality"],
             "minIdentity": vp["minIdentity"],
             "minScore": vp["minScore"],
+            "delta": vp["delta"],
             "fastq_fp_list":  cfg_d['fastq_fp_l'],
             "genome_fp": cfg_d['genome_fna_fp']
             }

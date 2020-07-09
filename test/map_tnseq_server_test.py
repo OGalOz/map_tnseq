@@ -66,13 +66,16 @@ class map_tnseqTest(unittest.TestCase):
        
         # Acido
         genome_ref = "52075/9/1" 
-        fastq_ref_list = ["52075/4/1"] # Short: 52075/4/1 # Long 52075/12/1
-        model_name = "model_pKMW3_universal" #"Custom" #Unknown # model_pKMW3_universal
+        # FASTQs: Short: 52075/4/1 # Long 52075/12/1
+        fastq_ref_list = ["52075/4/1", "52075/12/1"] 
+        # Models: "Custom" #Unknown # model_pKMW3_universal # model_ezTn5_Tet_Bifido 
+        model_name = "model_pKMW3_universal" 
         custom_model_string = "Arbitrary"
-        maxReads = 30000 
+        maxReads = 4000000 
         minQuality = 5
         minIdentity = 90
         minScore = 15
+        delta = 5
         minN = 5 #Restriction: Must be at least 1. 
         minFrac = 0.75 #Range 0-1
         minRatio = 8.0 #Range 0 -inf.
@@ -90,6 +93,7 @@ class map_tnseqTest(unittest.TestCase):
                                                         'minQuality': minQuality,
                                                         'minIdentity': minIdentity,
                                                         'minScore': minScore,
+                                                        'delta': delta,
                                                         'minN': minN,
                                                         'minFrac': minFrac,
                                                         'minRatio': minRatio,

@@ -82,8 +82,7 @@ class map_tnseq:
         # return variables are: output
         #BEGIN run_map_tnseq
         logging.basicConfig(level=logging.DEBUG)
-        dfu_tool = DataFileUtil(self.callback_url)
-        dfu = dfu_tool
+        dfu = DataFileUtil(self.callback_url)
         gfu = GenomeFileUtil(self.callback_url)
         # We need the workspace object to get info on the workspace the app is running in.
         token = os.environ.get('KB_AUTH_TOKEN', None)
@@ -118,11 +117,12 @@ class map_tnseq:
         
         # We divide the program into 3 parts:
         # Part 1: Prepare to run program: Download necessary files, create configs
-        pool_op_fp, vp = PrepareProgramInputs(params, cfg_d)
+        pool_op_fp, vp, genome_scientific_name = PrepareProgramInputs(params, cfg_d)
 
         # Part 2: Run the program using recently created config files
         html_fp, model_test = CompleteRun(cfg_d["MTS_cfg_fp"], cfg_d["DRP_cfg_fp"],
-                    cfg_d["tmp_dir"], pool_op_fp, cfg_d["models_dir"] )
+                                cfg_d["tmp_dir"], pool_op_fp, cfg_d["models_dir"],
+                                genome_scientific_name)
 
         # Part 3: Prepare output to return to user
         cfg_d['pool_fp'] = pool_op_fp

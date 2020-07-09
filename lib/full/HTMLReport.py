@@ -28,6 +28,7 @@ def CreateHTMLStringBody(pre_HTML_d):
     Inputs:
         pre_HTML_d: (dict)
             models_str: (str) Info about Models
+            genome_name: (str) Name of genome
             MapTnSeq_reports_list: (list) Each element is a MTS_report_d:
                 MTS_report_d: (dict)
                     fastq_fp: The path to the fastq file
@@ -42,7 +43,8 @@ def CreateHTMLStringBody(pre_HTML_d):
                         nTryToMap: (int)
                         nMapped: (int)
                         Uniquely_Mapped: (int)
-                        Hits_pE: (int) Total hits past End
+                        total_hits_pastEnd: (int)
+                        Hits_pE: (int) Total hits past End - nPastEndIgnored
                         nPastEndIgnored: (int)
                         nPastEndTrumps: (int)
                 Note that nPastEndIgnored + nPastEndTrumps = Hits_pE.
@@ -78,6 +80,9 @@ def CreateHTMLStringBody(pre_HTML_d):
     "Took FastQ file _ and extracted information. Report: )
     """
     HTML_str = "<h1>Text Report on 'Reads to Mutant File'</h1>\n"
+    HTML_str += "<h1>--------------------------------------</h1>\n"
+    # Genome info 
+    HTML_str += CreateGenomeInfo(pre_HTML_d["genome_name"])
     # Models info
     HTML_str += CreateModelInfo(pre_HTML_d["models_info"])
     # MapTnSeq info
@@ -86,6 +91,16 @@ def CreateHTMLStringBody(pre_HTML_d):
     HTML_str += Create_HTML_DRP(pre_HTML_d["DRP_report_dict"])
 
     return HTML_str
+
+
+def CreateGenomeInfo(genome_name):
+    # genome_name is string
+
+    HTML_str = "<h2>RBTnSeq Analysis on Genome:</h2>\n"
+    HTML_str += "<h3>{}</h3>\n".format(genome_name)
+    HTML_str += "<h1>--------------------------------------</h1>\n"
+
+    return HTML_str 
 
 def CreateModelInfo(model_info_d):
     """
@@ -98,6 +113,7 @@ def CreateModelInfo(model_info_d):
     HTML_l = ["<h2> Information on Model: </h2>"]
     HTML_l += ["<h3> Using the following given Model:</h3>"]
     HTML_l += ["<h4>" + mm.split('/')[-1] + "</h4>"]
+    HTML_l += ["<h1>--------------------------------------</h1>"]
 
     return "\n".join(HTML_l)
 
@@ -122,7 +138,8 @@ def Create_HTML_MTS(MapTnSeq_reports_list):
                             nTryToMap: (int)
                             nMapped: (int)
                             Uniquely_Mapped: (int)
-                            Hits_pE: (int) Total hits past End
+                            total_hits_pastEnd: (int)
+                            Hits_pE: (int) Total hits past End - nPastEndIgnored
                             nPastEndIgnored: (int)
                             nPastEndTrumps: (int)
             Note that nPastEndIgnored + nPastEndTrumps = Hits_pE.
@@ -154,7 +171,8 @@ def Create_MTS_Table(trd):
             nTryToMap: (int)
             nMapped: (int)
             Uniquely_Mapped: (int)
-            Hits_pE: (int) Total hits past End
+            total_hits_pastEnd: (int)
+            Hits_pE: (int) Total hits past End - nPastEndIgnored
             nPastEndIgnored: (int)
             nPastEndTrumps: (int)
 
@@ -178,11 +196,13 @@ def Create_MTS_Table(trd):
             ['# Reads with Barcode', prep_int(trd['tot_BC'])],
             ['# Reads with Mapped Insertions', prep_int(trd['nMapped'])],
             ['# Reads that Map Uniquely', prep_int(trd['Uniquely_Mapped'])],
+            ['# Reads that Map to Intact Vector', prep_int(trd['total_hits_pastEnd'])],
             ['% Reads that are longer than {}bp'.format(
                trd['minRlen']), Prc(float(trd['long_enough'])/float(r)) + "%"],
             ['% Reads with Barcode ', Prc(float(trd['tot_BC'])/float(r)) + "%"],
             ['% Reads with Mapped Insertions', Prc(float(trd['nMapped'])/float(r)) + "%"],
-            ['% Reads that Map Uniquely', Prc(float(trd['Uniquely_Mapped'])/float(r)) + "%"]
+            ['% Reads that Map Uniquely', Prc(float(trd['Uniquely_Mapped'])/float(r)) + "%"],
+            ['% Reads that Map to Intact Vector', Prc(float(trd['total_hits_pastEnd'])/float(r)) + "%"]
             ]:
 
         html_str = '<tr role="row" class="MTS_row">\n' \

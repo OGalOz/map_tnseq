@@ -120,7 +120,7 @@
             },
             "advanced": true,
             "allow_multiple": false,
-            "default_values": [ "20000000" ],
+            "default_values": [ "" ],
             "field_type": "text"
         },{
         "id": "minQuality",
@@ -130,7 +130,7 @@
             },
             "advanced": true,
             "allow_multiple": false,
-            "default_values": [ "0" ],
+            "default_values": [ "10" ],
             "field_type": "text"
         },       {
         "id": "minIdentity",
@@ -151,6 +151,16 @@
             "advanced": true,
             "allow_multiple": false,
             "default_values": [ "15" ],
+            "field_type": "text"
+        }, {
+        "id": "delta",
+            "optional": true,
+            "text_options" : {
+                "validate_as" : "int"
+            },
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "5" ],
             "field_type": "text"
         },
         {
@@ -287,6 +297,10 @@
                 {
                     "input_parameter": "minScore",
                     "target_property": "minScore"
+                },
+                {
+                    "input_parameter": "delta",
+                    "target_property": "delta"
                 },
                 {
                     "input_parameter": "minN",

@@ -24,6 +24,7 @@ def validate_init_params(params, cfg_d):
             minQuality: (i)
             minIdentity: (i)
             minScore: (i)
+            delta: (i)
 
             (Design Random Pool vars)
             minN: (i)
@@ -102,8 +103,8 @@ def validate_init_params(params, cfg_d):
         mR = params["maxReads"]
         if mR is None or mR == "":
             # There is no limit to number of reads to go through
-            # We set maxReads to 10 billion
-            vp["maxReads"] = 10**10
+            # We set maxReads to 10 trillion
+            vp["maxReads"] = 10**13
         elif not isinstance(mR, int):
             vp["maxReads"] = int(mR)
         else:
@@ -149,6 +150,17 @@ def validate_init_params(params, cfg_d):
     else:
         raise Exception("minScore not passed in params")
 
+    if "delta" in params:
+        delta = params["delta"]
+        if delta is None or delta == "":
+            vp["delta"] = 5
+        elif not isinstance(delta, int):
+            # It's string not int?
+            vp["delta"] = int(delta)
+        else:
+            vp["delta"] = delta
+    else:
+        raise Exception("delta not passed in params")
     if "minN" in params:
         # For Design Random Pool: minimum number of good reads for a barcode with
         # a specific mapping

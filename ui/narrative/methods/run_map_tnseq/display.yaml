@@ -36,7 +36,7 @@ parameters :
         ui-name : |
             FastQ Mapping Reads
         short-hint : |
-            The reads in Fastq format as a KBase Single End Library Object.
+            The reads in FASTQ format as a KBase Single End Library Object.
         long-hint  : |
             The Map Tn Seq Program takes a set of Reads objects and maps the embedded barcodes to a location in the genome.
     model_name :
@@ -71,13 +71,20 @@ parameters :
         ui-name : |
             min Identity
         short-hint : |
-            A float. Minimum Identity for read against genome to be counted as a map to the location.
+            Integer. Minimum Identity for read against genome to be counted as a map to the location.
         long-hint : |
+            Input to BLAT 8
     minScore :
         ui-name : |
             min Score
         short-hint : |
-            minimum length of mapping to genome or past-end of model
+            Integer. minimum length of mapping to genome or past-end of model and input to BLAT
+        long-hint : |
+    delta :
+        ui-name : |
+            delta 
+        short-hint : |
+            Integer. minimum length of mapping to genome or past-end of model
         long-hint : |
     minN :
         ui-name : |

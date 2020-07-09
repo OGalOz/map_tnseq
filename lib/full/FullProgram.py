@@ -21,7 +21,7 @@ Note:
     designrandompool needs genes.GC, 
 """
 
-def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, models_dir):
+def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, models_dir, gnm_nm):
     """
     All inputs are strings
 
@@ -41,7 +41,7 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, models_dir):
 
     
 
-    pre_HTML_d = {}
+    pre_HTML_d = {"genome_name": gnm_nm}
     html_fp = os.path.join(tmp_dir, "MutantsReport.html")
 
     # Here we test for a working model
@@ -98,8 +98,8 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, models_dir):
         logging.info("Running map tn seq on {}.\n Output {}".format(
                                                 current_map_cfg["fastq_fp"], cMTS_output_fp))
 
-        report_dict = RunMapTnSeq(current_map_cfg, False)
-        pre_HTML_d["MapTnSeq_reports_list"].append(report_dict)
+        MTS_return_dict = RunMapTnSeq(current_map_cfg, False)
+        pre_HTML_d["MapTnSeq_reports_list"].append(MTS_return_dict)
 
         # We reset the vars 
         current_map_cfg = copy.deepcopy(map_cfg)
@@ -117,7 +117,7 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, models_dir):
     DRP_report_dict = RunDesignRandomPool(drp_cfg, False)
     pre_HTML_d["DRP_report_dict"] = DRP_report_dict
 
-
+    
     HTML_str = CreateHTMLString(pre_HTML_d)
     # Print out HTML
     with open(html_fp, "w") as f:
@@ -135,7 +135,7 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, models_dir):
 def FindWorkingModel(mts_dict, models_dir):
     """
     Given the directory with all the models, run through each and do a 
-    maxReads = 1000 test on each.
+    maxReads = 10000 test on each.
     models_dir is "./DATA/models"
     We need a single fastq file out of the list to do the test run.
     We choose the first one in the list fastq_fp_list

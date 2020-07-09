@@ -241,6 +241,7 @@ def CreateTextReport(nLong, nReads, inp_dict):
             "nTryToMap": inp_dict['nTryToMap'],
             "nMapped": inp_dict['nMapped'],
             "Uniquely_Mapped": inp_dict['nMapUnique'],
+            "total_hits_pastEnd": len(inp_dict['hitsPastEnd'].keys()),
             "Hits_pE": len(inp_dict['hitsPastEnd'].keys()) - inp_dict['nPastEndIgnored'],
             "nPastEndIgnored": inp_dict["nPastEndIgnored"],
             "nPastEndTrumps": inp_dict['nPastEndTrumps']
@@ -731,8 +732,8 @@ def find_barcodes_and_end_of_transposon(inp_dict):
             raise Exception("Third line does not start with +")
 
         quality = FASTQ.readline()
-        line_num += 1
         quality = quality.rstrip()
+        line_num += 1
         
         if not (len(quality) == len(seq)):
             raise Exception("Quality line is wrong length. "
@@ -929,7 +930,7 @@ def FindModelEnd(seq, model, expOff, cfg_d):
     Inputs: 
 
     seq: (str) String of Sequence from FASTQ
-    model: (str) String of entire model
+    model: (str) String of entire model (no PastEnd)
     expOff: (int) expected location model starts
     cfg_d:
         wobbleAllowed (int) uncertainty in location of barcode or end of transposon,
@@ -945,6 +946,7 @@ def FindModelEnd(seq, model, expOff, cfg_d):
 
     """
     # expected End index of model is where it starts + length of model
+    # expOff could be 0
     expEnd = expOff + len(model)
 
     # We look for the end of the model within the sequence
