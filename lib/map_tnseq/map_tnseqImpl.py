@@ -122,13 +122,14 @@ class map_tnseq:
         pool_op_fp, vp = PrepareProgramInputs(params, cfg_d)
 
         # Part 2: Run the program using recently created config files
-        html_fp = CompleteRun(cfg_d["MTS_cfg_fp"], cfg_d["DRP_cfg_fp"],
+        html_fp, model_test = CompleteRun(cfg_d["MTS_cfg_fp"], cfg_d["DRP_cfg_fp"],
                     cfg_d["tmp_dir"], pool_op_fp, cfg_d["models_dir"] )
 
         # Part 3: Prepare output to return to user
         cfg_d['pool_fp'] = pool_op_fp
         cfg_d["workspace_name"] = params["workspace_name"]
         cfg_d["Main_HTML_report_fp"] = html_fp
+        cfg_d["model_test"] = model_test
         report_params = PrepareUserOutputs(vp, cfg_d)
 
         #Returning file in zipped format:------------------------------------------------------------------

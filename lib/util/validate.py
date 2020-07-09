@@ -103,7 +103,7 @@ def validate_init_params(params, cfg_d):
         if mR is None or mR == "":
             # There is no limit to number of reads to go through
             # We set maxReads to 10 billion
-            vp["maxReads"] = 10*10
+            vp["maxReads"] = 10**10
         elif not isinstance(mR, int):
             vp["maxReads"] = int(mR)
         else:

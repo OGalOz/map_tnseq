@@ -50,11 +50,13 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, models_dir):
         HTML_str = GetSingleModelHTML(good_models_list)
 
         # Print out HTML
-        html_fp = os.path.join("tmp", randomString(6) + ".html")
+        html_fp = os.path.join(tmp_dir, randomString(6) + ".html")
         with open(html_fp, "w") as f:
             f.write(HTML_str)
         logging.info("Wrote html file to " + html_fp)
-        return html_fp
+
+        #We return that the modeltest bool is true and that no pool file is created
+        return [html_fp, True]
 
     # We know what model we're using
     model_use = map_cfg["model_fp"]
@@ -123,7 +125,8 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, models_dir):
         f.write(HTML_str)
     logging.info("Wrote html file to " + html_fp)
 
-    return html_fp
+    # We return the html filepath and that modeltest is True
+    return [html_fp, False]
 
 
 
