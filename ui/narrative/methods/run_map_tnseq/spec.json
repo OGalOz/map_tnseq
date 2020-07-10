@@ -171,7 +171,7 @@
             },
             "advanced": true,
             "allow_multiple": false,
-            "default_values": [ "5" ],
+            "default_values": [ "2" ],
             "field_type": "text"
         },
         {
