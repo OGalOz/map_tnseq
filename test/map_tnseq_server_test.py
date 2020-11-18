@@ -71,7 +71,7 @@ class map_tnseqTest(unittest.TestCase):
         # Models: "Custom" #Unknown # model_pKMW3_universal # model_ezTn5_Tet_Bifido 
         model_name = "model_pKMW3_universal" 
         custom_model_string = "Arbitrary"
-        maxReads = 4000000 
+        maxReads = None 
         minQuality = 5
         minIdentity = 90
         minScore = 15

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <!-- Base JS util files: --!>
+    <script src="JS/d3.min.js"></script>
+    <script src="JS/LayoutUtil.js"></script>
+
+    <!-- Full Display Files: --!>
+        <script src="JS/FullDisplayFuncs.js"></script>
+        <!-- var FD_Defaults comes from below: --!>
+        <script src="JS/FullDisplay_Defaults.js"></script>
+
+    <!-- Stats Display Files: --!>
+        <script src="JS/StatsDisplay/MakeStatsDiv.js"></script>
+        <!-- var MhtnDefaults comes from below: --!>
+        <script src="JS/StatsDisplay/StatsDefaults.js"></script>
+        <!-- var MH_data comes from below: --!>
+        <script src="JS/StatsDisplay/StatsData.js"></script>
+
+
+    <!-- Manhattan Display Files: --!>
+        <script src="JS/MH/MhtnPlotExpandFuncs.js"></script>
+        <!-- var MhtnDefaults comes from below: --!>
+        <script src="JS/MH/MhtnDefaults.js"></script>
+        <!-- var MH_data comes from below: --!>
+        <script src="JS/MH/MH_Data.js"></script>
+    <!-- Expanding Bar Chart Files: --!>
+        <script src="JS/EBC/BCExpandingBarChartFuncs.js"></script>
+        <!-- var BCDefaults comes from below: --!>
+        <script src="JS/EBC/BCDefaults.js"></script>
+        <!-- var ebcScfInit comes from below: --!>
+        <script src="JS/EBC/EBC_Scaffolds_Init_Data.js"></script>
+    <style>
+        .bar { fill: steelblue;
+            outline: thin solid black;}
+        .bar:hover { fill: red;}
+            
+        table,th,td{
+            border:1pxsolidblack;
+            border-collapse:collapse;
+        }
+        
+        th,td{
+            padding:15px;
+            text-align:left;
+        }
+        
+        #t01tr:nth-child(even){
+            background-color:#eee;
+        }
+        #t01tr:nth-child(odd){
+            background-color:#fff;
+        }
+        #t01th{
+            background-color:black;
+            color:white;
+        }
+        .gene-bar:hover {
+            outline: 3px solid yellow;
+            fill: lightyellow;
+        }
+
+    </style>
+</head>
+<body>
+
+  <script>
+        
+        
+        
+        window.organism_name = "Acidovorax 3H11";
+
+        NewFullDisplay(); 
+
+        //FullDispProgram();
+        
+  </script>
+
+</body>
+</html>
+
+

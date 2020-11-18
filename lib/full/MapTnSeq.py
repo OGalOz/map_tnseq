@@ -106,8 +106,6 @@ def RunMapTnSeq(input_args, DEBUGPRINT):
 
     return_dict = {
             "fastq_fp": parsed_vars["fastq_fp"],
-            "text_report_str": text_report,
-            "text_report_list": text_list,
             "text_report_dict": report_dict
             }
 

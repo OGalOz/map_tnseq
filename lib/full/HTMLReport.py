@@ -6,6 +6,44 @@ import os
 import sys
 import logging
 import json
+import shutil
+
+def CreateHTMLdir(tmp_dir, html_display_files_dir):
+    """
+    We create the HTML directory in the tmp dir.
+    We need to copy baseline files from html_display_files_dir to this directory
+    This is where the information for the HTML directory is decided (no config)
+    Args:
+        both are paths to directories
+    """
+    html_dir = os.path.join(tmp_dir, "HTML")
+    os.mkdir(html_dir)
+    JS_dir = os.path.join(html_dir, "JS")
+    os.mkdir(JS_dir)
+    MH_dir = os.path.join(JS_dir, "MH")
+    os.mkdir(MH_dir)
+    EBC_dir = os.path.join(JS_dir, "EBC")
+    os.mkdir(EBC_dir)
+    stats_dir = os.path.join(JS_dir, "StatsDisplay")
+    os.mkdir(stats_dir)
+
+    shutil.move(os.path.join(html_display_files_dir, "FullDisplay_index.html"), html_dir)
+    shutil.move(os.path.join(html_display_files_dir, "FullDisplay_Defaults.js"), JS_dir)
+    shutil.move(os.path.join(html_display_files_dir, "FullDisplayFuncs.js"), JS_dir)
+    shutil.move(os.path.join(html_display_files_dir, "LayoutUtil.js"), JS_dir)
+    shutil.move(os.path.join(html_display_files_dir, "d3-zoom.min.js"), JS_dir)
+    shutil.move(os.path.join(html_display_files_dir, "d3.min.js"), JS_dir)
+    shutil.move(os.path.join(html_display_files_dir, "BCExpandingBarChartFuncs.js"), EBC_dir)
+    shutil.move(os.path.join(html_display_files_dir, "BCDefaults.js"), EBC_dir)
+    shutil.move(os.path.join(html_display_files_dir, "MakeStatsDiv.js"), stats_dir)
+    shutil.move(os.path.join(html_display_files_dir, "StatsDefaults.js"), stats_dir)
+    shutil.move(os.path.join(html_display_files_dir, "MhtnDefaults.js"), MH_dir)
+    shutil.move(os.path.join(html_display_files_dir, "MhtnPlotExpandFuncs.js"), MH_dir)
+    #shutil.move(os.path.join(html_display_files_dir, plc), res_dir)
+
+    return [stats_dir, EBC_dir, MH_dir]
+    
+
 
 
 def CreateHTMLString(pre_HTML_d):

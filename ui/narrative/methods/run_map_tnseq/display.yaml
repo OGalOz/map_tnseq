@@ -92,7 +92,7 @@ parameters :
         short-hint : |
             An integer. minimum number of "good" reads for a barcode supporting its mapping.
         long-hint : |
-            (Int) An optional input to the Design Random Pool program. minN is the minimum number of "good" reads for a barcode supporting its mapping.  (Good means a unique hit to the genome) Must be greater than 1.
+            (Int) An input to the Design Random Pool program. minN is the minimum number of "good" reads for a barcode supporting its mapping.  (Good means a unique hit to the genome) Must be greater than 1. 2 is a good estimate for low coverage data (MiSeq). 10 is the default and works well for high-coverage data.
     minFrac :
         ui-name : |
             minFrac

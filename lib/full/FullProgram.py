@@ -7,9 +7,13 @@ import json
 import random
 import string
 import copy
+import shutil
 from full.MapTnSeq import RunMapTnSeq
 from full.DesignRandomPool import RunDesignRandomPool
-from full.HTMLReport import CreateHTMLString, GetSingleModelHTML
+from full.HTMLReport import CreateHTMLdir
+from full.GeneTableGenomePoolFileToScfPosBC import GeneTable_Barcodes_To_BarcodeGenes
+from full.ScfPosBC_To_BarChartData import ScfPosBC_Info_To_Scaffolds
+from full.ScfPosBC_to_MhtnData import PosScfBCDataToZScrPointsForValues
 
 
 """
@@ -26,7 +30,14 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, models_dir, gnm
     All inputs are strings
 
     map_cfg_d: (the dict from map_cfg_fp)
-        modeltest: (bool)
+        Among others, contains keys:
+            modeltest: (bool)
+            genome_fp: (file path to genome fna file in tmp dir)
+
+    drp_cfg_fp: 
+        Among others, contains keys:
+            genes_table_fp: (file path to genes.GC file)
+            
     """
 
     # Checking inputs exist
@@ -42,7 +53,7 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, models_dir, gnm
     
 
     pre_HTML_d = {"genome_name": gnm_nm}
-    html_fp = os.path.join(tmp_dir, "MutantsReport.html")
+    html_fp = os.path.join(tmp_dir, "MapTnSeqReport.html")
 
     # Here we test for a working model
     if map_cfg["modeltest"]:
@@ -61,8 +72,14 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, models_dir, gnm
     # We know what model we're using
     model_use = map_cfg["model_fp"]
 
+    #We get the model string
+    with open(model_use, "r") as f:
+        model_str = f.read().rstrip()
+
     pre_HTML_d["models_info"] = {
-                "model_in_use": model_use
+                "model_in_use": model_use,
+                "model_str": model_str,
+                "model_name": os.path.basename(model_use)
                 }
 
     map_cfg["model_fp"] = model_use 
@@ -117,12 +134,58 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, models_dir, gnm
     DRP_report_dict = RunDesignRandomPool(drp_cfg, False)
     pre_HTML_d["DRP_report_dict"] = DRP_report_dict
 
+
+    HTMLDisplayFiles_dir = "/kb/module/lib/map_tnseq/HTMLDisplayFiles"
+   
+    # We create the directories and HTML output (imported from HTMLReport.py)
+    stats_dir, EBC_dir, MH_dir = CreateHTMLdir(tmp_dir, HTMLDisplayFiles_dir)
+
+    # We write pre_HTML_d to output JS files
+    # Preparing data for Statistics Data
+    js_stats_data_fp = os.path.join(stats_dir, "StatsData.js")
+    with open(js_stats_data_fp, "w") as f:
+        f.write("window.statistics_d = " + json.dumps(pre_HTML_d, indent=2))
+
+    # Preparing data for JS Display
+    scfPosBC_fp = os.path.join(tmp_dir, "ScfPosBC.json")
+    experiment_id = "Placeholder"
+    GeneTable_Barcodes_To_BarcodeGenes(drp_cfg["genes_table_fp"], 
+            pool_output_fp, 
+            map_cfg['genome_fp'], 
+            scfPosBC_fp, 
+            gnm_nm,
+            experiment_id
+            )
+
+
+    # Expanding Bar Chart Data
+    EBC_data_dir = os.path.join(EBC_dir, "DATA")
+    os.mkdir(EBC_data_dir)
+
+    ScfPosBC_Info_To_Scaffolds(scfPosBC_fp, 
+                                10, 
+                                drp_cfg["genes_table_fp"], 
+                                map_cfg["genome_fp"], 
+                                EBC_data_dir
+                                )
     
+    # We move a specific file to the right loc
+    shutil.move(os.path.join(EBC_data_dir,"EBC_Scaffolds_Init_Data.js"), EBC_dir)
+
+
+    #MH Plot Data
+    MH_data_fp = os.path.join(MH_dir, "MH_Data.js")
+    PosScfBCDataToZScrPointsForValues(scfPosBC_fp, MH_data_fp, "1")
+
+
+
+    """
     HTML_str = CreateHTMLString(pre_HTML_d)
     # Print out HTML
     with open(html_fp, "w") as f:
         f.write(HTML_str)
     logging.info("Wrote html file to " + html_fp)
+    """
 
     # We return the html filepath and that modeltest is True
     return [html_fp, False]

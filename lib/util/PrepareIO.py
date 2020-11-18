@@ -57,13 +57,13 @@ def PrepareUserOutputs(vp, cfg_d):
     # We make a directory containing the resultant files
     res_dir = os.path.join(cfg_d['tmp_dir'], "results")
     os.mkdir(res_dir)
-    shutil.copy(cfg_d["Main_HTML_report_fp"], res_dir)
+    #shutil.copy(cfg_d["Main_HTML_report_fp"], res_dir)
 
     if not cfg_d["model_test"]: 
         # Here we decide which files besides HTML to return to User and place in a directory
         # Pool File, ".surprise?", "html?"
-        shutil.move(cfg_d['pool_fp'], res_dir)
-        shutil.move(cfg_d["gene_table_fp"], res_dir)
+        shutil.copy(cfg_d['pool_fp'], res_dir)
+        shutil.copy(cfg_d["gene_table_fp"], res_dir)
 
 
 
@@ -82,9 +82,9 @@ def PrepareUserOutputs(vp, cfg_d):
     
     # Preparing HTML output
     html_dir = os.path.join(cfg_d["tmp_dir"], "HTML")
-    os.mkdir(html_dir)
-    shutil.move(cfg_d['css_style_fp'], html_dir)
-    shutil.move(cfg_d['Main_HTML_report_fp'], html_dir)
+    #os.mkdir(html_dir)
+    #shutil.move(cfg_d['css_style_fp'], html_dir)
+    #shutil.move(cfg_d['Main_HTML_report_fp'], html_dir)
 
     HTML_report_shock_id = cfg_d['dfu'].file_to_shock({
             "file_path": html_dir,
@@ -92,7 +92,7 @@ def PrepareUserOutputs(vp, cfg_d):
             })['shock_id']
 
     HTML_report_d_l = [{"shock_id": HTML_report_shock_id,
-                        "name": os.path.basename(cfg_d['Main_HTML_report_fp']),
+                        "name": os.path.basename(os.path.join(html_dir,"FullDisplay_index.html")),
                         "label": "MutantReport",
                         "description": "HTML Summary Report for MapTnSeq and Design Random Pool app"
                         }]
@@ -150,6 +150,9 @@ def PrepareProgramInputs(params, cfg_d):
         DRP_cfg_fp: (s) Path to write Design Random Pool Config
         gffToGeneTable_perl_fp: (s) Path to perl script
         ws: Workspace Object
+
+    Adds the following keys:
+        genome_fna_fp: (File path to the Genome FNA file)
     """
 
     # validated params
@@ -202,7 +205,7 @@ def Create_MTS_DRP_config(cfg_d, vp):
         cfg_d: (as above in PrepareProgramInputs)
             Plus:
             fastq_fp_l: (list<s>) List of file paths
-
+            genome_fna_fp: (File path to the Genome FNA file)
 
         vp: (d) must contain all used cases below
     Outputs:
