@@ -78,7 +78,7 @@ def PosScfBCDataToZScrPointsForValues(PosScfBC_fp, op_fp, analysis_type):
         raise Exception("Did not recognize analysis type")
 
     with open(op_fp, "w") as f:
-        f.write("window.MH_Data = " + json.dumps(Scf_Pos_ZScr_vals))
+        f.write("window.MH_data = " + json.dumps(Scf_Pos_ZScr_vals))
 
     logging.info("Wrote Scaffold to Position-ZScr value list at " + op_fp)
 
