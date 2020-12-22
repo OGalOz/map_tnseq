@@ -35,7 +35,7 @@ RunPoolStats = function(args = commandArgs(trailingOnly=TRUE)) {
 	     nrow(unique(pool[pool$scaffold != "pastEnd",words("scaffold strand pos")])));
 	nSeen = sum(pool$scaffold != "pastEnd" & pool$n >= 2);
 	nSeenTwice = sum(pool$scaffold != "pastEnd" & pool$n == 2);
-	if (nSeenTwice > 0) diversity_cmp(nreadstot, nSeen, nSeenTwice, sum(pool$n[pool$scaffold != "pastEnd" & pool$n >= 2])/nreadstot);
+	#if (nSeenTwice > 0) diversity_cmp(nreadstot, nSeen, nSeenTwice, sum(pool$n[pool$scaffold != "pastEnd" & pool$n >= 2])/nreadstot);
 	poolg = findWithinGrouped(split(pool, pool$scaffold),
 				split(without(genes, genes$scaffoldId), genes$scaffoldId),
 				"pos", "begin", "end");

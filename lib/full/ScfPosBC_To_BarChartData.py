@@ -111,7 +111,8 @@ def ScfPosBC_Info_To_Scaffolds(ScfPosBC_fp, tick_range_threshold, gene_table_fp,
                 }
 
         # This sets the name of the file: VERY IMPORTANT SHIFT
-        fixed_scf_name = scaffold_name.replace("/","_").replace(" ", "_")
+        fixed_scf_name = scaffold_name.replace("/","_").replace(\
+                                    " ", "_").replace(".", "_")
         fn_scf_name = fixed_scf_name + "_EBC_data.js"
 
         # Now we write out scf_EBC_data_d

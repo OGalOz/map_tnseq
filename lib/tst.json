@@ -1,0 +1,883 @@
+{
+  "sequence_set_id": [
+    "MapTnSeq_Barcodes_run_on_2020-12-15_18:32:54.756433"
+  ],
+  "description": "MapTnSeq (RBTNSEQ) mapping of barcodes to a genome. User Description: ",
+  "sequences": [
+    {
+      "sequence_id": "MapTnSeq_barcode_1",
+      "description": "nTot:5;n:5;scf:scaffold5/34;strand:+;pos:6344;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TTGAGCCGTCAGGTCTGAGA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_2",
+      "description": "nTot:5;n:5;scf:scaffold5/1;strand:-;pos:259055;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GAGTATAGCAATTAAAGGTA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_3",
+      "description": "nTot:21;n:21;scf:scaffold5/10;strand:+;pos:225124;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "ACGTGGGAGGGGTAGCCGTG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_4",
+      "description": "nTot:5;n:5;scf:scaffold5/13;strand:-;pos:69276;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GGAGATCTCTTTTGCAAATT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_5",
+      "description": "nTot:5;n:5;scf:scaffold5/7;strand:+;pos:49857;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "ACGTCGTCAACGTCCGGAGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_6",
+      "description": "nTot:24;n:24;scf:scaffold5/16;strand:-;pos:261410;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "ATCGTGTCCGGTGTGTTCAA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_7",
+      "description": "nTot:5;n:5;scf:scaffold5/0;strand:-;pos:415326;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "AGTTTAATCAGTGAACGTAC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_8",
+      "description": "nTot:5;n:5;scf:scaffold5/1;strand:-;pos:288707;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GTCGGACGCAATGGTTTGGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_9",
+      "description": "nTot:5;n:5;scf:scaffold5/30;strand:-;pos:20559;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TCGCGTTTGAGCATGATGGC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_10",
+      "description": "nTot:5;n:5;scf:scaffold5/16;strand:-;pos:420146;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CAATTAAACTATGTGCAGTG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_11",
+      "description": "nTot:6;n:6;scf:scaffold5/0;strand:-;pos:24417;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TAGCATTGCGGTCAACCAGT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_12",
+      "description": "nTot:6;n:6;scf:scaffold5/16;strand:+;pos:495183;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "AGGATAATGGTAGTGGTGGA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_13",
+      "description": "nTot:28;n:28;scf:scaffold5/23;strand:+;pos:65947;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CGTAATGCTGCAACGATGGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_14",
+      "description": "nTot:8;n:8;scf:scaffold5/33;strand:+;pos:116067;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TGCCCGCGTTAAGAGATAGT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_15",
+      "description": "nTot:6;n:6;scf:scaffold5/0;strand:-;pos:11943;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GTCGAGCAGAGGGAGGGTCG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_16",
+      "description": "nTot:7;n:7;scf:scaffold5/25;strand:+;pos:65122;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GGTAGTATCTAGTTGCAAGT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_17",
+      "description": "nTot:5;n:5;scf:scaffold5/37;strand:-;pos:35580;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GCGCGCGGAAGTTCGAATCG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_18",
+      "description": "nTot:5;n:5;scf:scaffold5/26;strand:+;pos:107620;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "ATGGGAATGCATGACTTGTT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_19",
+      "description": "nTot:5;n:5;scf:scaffold5/29;strand:+;pos:101519;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GTTGCGAATTATTACGTGTA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_20",
+      "description": "nTot:5;n:5;scf:scaffold5/25;strand:+;pos:816;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GTGCGGGGGGAATAGGCGGT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_21",
+      "description": "nTot:5;n:5;scf:scaffold5/16;strand:-;pos:44743;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "AGTCCTGATGCCAATGACTG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_22",
+      "description": "nTot:5;n:5;scf:scaffold5/0;strand:+;pos:32378;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "ATGTTGTGGTGCATAGAACC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_23",
+      "description": "nTot:6;n:6;scf:scaffold5/0;strand:+;pos:175848;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TCGGGGTTAAGTTTGGCTGA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_24",
+      "description": "nTot:6;n:6;scf:scaffold5/16;strand:+;pos:50575;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GAAGATGGAATAAGGATTGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_25",
+      "description": "nTot:5;n:5;scf:scaffold5/19;strand:+;pos:332697;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CCAGACGCCGACGCAGAGCG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_26",
+      "description": "nTot:5;n:5;scf:scaffold5/7;strand:-;pos:38328;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CGCGGCTCGAACTTGTTTGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_27",
+      "description": "nTot:7;n:7;scf:scaffold5/30;strand:-;pos:120305;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TTCGTGTGGGTTTTGGGGAG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_28",
+      "description": "nTot:14;n:14;scf:scaffold5/8;strand:-;pos:28985;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TGCGTAGTGGGTGCAGGGAC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_29",
+      "description": "nTot:5;n:5;scf:scaffold5/1;strand:-;pos:196234;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CGAGTTCATGCGGGGAAGGA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_30",
+      "description": "nTot:5;n:5;scf:scaffold5/16;strand:+;pos:586320;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CATTGTGTTGTAGGGGGGTC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_31",
+      "description": "nTot:6;n:6;scf:scaffold5/37;strand:+;pos:61807;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TTAGTAGGAGCGGTGGGGTG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_32",
+      "description": "nTot:5;n:5;scf:scaffold5/16;strand:+;pos:70972;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TTGTTCTAGAGTCGATGGTA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_33",
+      "description": "nTot:12;n:12;scf:scaffold5/16;strand:+;pos:715738;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CTTTAGTAAGCCTCGTTGGC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_34",
+      "description": "nTot:7;n:7;scf:scaffold5/16;strand:+;pos:1102967;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CAGGGAAAGAGTGCATGGTT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_35",
+      "description": "nTot:5;n:5;scf:scaffold5/23;strand:+;pos:66082;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GGTTCGTGCGGGTGCCGGGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_36",
+      "description": "nTot:11;n:10;scf:scaffold5/0;strand:+;pos:117528;n2:1;scf2:scaffold5/16;strnd2:+;pos2:182294;nPastEnd:0",
+      "sequence": "TACGTTGATGTGTGCGTGGC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_37",
+      "description": "nTot:9;n:9;scf:scaffold5/16;strand:+;pos:938483;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TTCCTACACTACAGTTGCCC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_38",
+      "description": "nTot:5;n:5;scf:scaffold5/10;strand:-;pos:206427;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TGAACGTACGAGATTTTAAA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_39",
+      "description": "nTot:5;n:5;scf:scaffold5/0;strand:-;pos:442417;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CCGCCAACTACAGACATGGA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_40",
+      "description": "nTot:5;n:5;scf:scaffold5/38;strand:-;pos:2247;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TGTTGTATAGCCTTAGTGGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_41",
+      "description": "nTot:5;n:5;scf:scaffold5/31;strand:-;pos:1983;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CTGCAGACCCGGTAGCCTGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_42",
+      "description": "nTot:5;n:5;scf:scaffold5/19;strand:+;pos:218617;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TCTTGAGCTTACAAACGATC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_43",
+      "description": "nTot:6;n:6;scf:scaffold5/16;strand:+;pos:774069;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GGTAGTCCTGAGAGCTCGCT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_44",
+      "description": "nTot:6;n:6;scf:scaffold5/2;strand:-;pos:76649;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TGCGGGGTCGAGTTGTGTAC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_45",
+      "description": "nTot:6;n:6;scf:scaffold5/16;strand:+;pos:115545;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TACGAGTAAGGTGATTACTC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_46",
+      "description": "nTot:5;n:5;scf:scaffold5/5;strand:+;pos:10724;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GTAACCTGCGGTCGGTAGAA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_47",
+      "description": "nTot:5;n:5;scf:scaffold5/1;strand:+;pos:288835;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TGCGGCTTGCTACGGGTTAG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_48",
+      "description": "nTot:12;n:12;scf:scaffold5/16;strand:-;pos:417687;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GGTGGTGCCACTGTCGGCGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_49",
+      "description": "nTot:5;n:5;scf:scaffold5/19;strand:-;pos:132567;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "AAGGTAGTAACCTCGGGGAT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_50",
+      "description": "nTot:5;n:5;scf:scaffold5/3;strand:+;pos:1015;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "ATGGGGGTGGCGGGGCGCTC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_51",
+      "description": "nTot:6;n:6;scf:scaffold5/34;strand:-;pos:57473;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GATGTGGAAAACTTAGTAGC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_52",
+      "description": "nTot:5;n:5;scf:scaffold5/16;strand:-;pos:394840;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "AAAAGGTGCGCCGTTTGGTA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_53",
+      "description": "nTot:6;n:6;scf:scaffold5/16;strand:-;pos:180032;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GAACTAGCACGTCTACATCG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_54",
+      "description": "nTot:10;n:10;scf:scaffold5/26;strand:+;pos:5185;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CCCGTGGGTTAAAAGTAAGC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_55",
+      "description": "nTot:12;n:12;scf:scaffold5/16;strand:+;pos:741489;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GTTATGGTCAATTATGCGGC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_56",
+      "description": "nTot:5;n:5;scf:scaffold5/37;strand:+;pos:31299;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "ATCCTGGGGCCATAATTGGA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_57",
+      "description": "nTot:5;n:5;scf:scaffold5/8;strand:-;pos:32652;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CGTCCATATCGGCTTCATAT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_58",
+      "description": "nTot:6;n:6;scf:scaffold5/5;strand:-;pos:15334;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CGTAGGGGGCTCCGGCGGGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_59",
+      "description": "nTot:5;n:5;scf:scaffold5/15;strand:-;pos:99919;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "ATGGTCCGTTAGCAGGGGGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_60",
+      "description": "nTot:5;n:5;scf:scaffold5/35;strand:-;pos:8729;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GTAAGTGAATACGAGAGAGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_61",
+      "description": "nTot:5;n:5;scf:scaffold5/1;strand:-;pos:216281;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GAGGGTTCGGTCGTGAGCGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_62",
+      "description": "nTot:6;n:6;scf:scaffold5/10;strand:-;pos:135724;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CGCCAATATTCAGCAAACCC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_63",
+      "description": "nTot:10;n:10;scf:scaffold5/7;strand:-;pos:4514;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TGTCATCAAAGCGTCACCCT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_64",
+      "description": "nTot:5;n:5;scf:scaffold5/16;strand:+;pos:374828;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "ACCGGTGGGTATGTCGAGGC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_65",
+      "description": "nTot:5;n:5;scf:scaffold5/30;strand:+;pos:80040;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CTTGCCAGGCGGACGGGCGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_66",
+      "description": "nTot:5;n:5;scf:scaffold5/30;strand:+;pos:159487;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "AGACACACTTGGCATGGAGA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_67",
+      "description": "nTot:5;n:5;scf:scaffold5/13;strand:-;pos:34442;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CGGGGGGACAAGGGAGGCAG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_68",
+      "description": "nTot:5;n:5;scf:scaffold5/30;strand:-;pos:130178;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CACGCATAAGATTAGTCTGA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_69",
+      "description": "nTot:5;n:5;scf:scaffold5/33;strand:+;pos:87557;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "AGCGCAAAGGTCGCGGGAGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_70",
+      "description": "nTot:7;n:7;scf:scaffold5/16;strand:-;pos:929533;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CTTCTCCGGTAATTTTTAAA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_71",
+      "description": "nTot:5;n:5;scf:scaffold5/38;strand:+;pos:39696;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CGGAACAATCTGTGAACTAG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_72",
+      "description": "nTot:7;n:7;scf:scaffold5/33;strand:+;pos:85253;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CGAGGGTTAGAGTCGTCGAC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_73",
+      "description": "nTot:8;n:8;scf:scaffold5/3;strand:+;pos:2053;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GTGTGAGAGTAGGGTGCGGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_74",
+      "description": "nTot:6;n:6;scf:scaffold5/16;strand:-;pos:420477;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "AGGTTAAAACTGGTCTGCTC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_75",
+      "description": "nTot:5;n:5;scf:scaffold5/19;strand:+;pos:390824;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GTTGCATGGAATCATGAAAA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_76",
+      "description": "nTot:7;n:7;scf:scaffold5/16;strand:-;pos:285907;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GGGGCTGGTGTTAGGCGTAG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_77",
+      "description": "nTot:6;n:6;scf:scaffold5/25;strand:-;pos:43067;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "AGTGTACATCGTGGTAGGCG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_78",
+      "description": "nTot:5;n:5;scf:scaffold5/26;strand:-;pos:77925;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GGTGTGCTAGGTGGCGCAGT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_79",
+      "description": "nTot:6;n:6;scf:scaffold5/26;strand:-;pos:17639;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CGGCAGATCGTGTACCGTTG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_80",
+      "description": "nTot:5;n:5;scf:scaffold5/26;strand:+;pos:384;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TCAAGTAGATTCTTCCCAGC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_81",
+      "description": "nTot:5;n:5;scf:scaffold5/16;strand:-;pos:1219916;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TCGAAACACGTCTCAGTGTT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_82",
+      "description": "nTot:6;n:6;scf:scaffold5/19;strand:-;pos:323881;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GGTTGTCCACTTTTGGACGT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_83",
+      "description": "nTot:5;n:5;scf:scaffold5/36;strand:-;pos:67294;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "ATGTCAGCTCCGTATGTGGT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_84",
+      "description": "nTot:5;n:5;scf:scaffold5/23;strand:-;pos:68345;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GGGGGGCATCGCGCGGGGGA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_85",
+      "description": "nTot:5;n:5;scf:scaffold5/36;strand:-;pos:12325;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GTTCTGACGCCACAAACGGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_86",
+      "description": "nTot:7;n:7;scf:scaffold5/16;strand:+;pos:218321;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CAATTCCCCTGCTGAAAGAG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_87",
+      "description": "nTot:5;n:5;scf:scaffold5/2;strand:-;pos:171124;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CATGTTGCTGCAGAATGTGC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_88",
+      "description": "nTot:7;n:7;scf:scaffold5/16;strand:+;pos:438027;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GAAGGAGGGTAGGGGGTAGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_89",
+      "description": "nTot:7;n:7;scf:scaffold5/18;strand:-;pos:71139;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "AGATACCTGCCATTTTATGC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_90",
+      "description": "nTot:5;n:5;scf:scaffold5/20;strand:+;pos:27841;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CGTCTGGAGGCTCCTGGAGT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_91",
+      "description": "nTot:5;n:5;scf:scaffold5/13;strand:-;pos:102532;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CTAGGGTTATTCGGTTGGCC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_92",
+      "description": "nTot:6;n:6;scf:scaffold5/19;strand:-;pos:36659;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GTGGAGATGCGTCTATACGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_93",
+      "description": "nTot:6;n:6;scf:scaffold5/16;strand:-;pos:134004;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GCGCTACGAAGGGCGGCGGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_94",
+      "description": "nTot:5;n:5;scf:scaffold5/1;strand:+;pos:65159;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GGGACGGAGACGATGGCCGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_95",
+      "description": "nTot:5;n:5;scf:scaffold5/0;strand:-;pos:106245;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TCATGTTTTAGTACGAGGCT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_96",
+      "description": "nTot:5;n:5;scf:scaffold5/1;strand:+;pos:167748;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CGGGAACGGTTACTGGTGCC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_97",
+      "description": "nTot:6;n:6;scf:scaffold5/1;strand:-;pos:160381;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CAGTTGGTTCCTAGGACGAC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_98",
+      "description": "nTot:5;n:5;scf:scaffold5/13;strand:+;pos:40386;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TATGCAACGGGACAGTCGCT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_99",
+      "description": "nTot:5;n:5;scf:scaffold5/16;strand:+;pos:26187;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "AACATGTTTCTGCCGTGGCG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_100",
+      "description": "nTot:5;n:5;scf:scaffold5/32;strand:-;pos:28390;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "AGAGCACTCATGGGTTAACT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_101",
+      "description": "nTot:5;n:5;scf:scaffold5/19;strand:-;pos:26723;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "ATCGAGAGGGGCCTATGTGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_102",
+      "description": "nTot:5;n:5;scf:scaffold5/16;strand:+;pos:794821;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CTCGCCCACGACTGGTTGCG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_103",
+      "description": "nTot:5;n:5;scf:scaffold5/16;strand:+;pos:737865;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TAGAGCAGAGGGCCGCTGTC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_104",
+      "description": "nTot:5;n:5;scf:scaffold5/1;strand:+;pos:245441;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TCAGCCTGGTTGATCCTGGC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_105",
+      "description": "nTot:5;n:5;scf:scaffold5/0;strand:-;pos:311271;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GAGGTGGGCTCCAGGGGAGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_106",
+      "description": "nTot:5;n:5;scf:scaffold5/30;strand:+;pos:13588;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CGACGGGTTATCGGGTGGCG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_107",
+      "description": "nTot:18;n:18;scf:scaffold5/1;strand:+;pos:230194;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TGGTTATCACATGTATGCTT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_108",
+      "description": "nTot:5;n:5;scf:scaffold5/0;strand:-;pos:224969;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GTTGGAAGGGGCAATTAAGC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_109",
+      "description": "nTot:6;n:6;scf:scaffold5/16;strand:-;pos:420477;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GGTGGGGTTGGCTGGGGGCG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_110",
+      "description": "nTot:5;n:5;scf:scaffold5/16;strand:-;pos:708661;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GCTTGATTCTATTCGACTGT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_111",
+      "description": "nTot:5;n:5;scf:scaffold5/5;strand:-;pos:4999;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GTATAATGTGATAGCTGCAT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_112",
+      "description": "nTot:5;n:5;scf:scaffold5/16;strand:+;pos:1290154;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "AGAATAGCGTCCTAGAATGT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_113",
+      "description": "nTot:5;n:5;scf:scaffold5/16;strand:-;pos:756133;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CATACACGACAAGGCGGGCG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_114",
+      "description": "nTot:5;n:5;scf:scaffold5/13;strand:-;pos:57473;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "AGCTGCAACAATCTTTTGTG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_115",
+      "description": "nTot:5;n:5;scf:scaffold5/3;strand:+;pos:997;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TGATGGAGTGCGGGTGGGGT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_116",
+      "description": "nTot:5;n:5;scf:scaffold5/16;strand:+;pos:665667;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CGTACAGGTAAGCCTGCTAA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_117",
+      "description": "nTot:5;n:5;scf:scaffold5/38;strand:-;pos:6521;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TCGGGGTTAGTCAAAAAGGC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_118",
+      "description": "nTot:5;n:5;scf:scaffold5/0;strand:-;pos:137539;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CGGCAGGTGGATAGGGGTCA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_119",
+      "description": "nTot:6;n:6;scf:scaffold5/16;strand:-;pos:703894;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TTGTGGGGGACCGGGAGGAA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_120",
+      "description": "nTot:7;n:7;scf:scaffold5/0;strand:+;pos:98960;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TATAGGGTCGTCCGGCTGGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_121",
+      "description": "nTot:5;n:5;scf:scaffold5/10;strand:+;pos:99264;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "ATACCAAGACTAGAGGCGGC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_122",
+      "description": "nTot:5;n:5;scf:scaffold5/36;strand:+;pos:82756;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TTGTAACGTAGGTGGGGCCT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_123",
+      "description": "nTot:7;n:7;scf:scaffold5/32;strand:+;pos:153330;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CTGTATCCAGGGGTGGGGGA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_124",
+      "description": "nTot:5;n:5;scf:scaffold5/1;strand:+;pos:158749;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GTAAAGCAGACTCGCCTCTA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_125",
+      "description": "nTot:5;n:5;scf:scaffold5/2;strand:-;pos:142233;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GGAGGAAACGACAACAGGTC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_126",
+      "description": "nTot:5;n:5;scf:scaffold5/16;strand:-;pos:420477;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CGGGGGGAGACGATGGTGGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_127",
+      "description": "nTot:5;n:5;scf:scaffold5/7;strand:+;pos:48675;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TCTTATTCCATGCACGGGTG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_128",
+      "description": "nTot:7;n:7;scf:scaffold5/16;strand:-;pos:949346;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CGAGTCCTGTTAGTGCCCGT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_129",
+      "description": "nTot:6;n:6;scf:scaffold5/10;strand:+;pos:31222;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TAGTGGAATACTACTGGGGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_130",
+      "description": "nTot:5;n:5;scf:scaffold5/20;strand:+;pos:78365;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "AACGGTTGGCATCTTTTGGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_131",
+      "description": "nTot:5;n:5;scf:scaffold5/19;strand:-;pos:132547;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GAGAAAGGACACCCGTTAAC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_132",
+      "description": "nTot:5;n:5;scf:scaffold5/7;strand:-;pos:29163;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "ATTGACGAGAGAGTGGCTGT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_133",
+      "description": "nTot:5;n:5;scf:scaffold5/0;strand:+;pos:240601;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TACTCAGTAAGATGATGAAT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_134",
+      "description": "nTot:5;n:5;scf:scaffold5/35;strand:+;pos:80013;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CGCCTGCTGTCGCGTTGGTG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_135",
+      "description": "nTot:5;n:5;scf:scaffold5/35;strand:-;pos:73310;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GCAGTACACCCGGCACACGT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_136",
+      "description": "nTot:5;n:5;scf:scaffold5/32;strand:-;pos:146403;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "ATGGTCGGAAGGTCATACTG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_137",
+      "description": "nTot:7;n:7;scf:scaffold5/10;strand:-;pos:91563;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TCCGCACCCCGCTGTCACAG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_138",
+      "description": "nTot:5;n:5;scf:scaffold5/10;strand:+;pos:258927;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GCACGGACACGAATGGTGTA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_139",
+      "description": "nTot:5;n:5;scf:scaffold5/38;strand:-;pos:6216;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GGAGCATCGGTCCTGGCTGC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_140",
+      "description": "nTot:5;n:5;scf:scaffold5/29;strand:+;pos:58097;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GGCGATGGGGTCCGTTGAGC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_141",
+      "description": "nTot:5;n:5;scf:scaffold5/5;strand:+;pos:46076;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GATCATGAAGGAGCCGTCTG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_142",
+      "description": "nTot:5;n:5;scf:scaffold5/2;strand:-;pos:56212;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GAGCTATCGCCTAGGGAGCG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_143",
+      "description": "nTot:6;n:6;scf:scaffold5/25;strand:-;pos:29057;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TGGTGGTTAGGTGCGGGGAG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_144",
+      "description": "nTot:5;n:5;scf:scaffold5/26;strand:+;pos:4073;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TCTATTAAGTCTAGCATAGC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_145",
+      "description": "nTot:5;n:5;scf:scaffold5/10;strand:+;pos:174966;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GCTGGGCTGTGATTCGAATA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_146",
+      "description": "nTot:5;n:5;scf:scaffold5/0;strand:-;pos:116210;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TGGGACGCATCGCGACGTGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_147",
+      "description": "nTot:5;n:5;scf:scaffold5/1;strand:+;pos:111016;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GGCAGGGACTTAATGGGGGT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_148",
+      "description": "nTot:6;n:6;scf:scaffold5/3;strand:+;pos:4578;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "AAGGGAAGCTAACGGCGGGC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_149",
+      "description": "nTot:5;n:5;scf:scaffold5/0;strand:+;pos:24614;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TGCGTGGCGAGAGCGGGTTG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_150",
+      "description": "nTot:5;n:5;scf:scaffold5/1;strand:-;pos:177980;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TTGGGGCATACGACACACGC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_151",
+      "description": "nTot:5;n:5;scf:scaffold5/29;strand:+;pos:53798;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GTCAAGGGTTGAGGGCACCA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_152",
+      "description": "nTot:5;n:5;scf:scaffold5/32;strand:-;pos:70701;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CCTCCGGGCTCGTCATTCGT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_153",
+      "description": "nTot:5;n:5;scf:scaffold5/1;strand:-;pos:188226;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CACGCATGTCGTATGCTGTA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_154",
+      "description": "nTot:6;n:6;scf:scaffold5/26;strand:+;pos:47039;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TTAACTTACGTGAGCCCAGT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_155",
+      "description": "nTot:5;n:5;scf:scaffold5/10;strand:+;pos:193787;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CTTAAGGATCGTTCGACTAG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_156",
+      "description": "nTot:5;n:5;scf:scaffold5/16;strand:-;pos:1262368;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CAGGCGGCTCAGAAAAGAAG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_157",
+      "description": "nTot:5;n:5;scf:scaffold5/2;strand:+;pos:2085;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CCCGGCAAGATTGAGGTGTA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_158",
+      "description": "nTot:5;n:5;scf:scaffold5/16;strand:+;pos:58416;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TGAATCACGGGGGTGAGGGA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_159",
+      "description": "nTot:5;n:5;scf:scaffold5/16;strand:-;pos:897722;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CTGCAGAACGCAATGGGAAG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_160",
+      "description": "nTot:5;n:5;scf:scaffold5/19;strand:-;pos:44268;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "AGTGGGTATGTCCGCCTGGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_161",
+      "description": "nTot:6;n:6;scf:scaffold5/16;strand:-;pos:927256;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TCTGGAGATTACATCGTGTA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_162",
+      "description": "nTot:6;n:6;scf:scaffold5/19;strand:-;pos:141074;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GACAGTTGCTGTGGGTTGAT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_163",
+      "description": "nTot:5;n:5;scf:scaffold5/13;strand:+;pos:111103;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GTCGAACATGAGAGGCTGCC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_164",
+      "description": "nTot:5;n:5;scf:scaffold5/0;strand:-;pos:139652;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "AGTGGGATTGGCGGCAATAT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_165",
+      "description": "nTot:5;n:5;scf:scaffold5/29;strand:+;pos:85361;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "GGCGAAGGGGACGGGGGGCG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_166",
+      "description": "nTot:6;n:6;scf:scaffold5/16;strand:-;pos:1195947;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TGTCCGGGCGCGGGGGGAAC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_167",
+      "description": "nTot:5;n:5;scf:scaffold5/0;strand:+;pos:123855;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CCTGGGCACAGTTTAGGATG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_168",
+      "description": "nTot:5;n:5;scf:scaffold5/16;strand:+;pos:499263;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "ACATATGAGGCGTCGGGGTG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_169",
+      "description": "nTot:5;n:5;scf:scaffold5/26;strand:-;pos:93509;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "TAAGGTACAATATTTGGGGG"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_170",
+      "description": "nTot:5;n:5;scf:scaffold5/13;strand:-;pos:63559;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "ACCTAATGGGTATCCAAGAC"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_171",
+      "description": "nTot:5;n:5;scf:scaffold5/34;strand:-;pos:30035;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "ACTGGGAGTACAAATGCTGA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_172",
+      "description": "nTot:5;n:5;scf:scaffold5/30;strand:+;pos:51731;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CGCAGAAGGTGCTATACAGT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_173",
+      "description": "nTot:5;n:5;scf:scaffold5/10;strand:+;pos:165227;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "AAAAAGCGGTCCGCGGATGT"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_174",
+      "description": "nTot:5;n:5;scf:scaffold5/0;strand:-;pos:473637;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CCACGTTGAAGACGTCATCA"
+    },
+    {
+      "sequence_id": "MapTnSeq_barcode_175",
+      "description": "nTot:5;n:5;scf:scaffold5/16;strand:-;pos:861159;n2:0;scf2:;strnd2:;pos2:;nPastEnd:0",
+      "sequence": "CGGCAAGGTGGGGCAAGGGG"
+    }
+  ]
+}
