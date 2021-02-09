@@ -37,7 +37,7 @@ def upload_poolfile_to_KBase(up):
 >>>>>>> Stashed changes
     '''
     # We check correctness of pool file
-    column_header_list = check_pool_file(up['poolfile_fp'])
+    column_header_list, num_lines = check_pool_file(up['poolfile_fp'])
     if len(column_header_list) != 12:
         logging.info(
             "WARNING: Number of columns is not 12 as expected: {}".format(
@@ -67,6 +67,7 @@ def upload_poolfile_to_KBase(up):
         "compression_type": "gzip",
         "column_header_list": column_header_list,
         "file_name": res_handle["file_name"],
+        "num_lines": num_lines,
         "utc_created": str(date_time),
         "related_genome_ref": up["genome_ref"],
         "related_organism_scientific_name": get_genome_organism_name(
@@ -114,7 +115,7 @@ def check_pool_file(poolfile_fp):
             "Pool file seems to have errors - " + "Please check and reupload."
         )
         raise Exception
-    return col_header_list
+    return [col_header_list, num_lines]
 
 
 def init_pool_dict(vars_dict):

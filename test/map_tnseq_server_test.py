@@ -65,9 +65,9 @@ class map_tnseqTest(unittest.TestCase):
         # self.assertEqual(ret[...], ...) or other unittest methods
        
         # Acido
-        genome_ref = "52075/9/1" 
+        genome_ref = "58816/3/1" 
         # FASTQs: Short: 52075/4/1 # Long 52075/12/1
-        fastq_ref_list = ["52075/4/1", "52075/12/1"] 
+        fastq_ref_list = ["58816/11/1"] 
         # Models: "Custom" #Unknown # model_pKMW3_universal # model_ezTn5_Tet_Bifido 
         model_name = "model_pKMW3_universal" 
         custom_model_string = "Arbitrary"
@@ -81,8 +81,8 @@ class map_tnseqTest(unittest.TestCase):
         minRatio = 8.0 #Range 0 -inf.
         maxQBeg = 3.0
         pool_description = "Ci Testing"
-        KB_Pool_Bool = "no"
-        output_name = "Valid Acido test"
+        KB_Pool_Bool = "yes"
+        output_name = "Valid Burk 376 test"
 
         ret = self.serviceImpl.run_map_tnseq(self.ctx, {'workspace_name': self.wsName,
                                                         'genome_ref': genome_ref ,
