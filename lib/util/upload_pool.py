@@ -108,7 +108,7 @@ def check_pool_file(poolfile_fp):
     # Parse pool file and check for errors
     test_vars_dict = {"poolfile": poolfile_fp, "report_dict": {"warnings": []}}
     try:
-        col_header_list = init_pool_dict(test_vars_dict)
+        col_header_list, num_lines = init_pool_dict(test_vars_dict)
     except Exception:
         logging.warning(
             "Pool file seems to have errors - " + "Please check and reupload."
@@ -120,10 +120,12 @@ def check_pool_file(poolfile_fp):
 def init_pool_dict(vars_dict):
 
     # pool dict is rcbarcode to [barcode, scaffold, strand, pos]
+    num_lines = None
     pool = {}
     with open(vars_dict["poolfile"], "r") as f:
         poolfile_str = f.read()
         poolfile_lines = poolfile_str.split("\n")
+        num_lines = len(poolfile_lines)
         column_header_list = [x.strip() for x in poolfile_lines[0].split("\t")]
         for pool_line in poolfile_lines:
             pool_line.rstrip()
@@ -132,7 +134,7 @@ def init_pool_dict(vars_dict):
             )
     if len(pool.keys()) == 0:
         raise Exception("No entries in pool file")
-    return column_header_list
+    return [column_header_list, str(num_lines)]
 
 
 def check_pool_line_and_add_to_pool_dict(pool_line, pool, vars_dict):
