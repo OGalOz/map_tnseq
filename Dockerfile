@@ -7,6 +7,7 @@ MAINTAINER ogaloz@lbl.gov
 # install line here, a git checkout to download code, or run any other
 # installation scripts.
 
+
 RUN ls
 
 RUN apt-get update && \
@@ -31,6 +32,9 @@ RUN apt-get install --yes r-base
 RUN apt-get install python3
 
 RUN pip install --upgrade pip 
+
+
+RUN pip install gffutils
 
 RUN pip install biopython-convert
 

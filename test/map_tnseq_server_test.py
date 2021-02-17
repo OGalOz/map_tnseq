@@ -63,9 +63,9 @@ class map_tnseqTest(unittest.TestCase):
         #
         # Check returned data with
         # self.assertEqual(ret[...], ...) or other unittest methods
-       
-        # Acido
-        genome_ref = "58816/3/1" 
+      
+        # Burk 376
+        genome_ref = "58816/26/1" 
         # FASTQs: Short: 52075/4/1 # Long 52075/12/1
         fastq_ref_list = ["58816/11/1"] 
         # Models: "Custom" #Unknown # model_pKMW3_universal # model_ezTn5_Tet_Bifido 
