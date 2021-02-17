@@ -8,8 +8,9 @@ import json
 import shutil
 from util.validate import validate_init_params
 from util.downloaders import DownloadGenomeToFNA , DownloadFASTQs, GetGenomeOrganismName
-from util.genbank_to_gene_table import OLD_convert_genbank_to_gene_table
+from util.genbank_to_gene_table import  genbank_and_genome_fna_to_gene_table, OLD_convert_genbank_to_gene_table
 from util.upload_pool import upload_poolfile_to_KBase
+
 
 
 def PrepareUserOutputs(vp, cfg_d):
@@ -173,8 +174,7 @@ def PrepareProgramInputs(params, cfg_d):
     cfg_d['fastq_fp_l'] = fastq_fp_l
 
     # This function creates the gene_table at the location gene_table_fp
-    OLD_convert_genbank_to_gene_table(gbk_fp, cfg_d['gene_table_fp'],
-                                    cfg_d["gffToGeneTable_perl_fp"])
+    genbank_and_genome_fna_to_gene_table(gbk_fp, genome_fna_fp, cfg_d['gene_table_fp'])
 
 
 

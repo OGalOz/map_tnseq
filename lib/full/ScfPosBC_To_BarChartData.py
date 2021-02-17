@@ -47,6 +47,10 @@ def ScfPosBC_Info_To_Scaffolds(ScfPosBC_fp, tick_range_threshold, gene_table_fp,
     # First, we prepare the genes info
     scf_len_d, scf_seq_d = GetScaffoldLengths(genome_fna_fp)
     scf_locs_d, scf_gene_id_d = GenesTableToLocsDict(gene_table_fp, scf_len_d)
+
+    logging.critical("SCF LOCS D:")
+    logging.critical(scf_locs_d)
+
     # Each of above dicts scf_locs_d & scf_gene_id_d are divided into scaffolds by scf_name
 
     with open(ScfPosBC_fp, "r") as f:
@@ -64,7 +68,10 @@ def ScfPosBC_Info_To_Scaffolds(ScfPosBC_fp, tick_range_threshold, gene_table_fp,
 
     for scaffold_name in All_Info_d["scaffolds"].keys():
 
-        print("Working on printing " + scaffold_name)
+        if scaffold_name not in scf_locs_d or scaffold_name not in scf_gene_id_d:
+            logging.info(f"Skipping scaffold {scaffold_name}")
+            continue
+        logging.info("Working on printing " + scaffold_name)
 
         # We initialize the output dict
         scf_EBC_data = {}
@@ -111,7 +118,7 @@ def ScfPosBC_Info_To_Scaffolds(ScfPosBC_fp, tick_range_threshold, gene_table_fp,
                 }
 
         # This sets the name of the file: VERY IMPORTANT SHIFT
-        fixed_scf_name = scaffold_name.replace("/","_").replace(\
+        fixed_scf_name = scaffold_name.replace("/","_").replace(
                                     " ", "_").replace(".", "_")
         fn_scf_name = fixed_scf_name + "_EBC_data.js"
 
@@ -259,8 +266,8 @@ def GenesTableToLocsDict(gt_fp, scf_len_d):
     header_line_s = gt_FH.readline()
     CheckGenesTableHeader(header_line_s)
 
-    scf_locs_d = {}
-    scf_gene_id_d = {}
+    scf_locs_d = {x:[] for x in scf_len_d.keys()}
+    scf_gene_id_d = {x:{} for x in scf_len_d.keys()}
 
     c_line = gt_FH.readline().strip()
     while c_line != "":
@@ -363,10 +370,7 @@ def AddGeneLocToScaffoldDict(scf_len_d, scf_locs_d, scf_name, begin, end, strand
     
     locs_list = [begin, end, gene_id, strand] 
 
-    if scf_name in scf_locs_d:
-        scf_locs_d[scf_name].append(locs_list)
-    else:
-        scf_locs_d[scf_name] = [locs_list] 
+    scf_locs_d[scf_name].append(locs_list)
 
 
     

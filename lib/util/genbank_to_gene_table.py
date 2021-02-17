@@ -3,6 +3,7 @@ import logging
 import os
 import sys
 import subprocess
+from util.bioparsing import parseFASTA
 #from BCBio import GFF
 from Bio import SeqIO
 
@@ -41,6 +42,160 @@ def convert_genbank_to_gene_table(genbank_filepath, gt_filepath, gffPrlScriptPat
 
 
 
+
+def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
+    """
+    Args:
+        gbk_fp: (str) Path to genbank file.
+        gnm_fp: (str) Path to genome fna file
+        op_fp: (str) Path to write genes table to
+
+    We use GenBank Records and Features
+
+    """
+
+    
+    id2seq = parseFASTA(gnm_fp)
+
+    out_FH = open(op_fp, 'w')
+    # This is the output file start line:
+    out_FH.write("locusId\tsysName\ttype\t" + \
+                    "scaffoldId\tbegin\tend\tstrand\t" + \
+                    "name\tdesc\tGC\tnTA\n")
+    
+    gb_record_generator = SeqIO.parse(open(gbk_fp, "r"), "genbank")
+
+    # TYPE - Note that we don't like misc_feature or gene
+    # May need to skip anything besides values under 10
+    types_dict = {"CDS" : 1, "rRNA" : 2, "tRNA" : 5, 
+                   "RNA" : 6, "transcript" : 6,
+                   "pseudogene": 7, "misc_feature": 20, 
+                   "gene": 21}
+
+    for gb_record in gb_record_generator:
+
+        locus_tag = gb_record.name
+        #Genome sequence:
+        g_seq = str(gb_record.seq)
+
+        scaffold = findSeqInId2Seq(g_seq, id2seq)
+
+        g_len = len(g_seq)
+
+        #Genome features (list of features):
+        g_features = gb_record.features
+        #DEBUG
+        #print(g_features[0])
+        g_feat_len = len(g_features)
+
+        """
+        scaffoldId_exists= False
+        if "scaffold_name" in config_dict:
+            scaffold_id = config_dict["scaffold_name"]
+            scaffoldId_exists = True
+        """
+
+        try:
+            for i in range(g_feat_len):
+
+
+                current_feat = g_features[i]
+
+                if current_feat.type == "source":
+                    print("Feature is of type 'source':")
+                    print(current_feat)
+                    continue
+
+                
+                #scaffold already set above
+                begin = "null"
+                end = "null"
+                strand = "null"
+                desc = "null"
+                typ = "null"
+                #locus_tag = "null"
+                sysName = "null"
+                name = "null"
+                GC = "null"
+                nTA = "null"
+
+
+                """
+                # Scaffold Id
+                if scaffoldId_exists:
+                    if scaffold_id in g_features[i].qualifiers:
+                        scaffold = g_features[i].qualifiers[scaffold_id]
+                    else:
+                        logging.debug("Could not find scaffold id "
+                                "{} in qualifiers:".format(scaffold_id))
+                        logging.debug(g_features[i].qualifiers)
+                        scaffold = "1"
+                else:
+                    scaffold = "1"
+
+                """
+
+                # Begin
+                begin = str(current_feat.location.start + 1)
+                # End
+                end = str(current_feat.location.end + 1)
+
+                # Strand
+                if current_feat.strand == 1:
+                    strand = "+"
+                elif current_feat.strand == -1:
+                    strand = "-"
+                else:
+                    logging.critical("Could not recognize strand type.")
+                    raise Exception("Parsing strand failed.")
+
+                # Desc (Description)
+                if "product" in current_feat.qualifiers.keys():
+                    desc = str(current_feat.qualifiers['product'][0])
+                else:
+                    desc = "Unknown function" 
+                    logging.critical("Could not find description in current_feat: ")
+                    logging.critical(current_feat)
+                    continue
+
+                typ_str = current_feat.type.strip()
+                if typ_str in types_dict:
+                    typ = str(types_dict[typ_str])
+                else:
+                    logging.info("Could not recognize type from feature: " \
+                            + typ_str)
+                    typ = "0"
+                if typ == "1":
+                    out_FH.write("\t".join([locus_tag, sysName, typ, scaffold,
+                            begin, end, strand, name, desc, GC, nTA]) + "\n")
+                else:
+                    logging.info(f"Did not write annotation for gene with type {typ}")
+        except:
+            logging.critical("Could not parse all features in genbank file.")
+            out_FH.close()
+            raise Exception("Parsing genbank file into gene table failed")
+    
+    out_FH.close()
+
+    return None
+
+
+
+
+def findSeqInId2Seq(seq_str, id2seq):
+
+    seq_id = None
+
+    for s in id2seq.keys():
+        if seq_str == id2seq[s]:
+            seq_id = s
+            break
+
+    if seq_id == None:
+        raise Exception("Couldn't find Sequence ID for sequence:\n" + \
+                        f" '{seq_str}'\n\nin id2seq")
+
+    return seq_id
 
 
 """
@@ -83,7 +238,7 @@ def OLD_convert_genbank_to_gene_table(genbank_filepath, output_filepath, gff_fas
 
 
     record_name = gb_record.name
-    scaffold = gb_record.locus 
+    scaffold = record_name 
     #Genome sequence:
     g_seq = gb_record.seq
     g_len = len(g_seq)
@@ -342,7 +497,17 @@ def main():
     args should be genbank_to_gene_table.py genbank, output, gffPrlScript
     """
     args = sys.argv
-    test(args)
+    if args[-1] != "1":
+        print("python3 genbank_to_gene_table.py genbank_fp genome_fna output")
+        sys.exit(0)
+    else:
+        args = sys.argv
+        gbk_fp = args[1]
+        gnm_fp = args[2]
+        op_fp = args[3]
+        genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp)
+        print(f"Wrote gene table to {op_fp}")
+
 
 if __name__ == "__main__":
     main()
