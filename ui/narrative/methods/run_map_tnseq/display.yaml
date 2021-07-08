@@ -32,6 +32,22 @@ parameters :
             The Genome you're checking your reads against to find locations of barcodes.
         long-hint  : |
             This is the genome to whose genes we are going to match barcodes so they can be used to measure the abundance of strains with those genes interrupted.
+    gene_table_ref :
+        ui-name : |
+           Gene Table Used 
+        short-hint : |
+            The RBTnSeq Gene Table you are using 
+        long-hint  : |
+            The RBTnSeq Gene Table you are using.
+            You can create an RBTnSeq Gene Table using the app RBTnSeq Genome to Gene Table
+    model_ref :
+        ui-name : |
+           Model Used 
+        short-hint : |
+            The RBTnSeq Transposon Model used when inserting Barcodes 
+        long-hint  : |
+            The RBTnSeq Transposon Model used when inserting Barcodes 
+            You can create an RBTnSeq Model using the app RBTnSeq Create Model 
     fastq_ref_list :
         ui-name : |
             FastQ Mapping Reads
@@ -39,22 +55,6 @@ parameters :
             The reads in FASTQ format as a KBase Single End Library Object.
         long-hint  : |
             The Map Tn Seq Program takes a set of Reads objects and maps the embedded barcodes to a location in the genome.
-    model_name :
-        ui-name : |
-            Model Name 
-        short-hint : |
-            The name of the model file you'll be using.
-        long-hint  : |
-            The model file has a specific format. You may be able to use one of the existing models,
-            or you can upload a custom one by choosing Custom.
-    custom_model_string :
-        ui-name : |
-            Custom Model Text 
-        short-hint : |
-            The text for your custom model. Must follow the format in description.
-        long-hint  : |
-            If you chose "Custom" as your model, then you must input the text for the model. Examples given
-            in the app description, including format restrictions.
     maxReads :
         ui-name : |
             max Reads per FASTQ
@@ -161,14 +161,7 @@ description : |
     not, the beginning and end of the hit to the genome in the read \n
     after trimming the transposon sequence, the bit score, and the \n
     %identity. </p>
-    <p> The gene-table file "map_tn_seq_gene_table.tsv" contains the following columns: \n
-    scaffoldId, (begin) base-pair location for starting, (end) base-pair location for \n
-    the end, strand (+/-), description (free text description), LocusID, and type, \n
-    (for type, "1" means it is a protein coding gene). </p>
-    <p>It is used by</p>
     <h2>Example Models</h2>
     <h4>model_ezTn5_kan</h4>
     <p>nnnnnnCTAAGATGTCCACGAGGTCTCTNNNNNNNNNNNNNNNNNNNNCGTACGCTGCAGGTCGACAGATGTGTATAAGAGACAG</p>
-
-
  

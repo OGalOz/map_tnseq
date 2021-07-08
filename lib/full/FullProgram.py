@@ -25,13 +25,12 @@ Note:
     designrandompool needs genes.GC, 
 """
 
-def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, models_dir, gnm_nm):
+def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm, models_dir=None):
     """
     All inputs are strings
 
     map_cfg_d: (the dict from map_cfg_fp)
         Among others, contains keys:
-            modeltest: (bool)
             genome_fp: (file path to genome fna file in tmp dir)
 
     drp_cfg_fp: 
@@ -55,6 +54,8 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, models_dir, gnm
     pre_HTML_d = {"genome_name": gnm_nm}
     html_fp = os.path.join(tmp_dir, "MapTnSeqReport.html")
 
+    """
+    DO NOT DELETE: WE COULD USE THIS TO FIND THE MODEL IF UNKNOWN
     # Here we test for a working model
     if map_cfg["modeltest"]:
         good_models_list = FindWorkingModel(map_cfg, models_dir)
@@ -68,6 +69,7 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, models_dir, gnm
 
         #We return that the modeltest bool is true and that no pool file is created
         return [html_fp, True]
+    """
 
     # We know what model we're using
     model_use = map_cfg["model_fp"]
@@ -82,7 +84,6 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, models_dir, gnm
                 "model_name": os.path.basename(model_use)
                 }
 
-    map_cfg["model_fp"] = model_use 
     # One run per fastq file
     num_mts_runs = len(map_cfg['fastq_fp_list'])
     if  num_mts_runs > 100:
@@ -91,8 +92,10 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, models_dir, gnm
 
     pre_HTML_d["MapTnSeq_reports_list"] = []
     MapTS_Output_fps = []
-    # maxReads set to ten billion arbitrarily
-    map_cfg['maxReads'] = 10**10
+
+    if 'maxReads' not in map_cfg or map_cfg['maxReads'] is None:
+        # maxReads set to ten billion arbitrarily
+        map_cfg['maxReads'] = 10**10
     map_cfg['modeltest'] = False 
 
     current_map_cfg = copy.deepcopy(map_cfg)
@@ -115,7 +118,7 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, models_dir, gnm
         logging.info("Running map tn seq on {}.\n Output {}".format(
                                                 current_map_cfg["fastq_fp"], cMTS_output_fp))
 
-        MTS_return_dict = RunMapTnSeq(current_map_cfg, False)
+        MTS_return_dict = RunMapTnSeq(current_map_cfg, DEBUGPRINT=False)
         pre_HTML_d["MapTnSeq_reports_list"].append(MTS_return_dict)
 
         # We reset the vars 

@@ -23,7 +23,7 @@ Notes:
 """
 
 
-def RunMapTnSeq(input_args, DEBUGPRINT):
+def RunMapTnSeq(input_args, DEBUGPRINT=False):
     """
     Inputs:
 
@@ -52,7 +52,7 @@ def RunMapTnSeq(input_args, DEBUGPRINT):
     ret_d = find_barcodes_and_end_of_transposon(parsed_vars)
 
 
-    # It is possible the model wasn't found at all, and thus ret_d = -1
+    # It is possible the model wasn't found at all, and then ret_d = -1
     if isinstance(ret_d, int) and ret_d == -1:
         logging.warning("Stopping current run on:\n"
         "Model {}\n".format(parsed_vars['model_fp']) + \

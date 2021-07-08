@@ -1,4 +1,4 @@
-#python3
+dir#python3
 import os
 import logging
 import sys
@@ -12,25 +12,16 @@ def DownloadGenomeToFNA(gfu, genome_ref, scratch_dir):
     """
 
     GenomeToGenbankResult = gfu.genome_to_genbank({'genome_ref': genome_ref})
-    genbank_fp = GenomeToGenbankResult['genbank_file']['file_path']
+
+    logging.info("Genome File Util download result:")
+    logging.info(GenomeToGenbankResult)
 
     genome_fna_fp = get_fa_from_scratch(scratch_dir)
 
     if genome_fna_fp is None:
         raise Exception("GFU Genome To Genbank did not download Assembly file in expected Manner.")
 
-    """
-    genome_fna_filename = "genome_fna"
-    genome_fna_fp = os.path.join(scratch_dir, genome_fna_filename)
-
-    #The following creates a file at genome_fna_fp
-    SeqIO.convert(genbank_fp, "genbank", genome_fna_fp, "fasta")
-
-    #Following gets important info from genbank file
-    gt_config_dict = get_gene_table_config_dict(genbank_fp)
-    """
-
-    return [genome_fna_fp, genbank_fp]
+    return genome_fna_fp
 
 
 def get_fa_from_scratch(scratch_dir):
@@ -54,6 +45,114 @@ def get_fa_from_scratch(scratch_dir):
 
     return fna_fp
 
+
+def download_genes_table(ref, dfu, op_fp):
+    """
+    Args:
+        ref (str): ID of object within KBase, looks like 'A/B/C'
+                    where A, B, and C are integers
+        dfu (Object): DataFileUtil Object
+        op_fp (str): Path to where to write the file
+    """
+    GetObjectsParams = {
+            'object_refs': [ref]
+            }
+    
+    ResultantData = dfu.get_objects(GetObjectsParams)['data'][0]['data']
+    logging.info(f"Resultant data for genes table ref {ref}:")
+    logging.info(ResultantData)
+
+
+    if "input_genes_table" not in ResultantData:
+        raise Exception("Object must contain data key 'input_genes_table' (the file handle.)"
+                        "Existing keys: " + ", ".join(ResultantData.keys()))
+    else:
+        KB_fh = ResultantData["input_genes_table"] 
+
+    # Set params for shock to file
+    ShockToFileParams = {
+            "handle_id": KB_fh,
+            "file_path": op_fp, 
+            "unpack": "uncompress"
+            }
+    ShockToFileOutput = dfu.shock_to_file(ShockToFileParams)
+    logging.info(ShockToFileOutput)
+    
+    logging.info(f"Downloaded genes table file for ref {ref}")
+
+
+def download_model(ref, dfu, op_dir):
+    """
+    Args:
+        ref (str): ID of object within KBase, looks like 'A/B/C'
+                    where A, B, and C are integers
+        dfu (Object): DataFileUtil Object
+        op_dir (str): Path to dir in which we write the model file (1 or 2 lines)
+    """
+    GetObjectsParams = {
+            'object_refs': [ref]
+            }
+    
+    ResultantData = dfu.get_objects(GetObjectsParams)['data'][0]['data']
+    logging.info(f"Resultant data for model ref {ref}:")
+    logging.info(ResultantData)
+    
+    full_model_str = ""
+
+
+    for x in ["model_string", "past_end_string", "standard_model_name"]:
+        if x not in ResultantData:
+            raise Exception(f"Model should contain key {x}, but does not. Try recreating Model."
+                            " Existing keys: " + ", ".join(ResultantData.keys()))
+    full_model_str = ResultantData["model_string"] + "\n" + ResultantData["past_end_string"]
+
+    logging.info("Full Model String: " + full_model_str)
+    
+    smn = ResultantData["standard_model_name"].replace(" ","_").replace("/","_") 
+    op_fp = os.path.join(op_dir, smn + ".txt")
+
+    with open(op_fp, 'w') as g:
+        g.write(full_model_str)
+
+    logging.info(f"Wrote model at location {op_fp}")
+
+    return op_fp
+
+
+
+def download_table_from_ref_to_dir(ref, ret_dp, dfu):
+    """
+    Args:
+        ref (str): ID of object within KBase, looks like 'A/B/C'
+                    where A, B, and C are integers
+        ret_dp (str): Path to directory where we place
+                    the downloaded tables
+        dfu (Object): DataFileUtil Object
+    """
+    GetObjectsParams = {
+            'object_refs': [ref]
+            }
+    
+    ResultantData = dfu.get_objects(GetObjectsParams)['data'][0]['data']
+    logging.info(f"Resultant data for ref {ref}:")
+    logging.info(ResultantData)
+
+    if "input_genes_table" not in ResultantData:
+        raise Exception("Object must contain data key 'input_genes_table' (the file handle.)"
+                        "Existing keys: " + ", ".join(ResultantData.keys()))
+    else:
+        KB_fh = ResultantData["input_genes_table"] 
+
+    # Set params for shock to file
+    ShockToFileParams = {
+            "handle_id": KB_fh,
+            "file_path": op_fp, 
+            "unpack": "uncompress"
+            }
+    ShockToFileOutput = dfu.shock_to_file(ShockToFileParams)
+    logging.info(ShockToFileOutput)
+    
+    logging.info(f"Downloaded file for ref {ref}")
 
 
 

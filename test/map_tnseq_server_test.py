@@ -64,13 +64,13 @@ class map_tnseqTest(unittest.TestCase):
         # Check returned data with
         # self.assertEqual(ret[...], ...) or other unittest methods
       
-        # Burk 376
-        genome_ref = "58816/34/1" 
+        # Keio
+        genome_ref = "62572/2/1" 
         # FASTQs: Short: 52075/4/1 # Long 52075/12/1
         fastq_ref_list = ["58816/11/1"] 
+        model_ref = "62572/7/1"
+        gene_table_ref = "62572/3/1" 
         # Models: "Custom" #Unknown # model_pKMW3_universal # model_ezTn5_Tet_Bifido 
-        model_name = "model_pKMW3_universal" 
-        custom_model_string = "Arbitrary"
         maxReads = None 
         minQuality = 5
         minIdentity = 90
@@ -86,9 +86,9 @@ class map_tnseqTest(unittest.TestCase):
 
         ret = self.serviceImpl.run_map_tnseq(self.ctx, {'workspace_name': self.wsName,
                                                         'genome_ref': genome_ref ,
+                                                        'gene_table_ref': gene_table_ref,
+                                                        'model_ref': model_ref,
                                                         'fastq_ref_list': fastq_ref_list,
-                                                        'model_name': model_name,
-                                                        'custom_model_string' : custom_model_string,
                                                         'maxReads': maxReads,
                                                         'minQuality': minQuality,
                                                         'minIdentity': minIdentity,

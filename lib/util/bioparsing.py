@@ -15,7 +15,6 @@ Supported parsing formats: (https://biopython.org/wiki/SeqIO#file-formats)
     ig, imgt, nexus, pdb-seqres, pdb-atom, phd, phylip,
     pir, seqxml, sff, sff-trim, snapgene, stockholm, 
     swiss, tab, qual, uniprot-xml, xdna 
-
 SeqRecord:
     SeqIO always returns SeqRecord objects. SeqRecord objects have the following 
     methods: 'annotations', 'dbxrefs', 'description', 'features', 'format', 
@@ -52,17 +51,14 @@ SeqFeature:
         qualifiers: dict
             qualifier_name (str) -> qualifier value (?)
     
-
 FeatureLocation:
      start: + int
      end: + int
      [strand]: int 1 (+), -1 (-), 0 (?)   
      [ref]: <str>
      [ref_db]: <str> (?)
-
      creating a FeatureLocation returns a loc which is an
         iterator over all positions 
-
 '''
 
 
@@ -145,7 +141,6 @@ def parseGenBankExample(gbk_fp):
     """
     We want to take the genbank file and move it to a format we can easily work with.
     Genbank JSON (?)
-
     Multiple record names?
     Multiple feature lists?
     What is included in each record, what in each feature?
@@ -205,7 +200,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-

@@ -7,10 +7,90 @@ import logging
 import json
 import shutil
 from util.validate import validate_init_params
-from util.downloaders import DownloadGenomeToFNA , DownloadFASTQs, GetGenomeOrganismName
+from util.downloaders import DownloadGenomeToFNA , DownloadFASTQs, GetGenomeOrganismName, \
+                             download_genes_table, download_model
 from util.genbank_to_gene_table import  genbank_and_genome_fna_to_gene_table, OLD_convert_genbank_to_gene_table
 from util.upload_pool import upload_poolfile_to_KBase
 
+
+
+"""
+This function needs to do a number of things:
+    1. Validate Parameters and make sure they're all of the right type, etc.
+    2. Download genbank file and fastq file(s).
+    3. Create gene table file
+    4. Create config files for the function "RunFullProgram" 
+"""
+def PrepareProgramInputs(params, cfg_d):
+    """
+    params: (d) As imported by spec file
+    cfg_d: (d)
+        gfu: GenomeFileUtil object
+        tmp_dir: (s) path to tmp dir
+        dfu: DataFileUtil object
+        model_dir: (s) Path to model's directory: (Should always be scratch_dir)
+        gene_table_fp: (s) Path to gene table
+        blat_cmd: (s) Path to blat loc
+        unmapped_fp: (s) Path to unmapped_fp (write)
+        tmpFNA_fp: (s) Path to tmp fna (write)
+        trunc_fp: (s) Path to Trunc (write)
+        endFNA_fp: (s) Path to endFNA (write)
+        R_fp: (s) Path to PoolStats.R file
+        R_op_fp: (s) Path to write R
+        MTS_cfg_fp: (s) Path to write MapTnSeq Config
+        DRP_cfg_fp: (s) Path to write Design Random Pool Config
+        gffToGeneTable_perl_fp: (s) Path to perl script
+        ws: Workspace Object
+
+    Adds the following keys:
+        genome_fna_fp: (File path to the Genome FNA file)
+    """
+
+    # validated params
+    vp = validate_init_params(params, cfg_d)
+
+
+    # Download genome in GBK format and convert it to fna:
+    # gt stands for genome table
+    genome_fna_fp = DownloadGenomeToFNA(cfg_d['gfu'], vp['genome_ref'], cfg_d['tmp_dir'])
+    cfg_d['genome_fna_fp'] = genome_fna_fp
+    genome_scientific_name = GetGenomeOrganismName(cfg_d['ws'], vp['genome_ref'])
+
+    # Downloading genes table
+    download_genes_table(vp['gene_table_ref'], cfg_d['dfu'], cfg_d['gene_table_fp'])
+
+    # Downloading Model
+    model_fp = download_model(vp['model_ref'], cfg_d['dfu'], cfg_d['model_dir'])
+
+    cfg_d["model_fp"] = model_fp
+
+    # FASTQs output dir
+    fq_dir = os.path.join(cfg_d['tmp_dir'], "FASTQs")
+    fastq_fp_l = DownloadFASTQs(cfg_d['dfu'], vp['fastq_ref_list'], fq_dir )
+
+    cfg_d['fastq_fp_l'] = fastq_fp_l
+
+    # This function creates the gene_table at the location gene_table_fp
+    # genbank_and_genome_fna_to_gene_table(gbk_fp, genome_fna_fp, cfg_d['gene_table_fp'])
+
+    MTS_cfg_d, DRP_cfg_d = Create_MTS_DRP_config(cfg_d, vp)
+
+    # Here we write the MapTNSeq config dict 
+    # and DRP config dict out to file
+    with open(cfg_d["MTS_cfg_fp"], "w") as f:
+        f.write(json.dumps(MTS_cfg_d, indent=4))
+
+    with open(cfg_d["DRP_cfg_fp"], "w") as f:
+        f.write(json.dumps(DRP_cfg_d, indent=4))
+
+    logging.info("Wrote both config files. MTS at {}, DRP at {}".format(
+                cfg_d["MTS_cfg_fp"], cfg_d["DRP_cfg_fp"]))
+
+    MTS_cfg_d, DRP_cfg_d = None, None
+
+    pool_op_fp = os.path.join( cfg_d["tmp_dir"] ,vp["output_name"] + ".pool")
+
+    return [pool_op_fp, vp, genome_scientific_name]
 
 
 def PrepareUserOutputs(vp, cfg_d):
@@ -118,88 +198,6 @@ def PrepareUserOutputs(vp, cfg_d):
 
 
 
-
-
-
-
-
-"""
-This function needs to do a number of things:
-    1. Validate Parameters and make sure they're all of the right type, etc.
-    2. Download genbank file and fastq file(s).
-    3. Create gene table file
-    4. Create config files for the function "RunFullProgram" 
-"""
-def PrepareProgramInputs(params, cfg_d):
-    """
-    params: (d) As imported by spec file
-    cfg_d: (d)
-        gfu: GenomeFileUtil object
-        tmp_dir: (s) path to tmp dir
-        dfu: DataFileUtil object
-        custom_model_fp: (s) Path to custom model: Should always be
-            scratch_dir/custom_model.txt
-        gene_table_fp: (s) Path to gene table
-        blat_cmd: (s) Path to blat loc
-        unmapped_fp: (s) Path to unmapped_fp (write)
-        tmpFNA_fp: (s) Path to tmp fna (write)
-        trunc_fp: (s) Path to Trunc (write)
-        endFNA_fp: (s) Path to endFNA (write)
-        R_fp: (s) Path to PoolStats.R file
-        R_op_fp: (s) Path to write R
-        MTS_cfg_fp: (s) Path to write MapTnSeq Config
-        DRP_cfg_fp: (s) Path to write Design Random Pool Config
-        gffToGeneTable_perl_fp: (s) Path to perl script
-        ws: Workspace Object
-
-    Adds the following keys:
-        genome_fna_fp: (File path to the Genome FNA file)
-    """
-
-    # validated params
-    vp = validate_init_params(params, cfg_d)
-
-
-    # Download genome in GBK format and convert it to fna:
-    # gt stands for genome table
-    genome_fna_fp, gbk_fp = DownloadGenomeToFNA(
-            cfg_d['gfu'], vp['genome_ref'], cfg_d['tmp_dir'])
-    cfg_d['genome_fna_fp'] = genome_fna_fp
-    genome_scientific_name = GetGenomeOrganismName(cfg_d['ws'], vp['genome_ref'])
-
-    # FASTQs output dir
-    fq_dir = os.path.join(cfg_d['tmp_dir'], "FASTQs")
-    fastq_fp_l = DownloadFASTQs(cfg_d['dfu'], vp['fastq_ref_list'], fq_dir )
-
-    cfg_d['fastq_fp_l'] = fastq_fp_l
-
-    # This function creates the gene_table at the location gene_table_fp
-    genbank_and_genome_fna_to_gene_table(gbk_fp, genome_fna_fp, cfg_d['gene_table_fp'])
-
-
-
-
-    MTS_cfg_d, DRP_cfg_d = Create_MTS_DRP_config(cfg_d, vp)
-
-    # Here we write the MapTNSeq config dict 
-    # and DRP config dict out to file
-    with open(cfg_d["MTS_cfg_fp"], "w") as f:
-        f.write(json.dumps(MTS_cfg_d, indent=4))
-
-    with open(cfg_d["DRP_cfg_fp"], "w") as f:
-        f.write(json.dumps(DRP_cfg_d, indent=4))
-
-    logging.info("Wrote both config files. MTS at {}, DRP at {}".format(
-                cfg_d["MTS_cfg_fp"], cfg_d["DRP_cfg_fp"]))
-
-    MTS_cfg_d, DRP_cfg_d = None, None
-
-    pool_op_fp = os.path.join( cfg_d["tmp_dir"] ,vp["output_name"] + ".pool")
-
-    return [pool_op_fp, vp, genome_scientific_name]
-
-
-
 def Create_MTS_DRP_config(cfg_d, vp):
     """
     Inputs:
@@ -229,8 +227,7 @@ def Create_MTS_DRP_config(cfg_d, vp):
             "tmpFNA_fp": cfg_d["tmpFNA_fp"],
             "trunc_fp": cfg_d["trunc_fp"],
             "endFNA_fp": cfg_d["endFNA_fp"],
-            "modeltest": vp["model_test"],
-            "model_fp": vp["model_fp"],
+            "model_fp": cfg_d["model_fp"],
             "maxReads": vp["maxReads"],
             "minQuality": vp["minQuality"],
             "minIdentity": vp["minIdentity"],
@@ -238,8 +235,8 @@ def Create_MTS_DRP_config(cfg_d, vp):
             "delta": vp["delta"],
             "fastq_fp_list":  cfg_d['fastq_fp_l'],
             "genome_fp": cfg_d['genome_fna_fp']
-            }
         }
+    }
 
 
     design_random_pool_config_dict = {

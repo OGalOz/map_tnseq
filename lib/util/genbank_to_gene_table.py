@@ -3,7 +3,7 @@ import logging
 import os
 import sys
 import subprocess
-from util.bioparsing import parseFASTA
+#from util.bioparsing import parseFASTA
 #from BCBio import GFF
 from Bio import SeqIO
 
@@ -19,6 +19,8 @@ The gene table we'll build will look like:
 
 def convert_genbank_to_gene_table(genbank_filepath, gt_filepath, gffPrlScriptPath):
     """
+    Deprecated
+    DO NOT USE
     All inputs are str paths
     """
 
@@ -153,10 +155,10 @@ def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
                 if "product" in current_feat.qualifiers.keys():
                     desc = str(current_feat.qualifiers['product'][0])
                 else:
-                    desc = "Unknown function" 
+                    desc = current_feat.type
                     logging.critical("Could not find description in current_feat: ")
                     logging.critical(current_feat)
-                    continue
+                    #continue
 
                 typ_str = current_feat.type.strip()
                 if typ_str in types_dict:
@@ -479,6 +481,31 @@ def keep_types_gene_table(gene_table_string, types_to_keep):
     gene_table_string = header_line + "\n".join(gt_lines)
 
     return gene_table_string
+
+
+def parseFASTA(fasta_fp, BioSeq_bool=False):
+    """
+    Args:
+        fasta_fp: filepath to FASTA file
+        BioSeq_bool: (bool) decides whether to return sequences in BioPython
+                        Sequence format
+    Returns:
+        id2seq: (dict)
+            Goes from sequence ID/ name (str) -> sequence (str)
+    """
+    id2seq = {}
+    seq_generator = SeqIO.parse(fasta_fp, "fasta")
+    
+    if not BioSeq_bool:
+        for sequence in seq_generator:
+            id2seq[sequence.id] = str(sequence.seq)
+    else:
+        for sequence in seq_generator:
+            id2seq[sequence.id] = sequence
+
+
+
+    return id2seq
 
 
 

@@ -43,6 +43,14 @@ def validate_init_params(params, cfg_d):
         vp['genome_ref'] = params['genome_ref']
     else:
         raise Exception("Genome Ref not passed in params.")
+    if 'gene_table_ref' in params:
+        vp['gene_table_ref'] = params['gene_table_ref']
+    else:
+        raise Exception("Gene Table Ref not passed in params.")
+    if 'model_ref' in params:
+        vp['model_ref'] = params['model_ref']
+    else:
+        raise Exception("Model Ref not passed in params.")
     if 'fastq_ref_list' in params:
         #fastq_ref will be a list since there can be multiple.
         fq_ref_list = params['fastq_ref_list']
@@ -52,52 +60,7 @@ def validate_init_params(params, cfg_d):
     else:
         raise Exception("Fastq Ref not passed in params.")
 
-    # MODEL TEST
-    if "model_name" in params:
-        vp['model_name'] = params["model_name"]
-    else:
-        raise Exception("Model Name not passed in params.")
-    vp["model_test"] = False
-    if vp['model_name'] == "Custom":
-        if "custom_model_string" in params:
-            vp['custom_model_string'] = params["custom_model_string"]
-            vp['tested_model_string'] = validate_custom_model(vp[
-                'custom_model_string'])
-            f = open(cfg_d['custom_model_fp'],"w")
-            f.write(vp['tested_model_string'])
-            f.close()
-            vp['model_fp'] = cfg_d['custom_model_fp']
-        else:
-            raise Exception("Model Name is Custom but no custom model string "
-            "passed in params.\n Please restart the program with "
-            "custom model included.")
-    elif vp['model_name'] == "Unknown":
-        vp['model_test'] = True
-        vp["model_fp"] = None
-        # If model_test is true, we run through all the models
-    else:
-        model_fp = os.path.join(cfg_d["models_dir"], vp['model_name'])
-        # Check if model file exists
-        logging.critical("We check if model file exists:")
-        if (os.path.exists(model_fp)):
-            logging.critical(model_fp + " does exist")
-            vp['model_fp'] = model_fp
-        else:
-            logging.critical(os.listdir(cfg_d["models_dir"]))
-            raise Exception("Could not find model within directory: {}".format(model_fp))
-    """
-    if "test_mode" in params:
-        if params["test_mode"] == "yes":
-            vp['test_mode_bool'] = True
-            # We know the model, we test out the fastq
-        else:
-            # We run the entire program
-            vp['test_mode_bool'] = False
-    else:
-        raise Exception("Test Mode not passed in params.")
-    """
 
-    
     #MapTnSeq variables
     if "maxReads" in params:
         mR = params["maxReads"]

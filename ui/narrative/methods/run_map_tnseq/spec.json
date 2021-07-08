@@ -22,6 +22,28 @@
             }
         },
         {
+            "id": "gene_table_ref",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [""],
+            "field_type" : "text",
+            "text_options": {
+                "valid_ws_types": ["KBaseRBTnSeq.RBTS_InputGenesTable"]
+            }
+        },
+        {
+            "id": "model_ref",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [""],
+            "field_type" : "text",
+            "text_options": {
+                "valid_ws_types": ["KBaseRBTnSeq.RBTS_Model"]
+            }
+        },
+        {
         "id": "fastq_ref_list",
             "optional": false,
             "advanced": false,
@@ -33,132 +55,52 @@
             }
         },
         {
-        "id": "model_name",
-        "optional": false,
-        "advanced": false,
-        "allow_multiple": false,
-        "default_values": [""],
-        "field_type": "dropdown",
-        "dropdown_options":{
-                "options": [{
-                    "value": "Custom",
-                    "display": "Custom - (Advanced)"
-                },
-                {
-                    "value": "Unknown",
-                    "display": "Unknown - (Find)"
-                },
-                {
-                    "value": "model_Sc_Tn5",
-                    "display": "model_Sc_Tn5"
-                },
-                {
-                    "value": "model_ezTn5_Tet_Bifido",
-                    "display": "model_ezTn5_Tet_Bifido"
-                },
-                 {
-                    "value": "model_ezTn5_kan1",
-                    "display": "model_ezTn5_kan1"
-                },
-                 {
-                    "value": "model_ezTn5_kanU",
-                    "display": "model_ezTn5_kanU"
-                },
-                {
-                    "value": "model_magic_Tn5",
-                    "display": "model_magic_Tn5"
-                },
-                {
-                    "value": "model_magic_mariner",
-                    "display": "model_magic_mariner"
-                },
-                {
-                    "value": "model_magic_mariner.2",
-                    "display": "model_magic_mariner.2"
-                },
-                {
-                    "value": "model_pHIMAR_kan",
-                    "display": "model_pHIMAR_kan"
-                },
-                {
-                    "value": "model_pKMW3",
-                    "display": "model_pKMW3"
-                },
-                {
-                    "value": "model_pKMW3_universal",
-                    "display": "model_pKMW3_universal"
-                },
-                {
-                    "value": "model_pKMW7",
-                    "display": "model_pKMW7"
-                },
-                {
-                    "value": "model_pKMW7_U",
-                    "display": "model_pKMW7_U"
-                }]
-            }
-
-
-        },          
-        {
-            "id": "custom_model_string", 
-            "optional": true,
-            "advanced": true,
-            "allow_multiple": false,
-            "default_values": [ "" ],
-            "field_type": "textarea",
-            "textarea_options" : {
-                "n_rows" : 2
-
-            }
-        }, 
-        {
         "id": "maxReads",
             "optional": true,
+            "advanced": true,
             "text_options" : {
                 "validate_as" : "int"
             },
-            "advanced": true,
             "allow_multiple": false,
             "default_values": [ "" ],
             "field_type": "text"
         },{
         "id": "minQuality",
             "optional": true,
+            "advanced": true,
             "text_options" : {
                 "validate_as" : "int"
             },
-            "advanced": true,
             "allow_multiple": false,
             "default_values": [ "10" ],
             "field_type": "text"
         },       {
         "id": "minIdentity",
             "optional": true,
+            "advanced": true,
             "text_options" : {
                 "validate_as" : "int"
             },
-            "advanced": true,
             "allow_multiple": false,
             "default_values": [ "90" ],
             "field_type": "text"
         },       {
         "id": "minScore",
             "optional": true,
+            "advanced": true,
             "text_options" : {
                 "validate_as" : "int"
             },
-            "advanced": true,
             "allow_multiple": false,
             "default_values": [ "15" ],
             "field_type": "text"
         }, {
         "id": "delta",
             "optional": true,
+            "advanced": true,
             "text_options" : {
                 "validate_as" : "int"
             },
-            "advanced": true,
             "allow_multiple": false,
             "default_values": [ "5" ],
             "field_type": "text"
@@ -166,10 +108,10 @@
         {
         "id": "minN",
             "optional": true,
+            "advanced": true,
             "text_options" : {
                 "validate_as" : "float"
             },
-            "advanced": true,
             "allow_multiple": false,
             "default_values": [ "10" ],
             "field_type": "text"
@@ -177,10 +119,10 @@
         {
         "id": "minFrac",
             "optional": true,
+            "advanced": true,
             "text_options" : {
                 "validate_as" : "float"
             },
-            "advanced": true,
             "allow_multiple": false,
             "default_values": [ "0.75" ],
             "field_type": "text"
@@ -189,10 +131,10 @@
         {
         "id": "minRatio",
             "optional": true,
+            "advanced": true,
             "text_options" : {
                 "validate_as" : "float"
             },
-            "advanced": true,
             "allow_multiple": false,
             "default_values": [ "8.0" ],
             "field_type": "text"
@@ -200,10 +142,10 @@
         {
         "id": "maxQBeg",
             "optional": true,
+            "advanced": true,
             "text_options" : {
                 "validate_as" : "int"
             },
-            "advanced": true,
             "allow_multiple": false,
             "default_values": [ "3" ],
             "field_type": "text"
@@ -268,19 +210,19 @@
                     "input_parameter": "genome_ref",
                     "target_property": "genome_ref",
                     "target_type_transform": "resolved-ref"
+                },{
+                    "input_parameter": "gene_table_ref",
+                    "target_property": "gene_table_ref",
+                    "target_type_transform": "resolved-ref"
+                },{
+                    "input_parameter": "model_ref",
+                    "target_property": "model_ref",
+                    "target_type_transform": "resolved-ref"
                 },
                 {
                     "input_parameter": "fastq_ref_list",
                     "target_property": "fastq_ref_list",
                     "target_type_transform": "resolved-ref"
-                },
-                {
-                    "input_parameter": "model_name",
-                    "target_property": "model_name"
-                },
-                {
-                    "input_parameter": "custom_model_string",
-                    "target_property": "custom_model_string"
                 },
                 {
                     "input_parameter": "maxReads",

@@ -67,8 +67,8 @@ class map_tnseq:
         # We need the workspace object to get info on the workspace the app is running in.
         token = os.environ.get('KB_AUTH_TOKEN', None)
         ws = Workspace(self.ws_url, token=token)
-        x = ws.get_workspace_info({'workspace': params['workspace_name']})
-        workspace_id = x[0]
+        ws_info = ws.get_workspace_info({'workspace': params['workspace_name']})
+        workspace_id = ws_info[0]
         td = self.shared_folder
 
         # Initializing config info 
@@ -79,19 +79,17 @@ class map_tnseq:
                 "ws_id": workspace_id,
                 "username" : ctx['user_id'],
                 "tmp_dir": td,
-                "custom_model_fp": os.path.join(td,"custom_model.txt"), 
+                "model_dir": td, 
                 "gene_table_fp": os.path.join(td, "genes.GC"),
                 "blat_cmd": "/kb/module/lib/map_tnseq/blat",
                 "unmapped_fp": os.path.join(td, "UNMAPPED.fna"),
                 "tmpFNA_fp": os.path.join(td,"TMP.fna"),
                 "trunc_fp": os.path.join(td, "TRUNC.fna"),
                 "endFNA_fp": os.path.join(td, "END.fna"),
-                "models_dir": "/kb/module/lib/map_tnseq/models",
                 "R_fp": "/kb/module/lib/map_tnseq/PoolStats.R",
                 "R_op_fp": os.path.join(td, "R_results.txt."),
                 "MTS_cfg_fp": os.path.join(td, "maptnseqconfig.json"),
                 "DRP_cfg_fp": os.path.join(td, "designRPconfig.json"),
-                "gffToGeneTable_perl_fp": "/kb/module/lib/map_tnseq/gffToGenes.pl",
                 "css_style_fp": "/kb/module/lib/map_tnseq/style.css"
         }
         
@@ -101,8 +99,7 @@ class map_tnseq:
 
         # Part 2: Run the program using recently created config files
         html_fp, model_test = CompleteRun(cfg_d["MTS_cfg_fp"], cfg_d["DRP_cfg_fp"],
-                                cfg_d["tmp_dir"], pool_op_fp, cfg_d["models_dir"],
-                                genome_scientific_name)
+                                cfg_d["tmp_dir"], pool_op_fp, genome_scientific_name)
 
         # Part 3: Prepare output to return to user
         cfg_d['pool_fp'] = pool_op_fp
