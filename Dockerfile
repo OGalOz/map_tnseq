@@ -33,11 +33,6 @@ RUN apt-get install python3
 
 RUN pip install --upgrade pip 
 
-
-RUN pip install gffutils
-
-RUN pip install biopython-convert
-
 # -----------------------------------------
 
 COPY ./ /kb/module
