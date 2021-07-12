@@ -112,7 +112,9 @@ def PrepareUserOutputs(vp, cfg_d):
         fastq_ref_list: list<s>,
         pool_description: s,
         KB_Pool_Bool: b,
-        
+       
+    Description:
+        Upload PoolFile to make KBaseRBTnSeq.RBTS_PoolFile object.
     """
 
     # Here we upload the pool file to KBase to make a PoolFile Object
@@ -122,6 +124,8 @@ def PrepareUserOutputs(vp, cfg_d):
         upload_params = {
                 'username': cfg_d['username'],
                 'genome_ref': vp['genome_ref'],
+                'gene_table_ref': vp['gene_table_ref'],
+                'model_ref': vp['model_ref'],
                 'fastq_refs': vp['fastq_ref_list'],
                 'pool_description': vp['pool_description'] ,
                 'workspace_id': cfg_d['ws_id'],
@@ -140,11 +144,12 @@ def PrepareUserOutputs(vp, cfg_d):
     os.mkdir(res_dir)
     #shutil.copy(cfg_d["Main_HTML_report_fp"], res_dir)
 
-    if not cfg_d["model_test"]: 
-        # Here we decide which files besides HTML to return to User and place in a directory
-        # Pool File, ".surprise?", "html?"
-        shutil.copy(cfg_d['pool_fp'], res_dir)
-        shutil.copy(cfg_d["gene_table_fp"], res_dir)
+    if "model_test" in cfg_d:
+        if not cfg_d["model_test"]: 
+            # Here we decide which files besides HTML to return to User and place in a directory
+            # Pool File, ".surprise?", "html?"
+            shutil.copy(cfg_d['pool_fp'], res_dir)
+            shutil.copy(cfg_d["gene_table_fp"], res_dir)
 
 
 

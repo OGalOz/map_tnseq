@@ -8,33 +8,20 @@ import datetime
 
 def upload_poolfile_to_KBase(up):
     '''
-<<<<<<< Updated upstream
     Inputs:
         up: d,
             username:
             genome_ref,:
+            gene_table_ref (str):
+            model_ref (str)
             pool_description:
-            fastq_refs (list):
+            fastq_refs (list<str>):
             workspace_id:
             ws_obj:
             poolfile_fp: 
             poolfile_name:
             dfu:
 
-=======
-    upload params (up) must include:
-    {
-    username,
-    genome_ref,
-    pool_description,
-    fastq_refs (list),
-    workspace_id,
-    ws_obj,
-    poolfile_fp
-    poolfile_name
-    dfu
-       }
->>>>>>> Stashed changes
     '''
     # We check correctness of pool file
     column_header_list, num_lines = check_pool_file(up['poolfile_fp'])
@@ -51,29 +38,33 @@ def upload_poolfile_to_KBase(up):
     # The following var res_handle only created for simplification of code
     res_handle = file_to_shock_result["handle"]
 
-    #util_die We create an updated description (prefix) with username and time.
+    # We create an updated description (prefix) with username and time.
     date_time = datetime.datetime.utcnow() 
-    updated_description = "\nCreated by {} on {}\n".format(up['username'],
+    updated_description = "\n Created by {} on {}. \n ".format(up['username'],
         str(date_time))
 
     # We create the data for the object
     pool_data = {
-        "file_type": "KBasePoolTSV.PoolFile",
+        "file_type": "KBaseRBTnSeq.RBTS_PoolFile",
         "poolfile": res_handle["hid"],
         # below should be shock
         "handle_type": res_handle["type"],
         "shock_url": res_handle["url"],
         "shock_node_id": res_handle["id"],
         "compression_type": "gzip",
-        "column_header_list": column_header_list,
         "file_name": res_handle["file_name"],
-        "num_lines": num_lines,
         "utc_created": str(date_time),
-        "related_genome_ref": up["genome_ref"],
+        "column_header_list": column_header_list,
+        "column_headers_str": ", ".join(column_header_list),
+        "num_lines": str(num_lines),
+        "related_genes_table_ref": up["gene_table_ref"],
         "related_organism_scientific_name": get_genome_organism_name(
             up["genome_ref"],
             up['ws_obj']
         ),
+        "model_ref": up["model_ref"],
+        "fastqs": up["fastq_refs"],
+        "fastqs_used_str": ", ".join(up["fastq_refs"]),
         "description": updated_description + up["pool_description"],
     }
 
@@ -81,16 +72,17 @@ def upload_poolfile_to_KBase(up):
         "id": up["workspace_id"],
         "objects": [
             {
-                "type": "KBasePoolTSV.PoolFile",
+                "type": "KBaseRBTnSeq.RBTS_PoolFile",
                 "data": pool_data,
                 "name": up['poolfile_name'],
             }
         ],
     }
+
     # save_objects returns a list of object_infos
     dfu_object_info = up['dfu'].save_objects(save_object_params)[0]
-    print("dfu_object_info: ")
-    print(dfu_object_info)
+    logging.info("dfu_object_info: ")
+    logging.info(dfu_object_info)
     return {
         "Name": dfu_object_info[1],
         "Type": dfu_object_info[2],

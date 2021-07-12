@@ -65,24 +65,37 @@ class map_tnseqTest(unittest.TestCase):
         # self.assertEqual(ret[...], ...) or other unittest methods
       
         # Keio
+        #str
         genome_ref = "62572/2/1" 
         # FASTQs: Short: 52075/4/1 # Long 52075/12/1
+        #list<str>
         fastq_ref_list = ["58816/11/1"] 
+        #str
         model_ref = "62572/7/1"
+        #str
         gene_table_ref = "62572/3/1" 
         # Models: "Custom" #Unknown # model_pKMW3_universal # model_ezTn5_Tet_Bifido 
+        #None or int
         maxReads = None 
+        #int
         minQuality = 5
+        #int
         minIdentity = 90
+        #int
         minScore = 15
+        #int
         delta = 5
+        #int
         minN = 5 #Restriction: Must be at least 1. 
+        #float
         minFrac = 0.75 #Range 0-1
+        #float
         minRatio = 8.0 #Range 0 -inf.
+        #float
         maxQBeg = 3.0
         pool_description = "Ci Testing"
         KB_Pool_Bool = "yes"
-        output_name = "Valid Burk 376 test"
+        output_name = "Keio_Test"
 
         ret = self.serviceImpl.run_map_tnseq(self.ctx, {'workspace_name': self.wsName,
                                                         'genome_ref': genome_ref ,
