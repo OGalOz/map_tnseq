@@ -69,9 +69,9 @@ class map_tnseqTest(unittest.TestCase):
         genome_ref = "62572/2/1" 
         # FASTQs: Short: 52075/4/1 # Long 52075/12/1
         #list<str>
-        fastq_ref_list = ["58816/11/1"] 
+        fastq_ref_list = ["62572/28/1"] 
         #str
-        model_ref = "62572/7/1"
+        model_ref = "62572/26/1"
         #str
         gene_table_ref = "62572/3/1" 
         # Models: "Custom" #Unknown # model_pKMW3_universal # model_ezTn5_Tet_Bifido 
