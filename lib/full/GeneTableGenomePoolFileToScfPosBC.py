@@ -200,8 +200,8 @@ def WriteScaffoldPositionBarcodesFile(ScaffoldGene_d, poolfile_fp, genome_fna_fp
         if scf in Scaffold_To_Length:
             scaffolds_info_dict[scf]["scaffold_length"] = Scaffold_To_Length[scf]
         else:
-            raise Exception("Couldn't find scaffold {} in genome fna {}".format(
-                scf, genome_fna_fp))
+            raise Exception(f"Couldn't find scaffold {scf} in genome fna {genome_fna_fp}."
+                    " Scaffold names in genome fna: " + ", ".join(Scaffold_To_Length.keys()))
 
     ScfPosBC_d["scaffolds"] = scaffolds_info_dict
 
@@ -233,7 +233,13 @@ def GetScaffoldLengths(genome_fna_fp):
         if c_line[0] == ">":
             if c_scaffold_name != "":
                 Scaffold_To_Length[c_scaffold_name] = cs_len
-            c_scaffold_name = c_line[1:]
+            if " " in c_line:
+                logging.warning(f"A space found in scaffold name: '{c_line}'."
+                                " This might cause an error.")
+                c_scaffold_name = (c_line.split(' ')[0])[1:]
+                logging.warning(f"Instead using scaffold name {c_scaffold_name}")
+            else:
+                c_scaffold_name = c_line[1:]
             # Current scaffold length is reset
             cs_len = 0
         else:

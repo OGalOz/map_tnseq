@@ -188,38 +188,42 @@ def RemoveGenesKeyFromDict(inp_d):
 
 def GetScaffoldLengths(genome_fna_fp):
     """ This function gets the lengths of the scaffolds, returns a dict
+    Also Computes Scaffold_To_Sequence dict
 
     Args:
         genome_fna_fp: (str) Path to genome fna file (FASTA)
 
     Returns:
-        [Scaffold_To_Length, Scf_Name_To_Sequence]
         Scaffold_To_Length: (dict) 
             scaffold_name: (str) -> length (int)
-        Scf_Name_To_Sequence: (d)
-            scaffold_name: (str) -> sequence (str)
     """
 
     Scaffold_To_Length = {}
-    Scf_Name_To_Sequence = {}
+    Scaffold_To_Sequence = {}
 
     FNA_FH = open(genome_fna_fp)
 
     c_line = FNA_FH.readline().strip()
     c_scaffold_name = ""
+    c_seq = ""
     while c_line != "":
         if c_line[0] == ">":
             if c_scaffold_name != "":
                 Scaffold_To_Length[c_scaffold_name] = cs_len
-                Scf_Name_To_Sequence[c_scaffold_name] = crnt_scf_seq
-            c_scaffold_name = c_line[1:]
+                Scaffold_To_Sequence[c_scaffold_name] = c_seq
+            if " " in c_line:
+                logging.warning(f"A space found in scaffold name: '{c_line}'."
+                                " This might cause an error.")
+                c_scaffold_name = (c_line.split(' ')[0])[1:]
+                logging.warning(f"Instead using scaffold name {c_scaffold_name}")
+            else:
+                c_scaffold_name = c_line[1:]
             # Current scaffold length is reset
             cs_len = 0
-            # Current scaffold sequence is reset
-            crnt_scf_seq = ""
+            c_seq = ""
         else:
+            c_seq += c_line
             cs_len += len(c_line)
-            crnt_scf_seq += c_line
 
         c_line = FNA_FH.readline().strip()
 
@@ -227,12 +231,12 @@ def GetScaffoldLengths(genome_fna_fp):
 
     if c_scaffold_name != "":
         Scaffold_To_Length[c_scaffold_name] = cs_len
-        Scf_Name_To_Sequence[c_scaffold_name] = crnt_scf_seq
+        Scaffold_To_Sequence[c_scaffold_name] = c_seq
 
     if len(Scaffold_To_Length.keys()) == 0:
         logging.warning("No Scaffolds found in " + genome_fna_fp)
 
-    return [Scaffold_To_Length, Scf_Name_To_Sequence]
+    return Scaffold_To_Length, Scaffold_To_Sequence
 
 
 
@@ -325,8 +329,8 @@ def AddGeneToScfGeneID_d(scf_len_d, scf_gene_id_d, scf_name, begin, end, desc):
     
     # We check if scaffold name is in genome.fna file
     if not scf_name in scf_len_d:
-        raise Exception("Scaffold name {} not found in genome fna file.".format(
-            scf_name))
+        raise Exception(f"Scaffold name {scf_name} not found in genome fna file."
+                        " Scaffold names in genome fna file: " + ", ".join(scf_len_d.keys()))
 
     if scf_name in scf_gene_id_d:
         gene_id = GetGeneID(scf_gene_id_d, scf_name) 

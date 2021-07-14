@@ -66,14 +66,15 @@ class map_tnseqTest(unittest.TestCase):
       
         # Keio
         #str
-        genome_ref = "62572/2/1" 
+        genome_ref = "62686/4/1" 
         # FASTQs: Short: 52075/4/1 # Long 52075/12/1
         #list<str>
-        fastq_ref_list = ["62572/28/1"] 
+        fastq_ref_list = ["62686/31/1"]
+        # , "62686/28/1"] 
         #str
-        model_ref = "62572/26/1"
+        model_ref = "62686/2/1"
         #str
-        gene_table_ref = "62572/3/1" 
+        gene_table_ref = "62686/5/1" 
         # Models: "Custom" #Unknown # model_pKMW3_universal # model_ezTn5_Tet_Bifido 
         #None or int
         maxReads = None 
@@ -95,7 +96,7 @@ class map_tnseqTest(unittest.TestCase):
         maxQBeg = 3.0
         pool_description = "Ci Testing"
         KB_Pool_Bool = "yes"
-        output_name = "Keio_Test"
+        output_name = "Keio_Test_July_n1"
 
         ret = self.serviceImpl.run_map_tnseq(self.ctx, {'workspace_name': self.wsName,
                                                         'genome_ref': genome_ref ,

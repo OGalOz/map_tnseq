@@ -117,6 +117,8 @@ def PrepareUserOutputs(vp, cfg_d):
         Upload PoolFile to make KBaseRBTnSeq.RBTS_PoolFile object.
     """
 
+    """
+    USED TO DO THIS
     # Here we upload the pool file to KBase to make a PoolFile Object
     if vp['KB_Pool_Bool']:
 
@@ -137,6 +139,7 @@ def PrepareUserOutputs(vp, cfg_d):
         upload_poolfile_results = upload_poolfile_to_KBase(upload_params)
         logging.info("Upload Pool File Results:")
         logging.info(upload_poolfile_results)
+    """
    
 
     # We make a directory containing the resultant files
@@ -144,7 +147,10 @@ def PrepareUserOutputs(vp, cfg_d):
     os.mkdir(res_dir)
     #shutil.copy(cfg_d["Main_HTML_report_fp"], res_dir)
 
-    if "model_test" in cfg_d:
+    if "model_test" not in cfg_d:
+        shutil.copy(cfg_d['pool_fp'], res_dir)
+        shutil.copy(cfg_d["gene_table_fp"], res_dir)
+    else:
         if not cfg_d["model_test"]: 
             # Here we decide which files besides HTML to return to User and place in a directory
             # Pool File, ".surprise?", "html?"
@@ -184,8 +190,6 @@ def PrepareUserOutputs(vp, cfg_d):
                         }]
 
 
-
-
     report_params = {
             'workspace_name' : cfg_d['workspace_name'],
             "html_links": HTML_report_d_l,
@@ -195,8 +199,7 @@ def PrepareUserOutputs(vp, cfg_d):
             "message": ""
             }
 
-    if not cfg_d["model_test"]:
-        report_params["file_links"] = [dir_link]
+    report_params["file_links"] = [dir_link]
 
 
     return report_params

@@ -14,7 +14,7 @@ from full.HTMLReport import CreateHTMLdir
 from full.GeneTableGenomePoolFileToScfPosBC import GeneTable_Barcodes_To_BarcodeGenes
 from full.ScfPosBC_To_BarChartData import ScfPosBC_Info_To_Scaffolds
 from full.ScfPosBC_to_MhtnData import PosScfBCDataToZScrPointsForValues
-
+from util.upload_pool import upload_poolfile_to_KBase
 
 """
 Note:
@@ -25,7 +25,9 @@ Note:
     designrandompool needs genes.GC, 
 """
 
-def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm, models_dir=None):
+def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm, 
+                KB_pool_bool, cfg_d, vp,
+                models_dir=None):
     """
     All inputs are strings
 
@@ -52,7 +54,6 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm, models_
     
 
     pre_HTML_d = {"genome_name": gnm_nm}
-    html_fp = os.path.join(tmp_dir, "MapTnSeqReport.html")
 
     """
     DO NOT DELETE: WE COULD USE THIS TO FIND THE MODEL IF UNKNOWN
@@ -138,6 +139,29 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm, models_
     pre_HTML_d["DRP_report_dict"] = DRP_report_dict
 
 
+    # Here we upload the pool file to KBase to make a PoolFile Object
+    if KB_pool_bool:
+        logging.info("UPLOADING POOL FILE to KBASE through DataFileUtil")
+        upload_params = {
+                'username': cfg_d['username'],
+                'genome_ref': vp['genome_ref'],
+                'gene_table_ref': vp['gene_table_ref'],
+                'model_ref': vp['model_ref'],
+                'fastq_refs': vp['fastq_ref_list'],
+                'pool_description': vp['pool_description'] ,
+                'workspace_id': cfg_d['ws_id'],
+                'ws_obj': cfg_d['ws'],
+                'poolfile_fp': cfg_d['pool_fp'],
+                'poolfile_name': vp['output_name'] + ".pool",
+                'dfu': cfg_d['dfu']
+                }
+        upload_poolfile_results = upload_poolfile_to_KBase(upload_params)
+        logging.info("Upload Pool File Results:")
+        logging.info(upload_poolfile_results)
+
+
+    logging.info("Beginning to create HTML Directory.")
+
     HTMLDisplayFiles_dir = "/kb/module/lib/map_tnseq/HTMLDisplayFiles"
    
     # We create the directories and HTML output (imported from HTMLReport.py)
@@ -190,8 +214,7 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm, models_
     logging.info("Wrote html file to " + html_fp)
     """
 
-    # We return the html filepath and that modeltest is True
-    return [html_fp, False]
+    return None
 
 
 

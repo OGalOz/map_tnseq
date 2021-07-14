@@ -70,6 +70,7 @@ class map_tnseq:
         ws_info = ws.get_workspace_info({'workspace': params['workspace_name']})
         workspace_id = ws_info[0]
         td = self.shared_folder
+        html_fp = os.path.join(td, "MapTnSeqReport.html")
 
         # Initializing config info 
         cfg_d = {
@@ -97,15 +98,19 @@ class map_tnseq:
         # Part 1: Prepare to run program: Download necessary files, create configs
         pool_op_fp, vp, genome_scientific_name = PrepareProgramInputs(params, cfg_d)
 
-        # Part 2: Run the program using recently created config files
-        html_fp, model_test = CompleteRun(cfg_d["MTS_cfg_fp"], cfg_d["DRP_cfg_fp"],
-                                cfg_d["tmp_dir"], pool_op_fp, genome_scientific_name)
 
-        # Part 3: Prepare output to return to user
+        # Part 1.5: Prepare vars 
         cfg_d['pool_fp'] = pool_op_fp
         cfg_d["workspace_name"] = params["workspace_name"]
         cfg_d["Main_HTML_report_fp"] = html_fp
-        cfg_d["model_test"] = model_test
+
+        # Part 2: Run the program using recently created config files
+        CompleteRun(cfg_d["MTS_cfg_fp"], cfg_d["DRP_cfg_fp"],
+                    cfg_d["tmp_dir"], pool_op_fp, genome_scientific_name,
+                    vp["KB_Pool_Bool"], cfg_d, vp)
+
+
+        # Part 3: Prepare final output to return to user
         report_params = PrepareUserOutputs(vp, cfg_d)
 
         #Returning file in zipped format:------------------------------------------------------------------
