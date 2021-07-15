@@ -1017,7 +1017,7 @@ def RunBLAT8(inp_dict):
 
 def HandleGenomeBLAT(rows, hitsPastEnd, HG_d, debug):
     """
-    This function writes out reads to pool file
+    This function writes out reads to pre-pool table file
     Each time this is run is on a single read name- which may correspond to a number
         of rows in the blat output. If there are multiple hits, the length of rows 
         input will be > 1, otherwise it is 1.

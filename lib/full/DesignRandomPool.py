@@ -13,6 +13,7 @@ import logging
 import json
 import copy
 import subprocess
+import pandas as pd
 
 
 
@@ -21,15 +22,15 @@ def RunDesignRandomPool(inp_d, DEBUGPRINT):
     We run through the program, dividing each part into a separate function
 
 
-    INPUTS:
-    inp_d: (dict) 
-        Required inputs listed in function "ParseInputs" below
+    ARGS:
+        inp_d: (dict) 
+            Required inputs listed in function "ParseInputs" below
 
-    DEBUGPRINT: (bool) Normally False if not checking changes in variables.
-        (Make 'True' if you want to print out JSON files in between each part 
-        of the function for debugging purposes)
+        DEBUGPRINT: (bool) Normally False if not checking changes in variables.
+            (Make 'True' if you want to print out JSON files in between each part 
+            of the function for debugging purposes)
 
-    OUTPUTS:
+    RETURNS:
         report_dict:
           chao2_report_str: (str)
           print_pool_report_str: (str)
@@ -201,9 +202,11 @@ def GetVariantsPrintPool(inp_dict):
     """
     inp_dict: (dict) Contains
         barcodeAt: (dict)
+            barcode (str) -> list<nTot, nMax, maxAt, nNext, nextAt>
         POOL_FH: file handle to output pool file
         nReadsForUsable: (int)
         nMapped: (int)
+        output_fp (str): Path to pool file?
     """
     
     nOut = 0
@@ -261,6 +264,12 @@ def GetVariantsPrintPool(inp_dict):
 
     
     inp_dict['POOL_FH'].close()
+
+    # Here we reopen the pool, and sort it by position
+    pool_df = pd.read_table(inp_dict['output_fp'], sep="\t")
+    pool_df.sort_values(by=["scaffold","pos"], inplace=True)
+    pool_df.to_csv(inp_dict['output_fp'], sep='\t', index=False)
+
 
     report_str = "\nMasked {} off-by-1 barcodes ({} reads) leaving {}".format(
                  nMasked, nMaskedReads, nOut) + " barcodes."
@@ -679,18 +688,26 @@ def ProcessInputMapTnSeqTables(inp_dict):
 
 def UpdateBarPosCount(barPosCount, barcode, key, unique, qBeg):
     """
-    This function is used simply to update the dict in a specific way.
+    Description:
+        barPosCount is a dict that maps barcodes to a location dict,
+        the location dict keys are strings that look like scf:strnd:pos,
+        each location key maps to a list [int, int], which represents
+        [how many barcodes found in this location, how many unique and good barcodes found in this location]
+
+    This function is used to update the dict in a specific way.
     Should there be a limit to the size of barPosCount? Memory problems?
+
 
     barPosCount: (dict)
     barcode: (str)
     key: (str) scf:strnd:pos (scaffoldId:+/-:int)
-    unique: (str) string of int (0 or 1)
+    unique: (str) string of int (0 or 1); 0 meaning not unique, and 1 meaning yes unique
     qBeg: (str) string of int, a good qBeg is between 1 and 3 (inclusive)
 
     note barPosCount contains all lines in any MapTnSeq table with the 
         same scaffold-strand-position value for a specific barcode
     """
+    # 'good query Beginning'
     gd_qB = ["1","2","3"]
     if barcode in barPosCount:
         if key in barPosCount[barcode]:
