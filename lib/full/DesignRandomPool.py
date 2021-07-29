@@ -150,6 +150,8 @@ def ParseInputs(input_dict):
 
 def RunPoolStatsR(inp_d):
     """
+    Description:
+        We run an R script to get statistics regarding pool
     inp_d: (dict) contains
         R_fp (str) Path to R script 'PoolStats.R'
         output_fp (str) (pool_fp) finished pool file

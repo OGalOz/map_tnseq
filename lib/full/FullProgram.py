@@ -77,13 +77,14 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm,
 
     #We get the model string
     with open(model_use, "r") as f:
+        # This includes pastEnd if that's there
         model_str = f.read().rstrip()
 
     pre_HTML_d["models_info"] = {
                 "model_in_use": model_use,
                 "model_str": model_str,
                 "model_name": os.path.basename(model_use)
-                }
+    }
 
     # One run per fastq file
     num_mts_runs = len(map_cfg['fastq_fp_list'])

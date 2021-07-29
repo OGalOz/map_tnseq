@@ -9,15 +9,11 @@ def validate_init_params(params, cfg_d):
         Must contain all the parameters passed in
         as shown in function.
     cfg_d: (d)
-        custom_model_fp: (s) Path to custom model: Should always be
-            scratch_dir/custom_model.txt
-        models_dir: (s) Path to all models
+        #models_dir: (s) Path to all models
     Outputs:
         vp: (d) "Validated Params"
             genome_ref: (s)
             fastq_ref_list: (list<s>)
-            model_fp: (s)
-            model_test: (b) True if don't know model
 
             (MapTnSeq vars)
             maxReads: (i)
@@ -47,10 +43,10 @@ def validate_init_params(params, cfg_d):
         vp['gene_table_ref'] = params['gene_table_ref']
     else:
         raise Exception("Gene Table Ref not passed in params.")
-    if 'model_ref' in params:
-        vp['model_ref'] = params['model_ref']
+    if 'tnseq_model_name' in params:
+        vp['tnseq_model_name'] = params['tnseq_model_name']
     else:
-        raise Exception("Model Ref not passed in params.")
+        raise Exception("Model Name not passed in params.")
     if 'fastq_ref_list' in params:
         #fastq_ref will be a list since there can be multiple.
         fq_ref_list = params['fastq_ref_list']
@@ -209,6 +205,17 @@ def validate_init_params(params, cfg_d):
 
 
 
+# op_name is string, (output_name for app)
+def check_output_name(op_name):
+    op_name = op_name.replace(' ', '_')
+    rgx = re.search(r'[^\w]', op_name)
+    if rgx:
+        logging.warning("Non-alphanumeric character in output name: " + rgx[0])
+        op_name = "Default_Name_Check_Chars"
+    return op_name
+
+
+
 def validate_custom_model(custom_model_string):
     """
     Inputs: custom_model_string (str) String of custom model. 
@@ -227,15 +234,5 @@ def validate_custom_model(custom_model_string):
     tested_model_string = custom_model_string
 
     return tested_model_string
-
-
-# op_name is string, (output_name for app)
-def check_output_name(op_name):
-    op_name = op_name.replace(' ', '_')
-    rgx = re.search(r'[^\w]', op_name)
-    if rgx:
-        logging.warning("Non-alphanumeric character in output name: " + rgx[0])
-        op_name = "Default_Name_Check_Chars"
-    return op_name
 
 

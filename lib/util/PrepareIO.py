@@ -8,7 +8,7 @@ import json
 import shutil
 from util.validate import validate_init_params
 from util.downloaders import DownloadGenomeToFNA , DownloadFASTQs, GetGenomeOrganismName, \
-                             download_genes_table, download_model
+                             download_genes_table
 from util.genbank_to_gene_table import  genbank_and_genome_fna_to_gene_table, OLD_convert_genbank_to_gene_table
 from util.upload_pool import upload_poolfile_to_KBase
 
@@ -59,10 +59,15 @@ def PrepareProgramInputs(params, cfg_d):
     # Downloading genes table
     download_genes_table(vp['gene_table_ref'], cfg_d['dfu'], cfg_d['gene_table_fp'])
 
-    # Downloading Model
-    model_fp = download_model(vp['model_ref'], cfg_d['dfu'], cfg_d['model_dir'])
 
+    model_str, past_end_str = get_model_and_pastEnd_strs(vp['tnseq_model_name'])
+    model_fp = os.path.join(cfg_d['model_dir'], vp['tnseq_model_name'] + '.txt')
+    write_model_to_file(model_fp, model_str, past_end_str)
     cfg_d["model_fp"] = model_fp
+
+    # Downloading Model
+    # model_fp = download_model(vp['model_ref'], cfg_d['dfu'], cfg_d['model_dir'])
+    # cfg_d["model_fp"] = model_fp
 
     # FASTQs output dir
     fq_dir = os.path.join(cfg_d['tmp_dir'], "FASTQs")
@@ -195,8 +200,7 @@ def PrepareUserOutputs(vp, cfg_d):
             "html_links": HTML_report_d_l,
             "direct_html_link_index": 0,
             "html_window_height": 333,
-            "report_object_name": "KB_MTS_DRP_Report",
-            "message": ""
+            "message": "Finished Running MapTnSeq"
             }
 
     report_params["file_links"] = [dir_link]
@@ -261,6 +265,86 @@ def Create_MTS_DRP_config(cfg_d, vp):
             }
 
     return [map_tnseq_config_dict, design_random_pool_config_dict]
+
+
+
+
+
+def get_model_and_pastEnd_strs(standard_model_name):
+    """
+    Args:
+        standard_model_name (str): Name of the model. Should be one of below.
+    Description:
+        In this function we get the two parts of the model-
+        The model string, which is the part of the transposon in which the barcode sits.
+        And the past end string, which is after the transposon.
+    Returns:
+        model_str, past_end_str 
+        
+    """
+
+    if standard_model_name ==  "Sc_Tn5":
+        model_str = "nnnnnGATGTCCACGAGGTCTCTNNNNNNNNNNNNNNNNNNNNCGTACGCTGCAGGTCGACCAGCAGCTATGACATGAAGATGTGTATAAGAGACAG" 
+        past_end_str = "GGAAGGGCCCGACGTCGCATGCTCCCGGCCGCCATGGCGGCCGCGGGAATTCGATTGGGCCCAGGTACCAACTACGTCAGGTGGCACTTT"
+    elif standard_model_name == "ezTn5_Tet_Bifido":
+        model_str = "nnnnnnGATGTCCACGAGGTCTCTNNNNNNNNNNNNNNNNNNNNCGTACGCTGCACCTCGACAGATGTGTATAAGAGACAG" 
+        past_end_str = ""
+    elif standard_model_name == "ezTn5_kan1":
+        model_str = "nnnnnnCTAAGATGTCCACGAGGTCTCTNNNNNNNNNNNNNNNNNNNNCGTACGCTGCAGGTCGACAGATGTGTATAAGAGACAG"
+        past_end_str = ""
+    elif standard_model_name == "ezTn5_kanU":
+        model_str = "nnnnnnGATGTCCACGAGGTCTCTNNNNNNNNNNNNNNNNNNNNCGTACGCTGCAGGTCGACAGATGTGTATAAGAGACAG"
+        past_end_str = ""
+    elif standard_model_name == "magic_Tn5":
+        model_str = 'nnnnnnGATGTCCACGAGGTCTCTNNNNNNNNNNNNNNNNNNNNCGTACGCTGCAGGTCGACCAGCGGCCGGCCGGTTGAGATGTGTATAAGAGACAG'
+        past_end_str = 'TCGACGGCTTGGTTTCATAAGCCATCCGCTTGCCCTCATCTGTTACGCCGGCGGTAGCCGGCCAGCCTCGCAGAGCAGGATTCCCGTTGA'
+    elif standard_model_name == "magic_mariner":
+        model_str = 'nnnnnnGATGTCCACGAGGTCTCTNNNNNNNNNNNNNNNNNNNNCGTACGCTGCAGGTCGACCAGCGGCCGGCCAGACCGGGGACTTATCAGCCAACCTGT' 
+        past_end_str = 'TATGTGTTGGGTAACGCCAGGGTTTTCCCAGTCACGACGTTGTAAAACGACGGCCAGTGAATTAATTCTTGCTTATCGGCCAGCCTCGCAGAGCAGGATTCCCGTTGAGCACCGCCAGGTGCGAATAAGGGACAGTGAAGAAG'
+    elif standard_model_name == "magic_mariner.2":
+        model_str = 'nnnnnnnnnnnnnGATGTCCACGAGGTCTCTNNNNNNNNNNNNNNNNNNNNCGTACGCTGCAGGTCGACCAGCGGCCGGCCAGACCGGGGACTTATCAGCCAACCTGT' 
+        past_end_str = 'TATGTGTTGGGTAACGCCAGGGTTTTCCCAGTCACGACGTTGTAAAACGACGGCCAGTGAATTAATTCTTGCTTATCGGCCAGCCTCGCAGAGCAGGATTCCCGTTGAGCACCGCCAGGTGCGAATAAGGGACAGTGAAGAAG'
+    elif standard_model_name == "pHIMAR_kan":
+        model_str = 'nnnnnnCGCCCTGCAGGGATGTCCACGAGGTCTCTNNNNNNNNNNNNNNNNNNNNCGTACGCTGCAGGTCGACGGCCGGCCAGACCGGGGACTTATCAGCCAACCTGT' 
+        past_end_str = 'TATGTGTTGGGTAACGCCAGGGTTTTCCCAGTCACGACGTTGTAAAACGACGGCCAGTGAATTAATTCTTGAAGA' 
+    elif standard_model_name == "pKMW3":
+        model_str = 'nnnnnnCGCCCTGCAGGGATGTCCACGAGGTCTCTNNNNNNNNNNNNNNNNNNNNCGTACGCTGCAGGTCGACGGCCGGCCAGACCGGGGACTTATCAGCCAACCTGT' 
+        past_end_str = 'TATGTGTTGGGTAACGCCAGGGTTTTCCCAGTCACGACGTTGTAAAACGACGGCCAGTGAATTAATTCTTGAAGA'
+    elif standard_model_name == "pKMW3_universal":
+        model_str = 'nnnnnnGATGTCCACGAGGTCTCTNNNNNNNNNNNNNNNNNNNNCGTACGCTGCAGGTCGACGGCCGGCCAGACCGGGGACTTATCAGCCAACCTGT' 
+        past_end_str = 'TATGTGTTGGGTAACGCCAGGGTTTTCCCAGTCACGACGTTGTAAAACGACGGCCAGTGAATTAATTCTTGAAGA'
+    elif standard_model_name == "pKMW7":
+        model_str = 'nnnnnnCGCCCTGCAGGGATGTCCACGAGGTCTCTNNNNNNNNNNNNNNNNNNNNCGTACGCTGCAGGTCGACGGCCGGCCGGTTGAGATGTGTATAAGAGACAG' 
+        past_end_str = 'TCGACGGCTTGGTTTCATCAGCCATCCGCTTGCCCTCATCTGTTACGCCGGCGGTAGCCGGCCAGCCTCGCAGAGC'
+    elif standard_model_name == "pKMW7_U":
+        model_str = 'nnnnnnGATGTCCACGAGGTCTCTNNNNNNNNNNNNNNNNNNNNCGTACGCTGCAGGTCGACGGCCGGCCGGTTGAGATGTGTATAAGAGACAG'
+        past_end_str = 'TCGACGGCTTGGTTTCATCAGCCATCCGCTTGCCCTCATCTGTTACGCCGGCGGTAGCCGGCCAGCCTCGCAGAGC'
+    else:
+        raise Exception(f"Model name {standard_model_name} not recognized.")
+
+
+    logging.info(f"Model String: '{model_str}'."
+                f" Past End String: '{past_end_str}'.")
+
+    return model_str, past_end_str
+
+
+def write_model_to_file(op_fp, model_str, past_end_str):
+    """
+    Args:
+        op_fp (str): Path to output model
+        model_str (str): Complete model string
+        past_end_str (str): Complete past End str (short sequence of vector after transposon)
+    Description:
+        We take the two components of the model and write out to a file.
+    """
+
+    with open(op_fp, "w") as g:
+        g.write(model_str + "\n" + past_end_str)
+    
+    logging.info(f"Wrote TnSeq model to file {op_fp}.")
+
+
 
 
 def test():

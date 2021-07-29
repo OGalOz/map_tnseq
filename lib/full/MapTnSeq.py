@@ -675,6 +675,14 @@ def find_barcodes_and_end_of_transposon(inp_dict):
     barcodeStart = inp_dict['model'].find("N")
     barcodeEnd = inp_dict['model'].rfind("N")
     barcodeLen = barcodeEnd - barcodeStart + 1
+
+
+    if barcodeStart == 0:
+        raise Exception("Barcode starts at beginning of model, should be in the middle.")
+    for i in range(barcodeLen):
+        if inp_dict['model'][barcodeStart + i] != "N":
+            raise Exception("Barcode should be consecutive Ns, found a non-N in between edge 'N's."
+                            " Supposed barcode range: " + inp_dict['model'][barcodeStart:barcodeEnd + 1])
    
     # Dict of read (shortname) to 1 if mapped or pastEnd, 0 otherwise.
     # mapnames only fills out when unmapped option is set to True
