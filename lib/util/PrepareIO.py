@@ -28,8 +28,8 @@ def PrepareProgramInputs(params, cfg_d):
         gfu: GenomeFileUtil object
         tmp_dir: (s) path to tmp dir
         dfu: DataFileUtil object
+        gt_obj: GeneTable Object 
         model_dir: (s) Path to model's directory: (Should always be scratch_dir)
-        gene_table_fp: (s) Path to gene table
         blat_cmd: (s) Path to blat loc
         unmapped_fp: (s) Path to unmapped_fp (write)
         tmpFNA_fp: (s) Path to tmp fna (write)
@@ -56,8 +56,13 @@ def PrepareProgramInputs(params, cfg_d):
     cfg_d['genome_fna_fp'] = genome_fna_fp
     genome_scientific_name = GetGenomeOrganismName(cfg_d['ws'], vp['genome_ref'])
 
-    # Downloading genes table
-    download_genes_table(vp['gene_table_ref'], cfg_d['dfu'], cfg_d['gene_table_fp'])
+    # Create genes table
+    #download_genes_table(vp['gene_table_ref'], cfg_d['dfu'], cfg_d['gene_table_fp'])
+
+    # Note that this gene table will be created at workdir/g2gt_results/genes.GC
+    g2gt_results = cfg_d['gt_obj'].genome_to_genetable({'genome_ref': vp['genome_ref']})
+    logging.info(g2gt_results)
+    cfg_d['gene_table_fp'] = os.path.join(os.path.join(cfg_d['tmp_dir'], 'g2gt_results'), 'genes.GC')
 
 
     model_str, past_end_str = get_model_and_pastEnd_strs(vp['tnseq_model_name'])

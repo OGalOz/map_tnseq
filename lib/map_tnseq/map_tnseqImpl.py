@@ -10,6 +10,7 @@ from installed_clients.GenomeFileUtilClient import GenomeFileUtil
 from installed_clients.AssemblyUtilClient import AssemblyUtil
 from installed_clients.DataFileUtilClient import DataFileUtil
 from installed_clients.WorkspaceClient import Workspace
+from installed_clients.rbts_genome_to_genetableClient import rbts_genome_to_genetable
 from Bio import SeqIO
 from full.FullProgram import CompleteRun
 from util.PrepareIO import PrepareProgramInputs, PrepareUserOutputs
@@ -64,6 +65,7 @@ class map_tnseq:
         logging.basicConfig(level=logging.DEBUG)
         dfu = DataFileUtil(self.callback_url)
         gfu = GenomeFileUtil(self.callback_url)
+        genetable_obj = rbts_genome_to_genetable(self.callback_url)
         # We need the workspace object to get info on the workspace the app is running in.
         token = os.environ.get('KB_AUTH_TOKEN', None)
         ws = Workspace(self.ws_url, token=token)
@@ -78,6 +80,7 @@ class map_tnseq:
                 "dfu": dfu,
                 "ws": ws,
                 "ws_id": workspace_id,
+                "gt_obj": genetable_obj,
                 "username" : ctx['user_id'],
                 "tmp_dir": td,
                 "model_dir": td, 

@@ -39,10 +39,6 @@ def validate_init_params(params, cfg_d):
         vp['genome_ref'] = params['genome_ref']
     else:
         raise Exception("Genome Ref not passed in params.")
-    if 'gene_table_ref' in params:
-        vp['gene_table_ref'] = params['gene_table_ref']
-    else:
-        raise Exception("Gene Table Ref not passed in params.")
     if 'tnseq_model_name' in params:
         vp['tnseq_model_name'] = params['tnseq_model_name']
     else:

@@ -22,17 +22,6 @@
             }
         },
         {
-            "id": "gene_table_ref",
-            "optional": false,
-            "advanced": false,
-            "allow_multiple": false,
-            "default_values": [""],
-            "field_type" : "text",
-            "text_options": {
-                "valid_ws_types": ["KBaseRBTnSeq.RBTS_InputGenesTable"]
-            }
-        },
-        {
             "id": "tnseq_model_name",
             "optional": false,
             "advanced": false,
@@ -257,10 +246,6 @@
                 },{
                     "input_parameter": "genome_ref",
                     "target_property": "genome_ref",
-                    "target_type_transform": "resolved-ref"
-                },{
-                    "input_parameter": "gene_table_ref",
-                    "target_property": "gene_table_ref",
                     "target_type_transform": "resolved-ref"
                 },{
                     "input_parameter": "tnseq_model_name",

@@ -146,7 +146,6 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm,
         upload_params = {
                 'username': cfg_d['username'],
                 'genome_ref': vp['genome_ref'],
-                'gene_table_ref': vp['gene_table_ref'],
                 'model_ref': vp['model_ref'],
                 'fastq_refs': vp['fastq_ref_list'],
                 'pool_description': vp['pool_description'] ,

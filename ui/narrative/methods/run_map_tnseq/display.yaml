@@ -32,14 +32,6 @@ parameters :
             The Genome you're checking your reads against to find locations of barcodes.
         long-hint  : |
             This is the genome to whose genes we are going to match barcodes so they can be used to measure the abundance of strains with those genes interrupted.
-    gene_table_ref :
-        ui-name : |
-           Gene Table Used 
-        short-hint : |
-            The RBTnSeq Gene Table you are using 
-        long-hint  : |
-            The RBTnSeq Gene Table you are using.
-            You can create an RBTnSeq Gene Table using the app RBTnSeq Genome to Gene Table
     tnseq_model_name :
         ui-name : |
            TnSeq Model Name

@@ -12,7 +12,6 @@ def upload_poolfile_to_KBase(up):
         up: d,
             username:
             genome_ref,:
-            gene_table_ref (str):
             model_ref (str)
             pool_description:
             fastq_refs (list<str>):
@@ -57,7 +56,7 @@ def upload_poolfile_to_KBase(up):
         "column_header_list": column_header_list,
         "column_headers_str": ", ".join(column_header_list),
         "num_lines": str(num_lines),
-        "related_genes_table_ref": up["gene_table_ref"],
+        "related_genome_ref": up["genome_ref"],
         "related_organism_scientific_name": get_genome_organism_name(
             up["genome_ref"],
             up['ws_obj']

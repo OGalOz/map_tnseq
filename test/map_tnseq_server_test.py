@@ -74,7 +74,7 @@ class map_tnseqTest(unittest.TestCase):
         #str
         tnseq_model_name = "magic_Tn5"
         #str
-        gene_table_ref = "62686/5/1" 
+        #gene_table_ref = "62686/5/1"  DEPRECATED
         # Models: "Custom" #Unknown # model_pKMW3_universal # model_ezTn5_Tet_Bifido 
         #None or int
         maxReads = None 
@@ -101,7 +101,6 @@ class map_tnseqTest(unittest.TestCase):
 
         ret = self.serviceImpl.run_map_tnseq(self.ctx, {'workspace_name': self.wsName,
                                                         'genome_ref': genome_ref ,
-                                                        'gene_table_ref': gene_table_ref,
                                                         'tnseq_model_name': tnseq_model_name,
                                                         'fastq_ref_list': fastq_ref_list,
                                                         'maxReads': maxReads,
