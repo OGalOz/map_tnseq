@@ -38,6 +38,10 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm,
     drp_cfg_fp: 
         Among others, contains keys:
             genes_table_fp: (file path to genes.GC file)
+
+    vp:
+        Among others, contains keys:
+            tnseq_model_name
             
     """
 
@@ -146,7 +150,7 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm,
         upload_params = {
                 'username': cfg_d['username'],
                 'genome_ref': vp['genome_ref'],
-                'model_ref': vp['model_ref'],
+                'tnseq_model_name': vp['tnseq_model_name'],
                 'fastq_refs': vp['fastq_ref_list'],
                 'pool_description': vp['pool_description'] ,
                 'workspace_id': cfg_d['ws_id'],

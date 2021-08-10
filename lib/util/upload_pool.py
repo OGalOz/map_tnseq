@@ -12,7 +12,7 @@ def upload_poolfile_to_KBase(up):
         up: d,
             username:
             genome_ref,:
-            model_ref (str)
+            tnseq_model_name
             pool_description:
             fastq_refs (list<str>):
             workspace_id:
@@ -61,7 +61,7 @@ def upload_poolfile_to_KBase(up):
             up["genome_ref"],
             up['ws_obj']
         ),
-        "model_ref": up["model_ref"],
+        "tnseq_model_name": up["tnseq_model_name"],
         "fastqs": up["fastq_refs"],
         "fastqs_used_str": ", ".join(up["fastq_refs"]),
         "description": updated_description + up["pool_description"],

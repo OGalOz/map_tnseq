@@ -96,7 +96,7 @@ class map_tnseqTest(unittest.TestCase):
         maxQBeg = 3.0
         pool_description = "Ci Testing"
         # yes or no
-        KB_Pool_Bool = "no"
+        KB_Pool_Bool = "yes"
         output_name = "Keio_Test_July_n1"
 
         ret = self.serviceImpl.run_map_tnseq(self.ctx, {'workspace_name': self.wsName,
