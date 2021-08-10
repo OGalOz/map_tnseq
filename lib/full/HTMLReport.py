@@ -45,7 +45,7 @@ def CreateHTMLdir(tmp_dir, html_display_files_dir):
     
 
 
-
+""" Deprecated
 def CreateHTMLString(pre_HTML_d):
 
     # style link-'n'-tag
@@ -57,12 +57,13 @@ def CreateHTMLString(pre_HTML_d):
     HTML_str += "</body></html>"
 
     return HTML_str
+"""
 
 
 
-
+""" Deprecated
 def CreateHTMLStringBody(pre_HTML_d):
-    """
+    '''
     Inputs:
         pre_HTML_d: (dict)
             models_str: (str) Info about Models
@@ -116,7 +117,8 @@ def CreateHTMLStringBody(pre_HTML_d):
         and the Design Random Pool Report.
     Each will have a brief explanation as to what it did, (e.g. for MapTnSeq,
     "Took FastQ file _ and extracted information. Report: )
-    """
+
+    '''
     HTML_str = "<h1>Text Report on 'Reads to Mutant File'</h1>\n"
     HTML_str += "<h1>--------------------------------------</h1>\n"
     # Genome info 
@@ -129,8 +131,9 @@ def CreateHTMLStringBody(pre_HTML_d):
     HTML_str += Create_HTML_DRP(pre_HTML_d["DRP_report_dict"])
 
     return HTML_str
+"""
 
-
+""" Deprecated
 def CreateGenomeInfo(genome_name):
     # genome_name is string
 
@@ -139,12 +142,15 @@ def CreateGenomeInfo(genome_name):
     HTML_str += "<h1>--------------------------------------</h1>\n"
 
     return HTML_str 
+"""
 
+
+""" Deprecated
 def CreateModelInfo(model_info_d):
-    """
+    '''
     model_info_d: (dict)
        model_in_use: (str)
-    """
+    '''
     mm = model_info_d['model_in_use']
 
 
@@ -155,10 +161,11 @@ def CreateModelInfo(model_info_d):
 
     return "\n".join(HTML_l)
 
+"""
 
 
 
-
+''' Deprecated
 # We make a nice table for every MapTnSeq Report
 def Create_HTML_MTS(MapTnSeq_reports_list):
     """
@@ -196,7 +203,11 @@ def Create_HTML_MTS(MapTnSeq_reports_list):
 
     return MTS_HTML_str
 
+'''
 
+
+
+''' Deprecated
 def Create_MTS_Table(trd):
     """
     Inputs:
@@ -254,9 +265,10 @@ def Create_MTS_Table(trd):
     HTML_l.append("</div>\n")
 
     return "\n".join(HTML_l)
+'''
 
 
-
+''' Deprecated
 def Create_HTML_DRP(DRP_report_dict):
     """
     input is dict with the following keys:
@@ -333,14 +345,17 @@ def Create_HTML_DRP(DRP_report_dict):
     HTML_l.append("</div>\n")
 
     return "\n".join(HTML_l)
+'''
 
+''' Deprecated
 def prep_num(val):
     if val == "NaN":
         return "NaN"
     else:
         return str(round(val, 3))
+'''
 
-
+''' Deprecated
 def getProteinBias(mean, median):
     """
     Note that mean and median could be 'NaN'
@@ -348,17 +363,20 @@ def getProteinBias(mean, median):
     if mean == "NaN" or median == "NaN":
         return "NaN"
     return str(round(float(mean)/float(median), 3))
+'''
 
+''' Deprecated
 def getInsertionsPCG(val):
     if val == "NaN":
         return "NaN"
     else:
         # val is a number
         return str(round(val, 3)) + "%"
+'''
 
 
 
-
+''' Deprecated
 def prep_int(inp_i):
     # inp_i is an int or float with no decimal nonzero digits, value will be converted into
     # string and have commas: 1000000 -> '1,000,000'
@@ -384,8 +402,9 @@ def prep_int(inp_i):
     op_str += ''.join(x) 
 
     return op_str
+'''
 
-
+''' Deprecated
 def Prc(flt):
     #flt is a fraction to be turned into percent and cut short to 3 decimals
     # returns string
@@ -416,8 +435,9 @@ def Prc(flt):
     op = l[0] + "." + ad
 
     return op 
+'''
 
-
+''' Deprecated
 def getStyle():
     """
     returns string of style. First links, and then the style tag
@@ -449,8 +469,9 @@ def getStyle():
                    }\n
                 """
     return style_link + style_tag
+'''
 
-
+''' Deprecated
 def GetSingleModelHTML(good_models_list):
     """
     good_models_list: (list) list of lists, each sublist [model_fp, value]
@@ -491,7 +512,7 @@ def GetSingleModelHTML(good_models_list):
     HTML_str += "</body></html>"
 
     return HTML_str
-
+'''
 
 def main():
     
