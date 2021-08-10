@@ -66,18 +66,18 @@ class map_tnseqTest(unittest.TestCase):
       
         # Keio
         #str
-        genome_ref = "62686/4/1" 
+        genome_ref = "63063/3/1" 
         # FASTQs: Short: 52075/4/1 # Long 52075/12/1
         #list<str>
-        fastq_ref_list = ["62686/31/1"]
+        fastq_ref_list = ["63063/2/1"]
         # , "62686/28/1"] 
         #str
-        tnseq_model_name = "magic_Tn5"
+        tnseq_model_name = "Sc_Tn5"
         #str
         #gene_table_ref = "62686/5/1"  DEPRECATED
         # Models: "Custom" #Unknown # model_pKMW3_universal # model_ezTn5_Tet_Bifido 
         #None or int
-        maxReads = None 
+        maxReads = 50000
         #int
         minQuality = 5
         #int

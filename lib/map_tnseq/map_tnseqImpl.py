@@ -91,7 +91,7 @@ class map_tnseq:
                 "trunc_fp": os.path.join(td, "TRUNC.fna"),
                 "endFNA_fp": os.path.join(td, "END.fna"),
                 "R_fp": "/kb/module/lib/map_tnseq/PoolStats.R",
-                "R_op_fp": os.path.join(td, "R_results.txt."),
+                "R_op_fp": os.path.join(td, "R_results.txt"),
                 "MTS_cfg_fp": os.path.join(td, "maptnseqconfig.json"),
                 "DRP_cfg_fp": os.path.join(td, "designRPconfig.json"),
                 "css_style_fp": "/kb/module/lib/map_tnseq/style.css"

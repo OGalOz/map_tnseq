@@ -624,7 +624,7 @@ def find_barcodes_and_end_of_transposon(inp_dict):
         file "TMPFNA". So TMPFNA contains shortname of sequence and part of sequence
         after the model in a FASTA file format:
             >Name\nSequenceAfterModel\n>Name\nSeq...
-        unmapped keeps track of unmapped sequences?
+        unmapped keeps track of unmapped sequences
         TRUNC is a truncated version of the fastq file with only good sequences
             from the end of the Model and the barcode is maintained in the name
 

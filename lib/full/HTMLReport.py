@@ -232,6 +232,7 @@ def Create_MTS_Table(trd):
             ['# Reads that are longer than {}bp'.format(
                 trd['minRlen']), prep_int(trd['long_enough'])],
             ['# Reads with Barcode', prep_int(trd['tot_BC'])],
+            ['# Mappings attempted', prep_int(trd['nTryToMap'])],
             ['# Reads with Mapped Insertions', prep_int(trd['nMapped'])],
             ['# Reads that Map Uniquely', prep_int(trd['Uniquely_Mapped'])],
             ['# Reads that Map to Intact Vector', prep_int(trd['total_hits_pastEnd'])],
@@ -272,6 +273,8 @@ def Create_HTML_DRP(DRP_report_dict):
             cntrl_ins: (int)
             cntrl_distinct: (int)
             nPrtn_cntrl: (int)
+            essential_hit_rate: (float) Rate of hits for putatively essential genes
+            other_hit_rate: (float) Rate of hits for all genes besides those essential ones.
             num_surp: (int) # number surprising insertions
             stn_per_prtn_median: (int)
             stn_per_prtn_mean: (float)
@@ -308,14 +311,17 @@ def Create_HTML_DRP(DRP_report_dict):
                 ['% Coverage of mapped reads by usable barcodes', 
                     Prc(float(rd['nReadsForUsable'])/(float(rd['nMapped']) + 10**-6)) + "%" ],
                 ['# Protein-Coding Genes with Central Insertion(s)', prep_int(rl['nPrtn_cntrl']) ],
+                ['Fraction of putatively essential genes with good hits', prep_num(rl['essential_hit_rate']) ],
+                ['Fraction of non-essential (putative) genes with good hits', prep_num(rl['other_hit_rate'])],
+                ['# Protein-Coding Genes with Central Insertion(s)', prep_int(rl['nPrtn_cntrl']) ],
                 ['# Central Insertions in Protein Coding Genes ', prep_int(rl['cntrl_ins'])],
                 ['# Putatively Essential Genes with Insertions', prep_int(rl['num_surp'])],
-                ['Reads per Protein: Mean ', rl['reads_per_prtn_mean']],
+                ['Reads per Protein: Mean ', prep_num(rl['reads_per_prtn_mean'])],
                 ['Reads per Protein: Median', prep_int(rl['reads_per_prtn_median'])],
                 ['Reads per Protein: Bias (mean/median)',
-                    str(round(float(rl['reads_per_prtn_mean'])/float(rl['reads_per_prtn_median']), 3)) ],
+                    getProteinBias(rl['reads_per_prtn_mean'], rl['reads_per_prtn_median']) ],
                 ['% Of Insertions in Protein-Coding Genes on the Coding Strand', 
-                    str(round(rl['gene_trspsn_same_prcnt'],3)) + "%"]
+                   getInsertionsPCG(rl['gene_trspsn_same_prcnt'])]
                 ]:
             html_str = '<tr role="row" class="DRP_row">\n' \
                     + '<td class="DRP_col_1">' + info[0] + '</td>\n' \
@@ -328,7 +334,30 @@ def Create_HTML_DRP(DRP_report_dict):
 
     return "\n".join(HTML_l)
 
-    
+def prep_num(val):
+    if val == "NaN":
+        return "NaN"
+    else:
+        return str(round(val, 3))
+
+
+def getProteinBias(mean, median):
+    """
+    Note that mean and median could be 'NaN'
+    """
+    if mean == "NaN" or median == "NaN":
+        return "NaN"
+    return str(round(float(mean)/float(median), 3))
+
+def getInsertionsPCG(val):
+    if val == "NaN":
+        return "NaN"
+    else:
+        # val is a number
+        return str(round(val, 3)) + "%"
+
+
+
 
 def prep_int(inp_i):
     # inp_i is an int or float with no decimal nonzero digits, value will be converted into
@@ -336,10 +365,14 @@ def prep_int(inp_i):
     # OR inp_i is '?'
     
     # converting floats into ints and ints into strings and strings into lists
+
+    if inp_i == "NaN":
+        return "NaN"
+
     if inp_i != '?':
         x = list(str(int(inp_i)))
     else:
-        return '?'
+        return 'NaN'
 
     op_str = ''
     while len(x) > 3:

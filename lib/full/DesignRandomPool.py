@@ -14,6 +14,7 @@ import json
 import copy
 import subprocess
 import pandas as pd
+import math
 
 
 
@@ -97,6 +98,7 @@ def RunDesignRandomPool(inp_d, DEBUGPRINT):
     logging.info("Finished running Design Random Pool")
 
     Rlog_d = RlogToDict(parsed_vars['R_op_fp'])
+    
     parsed_vars["report_dict"]["Rlog_d"] = Rlog_d
 
     return parsed_vars["report_dict"]
@@ -298,6 +300,8 @@ def RlogToDict(R_log_fp):
             nPrtn_cntrl: (int)
             cntrl_ins: (int)
             cntrl_distinct: (int)
+            essential_hit_rate: (float) Rate of hits for putatively essential genes
+            other_hit_rate: (float) Rate of hits for all genes besides those essential ones.
             num_surp: (int) # number surprising insertions
             stn_per_prtn_median: (int)
             stn_per_prtn_mean: (float)
@@ -306,6 +310,9 @@ def RlogToDict(R_log_fp):
             reads_per_prtn_mean: (float)
             reads_per_mil_prtn_median: (float)
             reads_per_mil_prtn_mean: (float)
+    Description:
+        We take the Standard Error output of PoolStats.R and parse it
+        in a crude manner. 
     """
     with open(R_log_fp, "r") as f:
         rlog_str = f.read()
@@ -324,24 +331,44 @@ def RlogToDict(R_log_fp):
         res_d["Error_str"] = 'PoolStats output does not have 11 lines as expected:\n"' + rlog_str
         return res_d
 
-    res_d['insertions'] = int(rlog_l[0].split(' ')[0])
-    res_d['diff_loc'] = int(rlog_l[0].split(' ')[6])
-    res_d['cntrl_ins'] = int(rlog_l[1].split(' ')[1])
-    res_d['cntrl_distinct'] = int(rlog_l[1].split(' ')[3][1:])
-    res_d['nPrtn_cntrl'] = int(rlog_l[2].split(' ')[4])
-    res_d["num_surp"] = int(rlog_l[5].split(' ')[1])
-    res_d['stn_per_prtn_median'] = int(rlog_l[7].split(' ')[5])
-    res_d['stn_per_prtn_mean'] = float(rlog_l[7].split(' ')[-1])
-    res_d['gene_trspsn_same_prcnt'] = float(rlog_l[8].split(' ')[-1][:-1])
-    res_d['reads_per_prtn_median'] = int(rlog_l[9].split(' ')[5])
-    res_d['reads_per_prtn_mean'] = float(rlog_l[9].split(' ')[7])
-    res_d['reads_per_mil_prtn_median'] = float(rlog_l[10].split(' ')[-3])
-    res_d['reads_per_mil_prtn_mean'] = float(rlog_l[10].split(' ')[-1])
+    
+    logging.debug(rlog_l)
 
+
+    res_d['insertions'] = catch_NaN(rlog_l[0].split(' ')[0])
+    res_d['diff_loc'] = catch_NaN(rlog_l[0].split(' ')[6])
+    res_d['cntrl_ins'] = catch_NaN(rlog_l[1].split(' ')[1])
+    res_d['cntrl_distinct'] = catch_NaN(rlog_l[1].split(' ')[3][1:])
+    res_d['nPrtn_cntrl'] = catch_NaN(rlog_l[2].split(' ')[4])
+    res_d["essential_hit_rate"] = catch_NaN(rlog_l[3].split(' ')[6])
+    res_d["other_hit_rate"] = catch_NaN(rlog_l[3].split(' ')[8])
+    res_d["num_surp"] = catch_NaN(rlog_l[5].split(' ')[1])
+    res_d['stn_per_prtn_median'] = catch_NaN(rlog_l[7].split(' ')[5])
+    res_d['stn_per_prtn_mean'] = catch_NaN(rlog_l[7].split(' ')[-1])
+    res_d['gene_trspsn_same_prcnt'] = catch_NaN(rlog_l[8].split(' ')[-1][:-1])
+    res_d['reads_per_prtn_median'] = catch_NaN(rlog_l[9].split(' ')[5])
+    res_d['reads_per_prtn_mean'] = catch_NaN(rlog_l[9].split(' ')[7])
+    res_d['reads_per_mil_prtn_median'] = catch_NaN(rlog_l[10].split(' ')[-3])
+    res_d['reads_per_mil_prtn_mean'] = catch_NaN(rlog_l[10].split(' ')[-1])
+
+    logging.info("Results from parsing PoolStats.R output:")
+    logging.info(res_d)
 
     return res_d
 
 
+def catch_NaN(val):
+    # val is a string. If not a number returns NaN
+    if val in ["NaN", "NA"]:
+        val = "NaN"
+    else:
+        try:
+            val = float(val)
+        except ValueError:
+            val = "NaN"
+        if val - math.floor(val) == 0:
+            val = int(val)
+    return val
 
 
 
@@ -776,8 +803,19 @@ def test():
     return None
 
 
+
+
 def main():
-    test()
+
+    args = sys.argv
+    if args[-1] == "1":
+        #main test
+        pass
+    elif args[-1] == "2":
+        # Rlog_d test
+        rlog_fp = args[1]
+        RlogToDict(rlog_fp)
+
 
     return None
 
