@@ -207,6 +207,7 @@ def GetVariantsPrintPool(inp_dict):
     inp_dict: (dict) Contains
         barcodeAt: (dict)
             barcode (str) -> list<nTot, nMax, maxAt, nNext, nextAt>
+                where maxAt is a string that splits pos;
         POOL_FH: file handle to output pool file
         nReadsForUsable: (int)
         nMapped: (int)
@@ -243,8 +244,9 @@ def GetVariantsPrintPool(inp_dict):
         if mask != 0:
             continue
         
-        # maxAt is a key "A:B:C"
+        # maxAt is a key "A:B:C" - scaffold:strand:pos
         atSplit = maxAt.split(":")
+        #atSplit[-1] = str(int(float(atSplit[-1])))
        
         # nextAt could be "::" or "A:B:C"
         nextAtSplit = nextAt.split(":")
@@ -254,6 +256,8 @@ def GetVariantsPrintPool(inp_dict):
         else:
             nPastEnd = 0
 
+        # barcode, rcbarcode, nTot, nMax, scaffold, strand, pos
+        # n2, scaffold2, strand2, pos2, nPastEnd
         inp_dict['POOL_FH'].write("\t".join([
                         barcode,
                         ReverseComplement(barcode),
@@ -270,7 +274,8 @@ def GetVariantsPrintPool(inp_dict):
     inp_dict['POOL_FH'].close()
 
     # Here we reopen the pool, and sort it by position
-    pool_df = pd.read_table(inp_dict['output_fp'], sep="\t")
+    pool_dtypes = {"pos": int}
+    pool_df = pd.read_table(inp_dict['output_fp'], sep="\t", dtype=pool_dtypes)
     pool_df.sort_values(by=["scaffold","pos"], inplace=True)
     pool_df.to_csv(inp_dict['output_fp'], sep='\t', index=False)
 
@@ -421,8 +426,8 @@ def CountBarCodesPrintPool(inp_dict):
     # -- Used for report
     nReadsForUsable = 0 
 
-    # key_d is a dict with a specific format:
     """
+    key_d is a dict with a specific format:
     {key1: [nReads, nGoodReads], key2: [nReads, nGoodReads, ...}
     where key1, key2, are in format scaffold:strand:position 
         where scaffold is name of scaffold (str), strand is +/-, position is int
@@ -461,7 +466,14 @@ def CountBarCodesPrintPool(inp_dict):
 
         # "at" will be a sorted list of keys based on their 'nReads' (0th index)
         # list is sorted by decreasing order (highest first)
+        """
+        key_d is a dict with a specific format:
+        {key1: [nReads, nGoodReads], key2: [nReads, nGoodReads, ...}
+        where key1, key2, are in format scaffold:strand:position 
+            where scaffold is name of scaffold (str), strand is +/-, position is int
+        """
         preAt = sorted(key_d.items(), key=lambda j: j[1][0], reverse=True)
+        # at is a list of sorted keys 'scaffold:strand:position'
         at = [v[0] for v in preAt] 
 
         if len(at) == 0:
