@@ -274,7 +274,7 @@ def GetVariantsPrintPool(inp_dict):
     inp_dict['POOL_FH'].close()
 
     # Here we reopen the pool, and sort it by position
-    pool_dtypes = {"pos": int}
+    pool_dtypes = {"pos": 'Int64'}
     pool_df = pd.read_table(inp_dict['output_fp'], sep="\t", dtype=pool_dtypes)
     pool_df.sort_values(by=["scaffold","pos"], inplace=True)
     pool_df.to_csv(inp_dict['output_fp'], sep='\t', index=False)
