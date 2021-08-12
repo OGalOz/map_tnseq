@@ -114,10 +114,12 @@ def ParseInputs(input_dict):
         R_fp: (str) Path to PoolStats.R
         R_op_fp: (str) Path to PoolStats.R output log
         tmp_dir: (str) Path to temporary directory
-        minN: (int)
-        minFrac: (float)
-        minRatio: (float)
-        maxQBeg: (int)
+        minN: (int) Threshold (minimum number of good Reads to support a mapping).
+        minFrac: (float) Threshold (minimum fraction of reads of most common
+                    location to all others)
+        minRatio: (float) Threshold (minimum ratio of reads of most common
+                        mapping to second most common mapping).
+        maxQBeg: (int) Threshold (max query beginning for a read to pass)
         map_tnseq_table_fps: (list of str)
     """
     
@@ -396,7 +398,7 @@ def CountBarCodesPrintPool(inp_dict):
             minN: (int)
             POOL_FH: File Handle for pool file
             minFrac: (float)
-            minRatio: (float)
+            minRatio: (float) 
     """
     
     # For barcodes, f1 is number seen once, f2 is number seen twice,
@@ -673,6 +675,19 @@ def ProcessInputMapTnSeqTables(inp_dict):
         nSkipQBeg: (int) Counts how many queries were skipped because the location
             where the read had a hit to the genome within the query started after 'maxQBeg'
         report_dict: (dict) Dict containing entire report for the process.
+
+    Description:
+        Every output table from Map Tn Seq has the following columns:
+            read_name (from FASTQ)
+            barcode (nt string)
+            scaffold (from genome)
+            position 
+            strand
+            unique (1 if yes, 0 if no, uniqueness refers to location, not number of reads).
+            query beginning loc
+            query end location
+            bit score
+            percent identity
     """
     logging.info("Starting to read MapTnSeq Output Tables:\n" \
             + "\n".join(inp_dict['map_tnseq_table_fps']))

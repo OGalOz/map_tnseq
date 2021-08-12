@@ -1,0 +1,62 @@
+
+
+Entrypoint is through the file lib/map_tnseq/map_tnseqImpl.py
+Within the class map_tnseq, in the function run_map_tnseq.
+The arg "params" contains the inputs to run the program,
+those params come from the user input through the KBase narrative.
+
+General Summary of MapTnSeq program:
+The MapTnSeq program is comprised of two main scripts: once called
+"MapTnSeq", and one called "Design Random Pool".
+"MapTnSeq" is a script that runs once per FASTQ file. "Design 
+Random Pool" runs just once, combining the outputs from
+the multiple MapTnSeq runs.
+MapTnSeq parses a single FASTQ file each time,
+so if there are x FASTQ files, MapTnSeq will run x times,
+each time producing a table that contains 
+the following columns (in sequential order):
+    read_name (from FASTQ)
+    barcode (nt string)
+    scaffold (from genome)
+    position (within scaffold)
+    strand (+/-)
+    unique (1 if yes, 0 if no, uniqueness refers to whether genome sequence is unique).
+    query beginning loc (the sequence of the transposon junction, when does it start in the genome?)
+    query end location (the sequence of the transposon junction, where does its match to the genome end?)
+    bit score (Score of matching according to blat)
+    percent identity (Percent match)
+The Map Tn Seq tables have one row per read with a 
+barcode found. So within the Map Tn Seq tables you 
+might have multiple different rows with the same 
+barcode, but you'll never have two rows with the
+same read name. 
+How it gets above table is that it looks
+for the TnSeq model sequence flanking the barcode
+within each read from the FASTQ file, making sure
+the reads pass the quality thresholds such as the
+minimum quality and length of sequence after the
+transposon junction. Then, for every read name
+that labels a good read, it stores the barcode associated with
+it and it stores the sequence after the transposon
+junction. Then it takes all the sequences after the 
+transposons and runs blat against the genome FNA sequence, 
+looking for matches of those sequences to the genome.
+BLAT gives information such as bit score and percent
+identity for each of the matches. Now the program
+looks at the matches given by BLAT and stores the matches
+that pass the thresholds, and for those good ones it
+marks the read name, the barcode, the location,
+the strand and whether it mapped uniquely to the genome
+(some of the sequences after the transposon junction
+might appear multiple times in the genome).
+Design Random Pool runs a single time, taking as an 
+input all the tables from MapTnSeq. It combines
+the barcodes from the various reads and counts the 
+number of times they occur and the ratios between
+their various mappings; if the number of times a
+barcode was read and the ratio between its most
+common mapping and the second most common mapping
+is good enough, then the barcode and its location
+is added to the poolfile, so that the poolfile only
+contains the 'good' barcodes that pass the multiple
+thresholds.

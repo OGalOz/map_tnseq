@@ -1122,9 +1122,9 @@ def HandleGenomeBLAT(rows, hitsPastEnd, HG_d, debug):
             # This is so we don't print out a line for it later on...
             hitsPastEnd[read] = 0.0
 
-    # else if no trumping, we write to output (pool file)
+    # else if no trumping, we write to output (MTS Table)
     # read name, barcode, scaffold (from besthit (genome.fna)), position in scaffold,
-    # strand (+ or -), whether or not there are multiple loc for good reads,
+    # strand (+ or -), uniqueness: whether or not there are multiple loc for good reads,
     # query Beginning, query End, bit score, % identity 
     HG_d['OUTPUT'].write("\t".join([
         read, 

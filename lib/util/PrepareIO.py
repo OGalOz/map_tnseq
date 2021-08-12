@@ -23,27 +23,37 @@ This function needs to do a number of things:
 """
 def PrepareProgramInputs(params, cfg_d):
     """
-    params: (d) As imported by spec file
-    cfg_d: (d)
-        gfu: GenomeFileUtil object
-        tmp_dir: (s) path to tmp dir
-        dfu: DataFileUtil object
-        gt_obj: GeneTable Object 
-        model_dir: (s) Path to model's directory: (Should always be scratch_dir)
-        blat_cmd: (s) Path to blat loc
-        unmapped_fp: (s) Path to unmapped_fp (write)
-        tmpFNA_fp: (s) Path to tmp fna (write)
-        trunc_fp: (s) Path to Trunc (write)
-        endFNA_fp: (s) Path to endFNA (write)
-        R_fp: (s) Path to PoolStats.R file
-        R_op_fp: (s) Path to write R
-        MTS_cfg_fp: (s) Path to write MapTnSeq Config
-        DRP_cfg_fp: (s) Path to write Design Random Pool Config
-        gffToGeneTable_perl_fp: (s) Path to perl script
-        ws: Workspace Object
+    Args:
+        params: (d) As imported by spec file
+        cfg_d: (d)
+            gfu: GenomeFileUtil object
+            tmp_dir: (s) path to tmp dir
+            dfu: DataFileUtil object
+            gt_obj: GeneTable Object 
+            model_dir: (s) Path to model's directory: (Should always be scratch_dir)
+            blat_cmd: (s) Path to blat loc
+            unmapped_fp: (s) Path to unmapped_fp (write)
+            tmpFNA_fp: (s) Path to tmp fna (write)
+            trunc_fp: (s) Path to Trunc (write)
+            endFNA_fp: (s) Path to endFNA (write)
+            R_fp: (s) Path to PoolStats.R file
+            R_op_fp: (s) Path to write R
+            MTS_cfg_fp: (s) Path to write MapTnSeq Config
+            DRP_cfg_fp: (s) Path to write Design Random Pool Config
+            gffToGeneTable_perl_fp: (s) Path to perl script
+            ws: Workspace Object
 
     Adds the following keys:
         genome_fna_fp: (File path to the Genome FNA file)
+
+    Description:
+        This function needs to do a number of things:
+            1. Validate Parameters and make sure they're all of the right type, etc.
+            2. Download genbank file and fastq file(s).
+            3. Create gene table file
+            4. Create config files for the function "RunFullProgram" 
+            5. Get the TnSeq Model (transposon model)
+            6. 
     """
 
     # validated params
@@ -80,8 +90,6 @@ def PrepareProgramInputs(params, cfg_d):
 
     cfg_d['fastq_fp_l'] = fastq_fp_l
 
-    # This function creates the gene_table at the location gene_table_fp
-    # genbank_and_genome_fna_to_gene_table(gbk_fp, genome_fna_fp, cfg_d['gene_table_fp'])
 
     MTS_cfg_d, DRP_cfg_d = Create_MTS_DRP_config(cfg_d, vp)
 
@@ -214,7 +222,7 @@ def PrepareUserOutputs(vp, cfg_d):
     return report_params
 
 
-
+# MTS - Map Tn Seq, DRP - Design Random Pool
 def Create_MTS_DRP_config(cfg_d, vp):
     """
     Inputs:

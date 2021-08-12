@@ -54,10 +54,31 @@ class map_tnseq:
 
     def run_map_tnseq(self, ctx, params):
         """
-        This example function accepts any number of parameters and returns results in a KBaseReport
-        :param params: instance of mapping from String to unspecified object
         :returns: instance of type "ReportResults" -> structure: parameter
            "report_name" of String, parameter "report_ref" of String
+        
+        Args:
+            params (d) contains keys:
+                
+        Returns:
+           
+
+        Description:
+            This is the primary starting point for the program.
+            At first we create the classes 'dfu', 'gfu', 'genetable_obj',
+            'ws'. These are all objects to help with the KBase interface.
+            'dfu' and 'gfu' and 'ws' all allow us to easily download files and info 
+            from the KBase workspace, whereas genetable_obj specifically helps
+            in converting the Genome Object to a Gene Table as used by
+            the program. 
+            The var 'cfg_d' is a dict to be passed along to the rest of 
+            the functions in order to not have too many function inputs
+            and to keep the default variables organized.
+            The function 'PrepareProgramInputs' downloads the needed files
+            using the aforementioned objects (like 'dfu' and 'gfu') 
+            and writes the config files for MapTnSeq and Design Random Pool.
+            Note
+
         """
         # ctx is the context object
         # return variables are: output
