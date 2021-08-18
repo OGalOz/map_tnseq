@@ -4,7 +4,7 @@
 name: RBTnSeq Mapping 
 
 tooltip: |
-    Give a Genome and Related Reads with Barcodes and Get a Pool File.
+    TnSeq Map Barcodes to the Genome 
 
 
 screenshots: []
