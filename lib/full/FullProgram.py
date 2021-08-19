@@ -14,7 +14,7 @@ from full.HTMLReport import CreateHTMLdir
 from full.GeneTableGenomePoolFileToScfPosBC import GeneTable_Barcodes_To_BarcodeGenes
 from full.ScfPosBC_To_BarChartData import ScfPosBC_Info_To_Scaffolds
 from full.ScfPosBC_to_MhtnData import PosScfBCDataToZScrPointsForValues
-from util.upload_pool import upload_poolfile_to_KBase
+from util.upload_pool import upload_mutantpool_to_KBase
 
 """
 Note:
@@ -72,7 +72,7 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm,
             f.write(HTML_str)
         logging.info("Wrote html file to " + html_fp)
 
-        #We return that the modeltest bool is true and that no pool file is created
+        #We return that the modeltest bool is true and that no mutant pool is created
         return [html_fp, True]
     """
 
@@ -144,9 +144,9 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm,
     pre_HTML_d["DRP_report_dict"] = DRP_report_dict
 
 
-    # Here we upload the pool file to KBase to make a PoolFile Object
+    # Here we upload the mutant pool to KBase to make a mutantpool Object
     if KB_pool_bool:
-        logging.info("UPLOADING POOL FILE to KBASE through DataFileUtil")
+        logging.info("UPLOADING mutant pool to KBASE through DataFileUtil")
         upload_params = {
                 'username': cfg_d['username'],
                 'genome_ref': vp['genome_ref'],
@@ -155,13 +155,13 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm,
                 'pool_description': vp['pool_description'] ,
                 'workspace_id': cfg_d['ws_id'],
                 'ws_obj': cfg_d['ws'],
-                'poolfile_fp': cfg_d['pool_fp'],
-                'poolfile_name': vp['output_name'] + ".pool",
+                'mutantpool_fp': cfg_d['pool_fp'],
+                'mutantpool_name': vp['output_name'] + ".pool",
                 'dfu': cfg_d['dfu']
                 }
-        upload_poolfile_results = upload_poolfile_to_KBase(upload_params)
-        logging.info("Upload Pool File Results:")
-        logging.info(upload_poolfile_results)
+        upload_mutantpool_results = upload_mutantpool_to_KBase(upload_params)
+        logging.info("Upload mutant pool Results:")
+        logging.info(upload_mutantpool_results)
 
 
     logging.info("Beginning to create HTML Directory.")
@@ -306,7 +306,7 @@ def test():
     map_cfg_fp = args[1] # map tn seq config file path (contains all)
     drp_cfg_fp = args[2] # design random pool config file path (contains all)
     tmp_dir = args[3] # tmp dir to do work
-    pool_output_fp = args[4] # the pool file to write to
+    pool_output_fp = args[4] # the mutant pool to write to
 
 
     CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp)

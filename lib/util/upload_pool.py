@@ -1,12 +1,11 @@
 #python3
-# This file is to upload a pool file to KBasePoolTSV.PoolFile
 
 import logging
 import re
 import datetime
 
 
-def upload_poolfile_to_KBase(up):
+def upload_mutantpool_to_KBase(up):
     '''
     Inputs:
         up: d,
@@ -17,13 +16,13 @@ def upload_poolfile_to_KBase(up):
             fastq_refs (list<str>):
             workspace_id:
             ws_obj:
-            poolfile_fp: 
-            poolfile_name:
+            mutantpool_fp: 
+            mutantpool_name:
             dfu:
 
     '''
     # We check correctness of pool file
-    column_header_list, num_lines = check_pool_file(up['poolfile_fp'])
+    column_header_list, num_lines = check_mutant_pool(up['mutantpool_fp'])
     if len(column_header_list) != 12:
         logging.info(
             "WARNING: Number of columns is not 12 as expected: {}".format(
@@ -32,7 +31,7 @@ def upload_poolfile_to_KBase(up):
         )
     # We create the handle for the object:
     file_to_shock_result = up['dfu'].file_to_shock(
-        {"file_path": up['poolfile_fp'], "make_handle": True, "pack": "gzip"}
+        {"file_path": up['mutantpool_fp'], "make_handle": True, "pack": "gzip"}
     )
     # The following var res_handle only created for simplification of code
     res_handle = file_to_shock_result["handle"]
@@ -44,8 +43,8 @@ def upload_poolfile_to_KBase(up):
 
     # We create the data for the object
     pool_data = {
-        "file_type": "KBaseRBTnSeq.RBTS_MutantPoolFile",
-        "poolfile": res_handle["hid"],
+        "file_type": "KBaseRBTnSeq.RBTS_MutantPool",
+        "mutantpool": res_handle["hid"],
         # below should be shock
         "handle_type": res_handle["type"],
         "shock_url": res_handle["url"],
@@ -71,9 +70,9 @@ def upload_poolfile_to_KBase(up):
         "id": up["workspace_id"],
         "objects": [
             {
-                "type": "KBaseRBTnSeq.RBTS_MutantPoolFile",
+                "type": "KBaseRBTnSeq.RBTS_MutantPool",
                 "data": pool_data,
-                "name": up['poolfile_name'],
+                "name": up['mutantpool_name'],
             }
         ],
     }
@@ -89,7 +88,7 @@ def upload_poolfile_to_KBase(up):
     }
 
 
-def check_pool_file(poolfile_fp):
+def check_mutant_pool(mutantpool_fp):
     """
     We check the pool file by initializing into dict format
 
@@ -98,7 +97,7 @@ def check_pool_file(poolfile_fp):
     """
     col_header_list = []
     # Parse pool file and check for errors
-    test_vars_dict = {"poolfile": poolfile_fp, "report_dict": {"warnings": []}}
+    test_vars_dict = {"mutantpool": mutantpool_fp, "report_dict": {"warnings": []}}
     try:
         col_header_list, num_lines = init_pool_dict(test_vars_dict)
     except Exception:
@@ -114,12 +113,12 @@ def init_pool_dict(vars_dict):
     # pool dict is rcbarcode to [barcode, scaffold, strand, pos]
     num_lines = None
     pool = {}
-    with open(vars_dict["poolfile"], "r") as f:
-        poolfile_str = f.read()
-        poolfile_lines = poolfile_str.split("\n")
-        num_lines = len(poolfile_lines)
-        column_header_list = [x.strip() for x in poolfile_lines[0].split("\t")]
-        for pool_line in poolfile_lines:
+    with open(vars_dict["mutantpool"], "r") as f:
+        mutantpool_str = f.read()
+        mutantpool_lines = mutantpool_str.split("\n")
+        num_lines = len(mutantpool_lines)
+        column_header_list = [x.strip() for x in mutantpool_lines[0].split("\t")]
+        for pool_line in mutantpool_lines:
             pool_line.rstrip()
             pool = check_pool_line_and_add_to_pool_dict(
                 pool_line, pool, vars_dict
