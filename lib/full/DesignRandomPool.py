@@ -2,7 +2,7 @@
 # this file is a translation of DesignRandomPool.pl into python
 # Given the output of MapTnSeq.pl, possibly from multiple runs,
 # choose the reliable and unambiguous tags
-# Makes a tab-delimited table (Pool File)
+# Makes a tab-delimited table (Mutant Pool)
 
 # Inputs are one or more MapTnSeq output tables that contain rows:
 # read,barcode,scaffold,pos,strand,uniq,qBeg,qEnd
@@ -100,6 +100,7 @@ def RunDesignRandomPool(inp_d, DEBUGPRINT):
     Rlog_d = RlogToDict(parsed_vars['R_op_fp'])
     
     parsed_vars["report_dict"]["Rlog_d"] = Rlog_d
+    parsed_vars["report_dict"]["gene_hit_frac"] = Rlog_d["other_hit_rate"]
 
     return parsed_vars["report_dict"]
 
@@ -156,6 +157,8 @@ def RunPoolStatsR(inp_d):
     """
     Description:
         We run an R script to get statistics regarding pool
+        It actually writes the file to inp_d['R_op_fp'],
+        which is the standard error output. 
     inp_d: (dict) contains
         R_fp (str) Path to R script 'PoolStats.R'
         output_fp (str) (pool_fp) finished pool file
@@ -221,7 +224,7 @@ def GetVariantsPrintPool(inp_dict):
     nMaskedReads = 0
     barcodeAt = inp_dict['barcodeAt']
 
-    # Pool file will have 1 per non "Masked" keys in barcodeAt
+    # Mutant Pool will have 1 per non "Masked" keys in barcodeAt
     for k in barcodeAt.keys():
         barcode, row = k, barcodeAt[k]
         
@@ -604,7 +607,7 @@ def CountBarCodesPrintPool(inp_dict):
 def InitPoolFileHandle(poolfile_path):
     # poolfile_path is a string, path to output
 
-    logging.info("Starting to write to Pool File at " + poolfile_path)
+    logging.info("Starting to write to Mutant Pool at " + poolfile_path)
     POOL_FH = open(poolfile_path, "w")
 
     POOL_FH.write("\t".join([

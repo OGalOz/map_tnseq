@@ -7,10 +7,9 @@ import logging
 import json
 import shutil
 from util.validate import validate_init_params
-from util.downloaders import DownloadGenomeToFNA , DownloadFASTQs, GetGenomeOrganismName, \
-                             download_genes_table
-from util.genbank_to_gene_table import  genbank_and_genome_fna_to_gene_table, OLD_convert_genbank_to_gene_table
-from util.upload_pool import upload_poolfile_to_KBase
+from util.downloaders import DownloadGenomeToFNA , DownloadFASTQs, GetGenomeOrganismName
+#from util.genbank_to_gene_table import  genbank_and_genome_fna_to_gene_table, OLD_convert_genbank_to_gene_table
+#from util.upload_pool import upload_poolfile_to_KBase
 
 
 

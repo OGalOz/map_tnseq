@@ -4,7 +4,7 @@ import logging
 import re
 import datetime
 
-
+# Called by lib/full/FullProgram.py
 def upload_mutantpool_to_KBase(up):
     '''
     Inputs:
@@ -15,6 +15,7 @@ def upload_mutantpool_to_KBase(up):
             pool_description:
             fastq_refs (list<str>):
             workspace_id:
+            gene_hit_frac (float):
             ws_obj:
             mutantpool_fp: 
             mutantpool_name:
@@ -55,6 +56,7 @@ def upload_mutantpool_to_KBase(up):
         "column_header_list": column_header_list,
         "column_headers_str": ", ".join(column_header_list),
         "num_lines": str(num_lines),
+        "gene_hit_frac": str(round(up["gene_hit_frac"], 4)),
         "related_genome_ref": up["genome_ref"],
         "related_organism_scientific_name": get_genome_organism_name(
             up["genome_ref"],
