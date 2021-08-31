@@ -100,7 +100,11 @@ def RunDesignRandomPool(inp_d, DEBUGPRINT):
     Rlog_d = RlogToDict(parsed_vars['R_op_fp'])
     
     parsed_vars["report_dict"]["Rlog_d"] = Rlog_d
-    parsed_vars["report_dict"]["gene_hit_frac"] = Rlog_d["other_hit_rate"]
+
+    if not Rlog_d["failed"]:
+        parsed_vars["report_dict"]["gene_hit_frac"] = Rlog_d["other_hit_rate"]
+    else:
+        parsed_vars["report_dict"]["gene_hit_frac"] = "NaN"
 
     return parsed_vars["report_dict"]
 
