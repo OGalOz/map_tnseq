@@ -15,6 +15,7 @@ import copy
 import subprocess
 import pandas as pd
 import math
+from full.PoolStats import RunPoolStatsPy
 
 
 
@@ -92,17 +93,16 @@ def RunDesignRandomPool(inp_d, DEBUGPRINT):
             parsed_vars['f2'])
 
     parsed_vars["report_dict"]["chao2_report_str"] = Chao2_report_str
-   
-    RunPoolStatsR(parsed_vars)
+  
+    logging.info("Starting to Run Pool Stats")
+    PoolStats_res_d = CallPoolStatsPy(parsed_vars)
 
-    logging.info("Finished running Design Random Pool")
+    logging.info("Finished running Pool Stats and Design Random Pool")
 
-    Rlog_d = RlogToDict(parsed_vars['R_op_fp'])
-    
-    parsed_vars["report_dict"]["Rlog_d"] = Rlog_d
+    parsed_vars["report_dict"]["PS_res_d"] = PoolStats_res_d
 
-    if not Rlog_d["failed"]:
-        parsed_vars["report_dict"]["gene_hit_frac"] = Rlog_d["other_hit_rate"]
+    if not PoolStats_res_d["failed"]:
+        parsed_vars["report_dict"]["gene_hit_frac"] = PoolStats_res_d["fNonEssentialGenesHitRatio"]
     else:
         parsed_vars["report_dict"]["gene_hit_frac"] = "NaN"
 
@@ -155,6 +155,58 @@ def ParseInputs(input_dict):
     logging.info("All input parameters to Design Random Pool passed")
 
     return input_dict
+
+
+
+def CallPoolStatsPy(inp_d):
+    """
+
+    Args:
+        inp_d: (dict) contains
+            output_fp (str) (pool_fp) finished pool file
+            genes_table_fp (str) genes table file path
+            nMapped (int) 
+            tmp_dir (str) Path to tmp_dir
+
+    Returns:
+        res_d (dict): If succesful, also contains all below keys from stats_d 
+            failed (bool): True if failed, False if succesful
+            Error_str (str): Why it failed (?)
+        stats_d (dict): has the following 21 keys: (all 'n' are int, all 'f' are float, 'prcnt' is float)
+            'nNonPastEnd', 'nUnique_Insertions', 'nSeenMoreThanOnce', 
+            'nSeenExactlyTwice', 'fMedian_strains_per_gene', 'fMean_strains_per_gene', 
+            'fMedian_reads_per_gene', 'fMean_reads_per_gene', 
+            'fBias_reads_per_gene', 'prcnt_gene_and_transposon_ratio_same_strand', 
+            'nCentralInsertions',  'nUniqueCentralInsertions', 
+            'nGenesWithInsertions', 'nGenesWithCentralInsertions', 'nGenes',
+            'nEssentialGenes', 'nNotEssentialGenes', 'nEssentialGenesHit', 
+            'nNotEssentialGenesHit', 'fEssentialGenesHitRatio', 
+            'fNonEssentialGenesHitRatio'
+
+
+    """
+
+
+    res_d = {}
+    success_bool, stats_d = RunPoolStatsPy(inp_d['output_fp'], 
+                                          inp_d['genes_table_fp'], 
+                                          inp_d['nMapped'], 
+                                          op_dir=inp_d["tmp_dir"])
+
+    if not success_bool:
+        # Unsuccesful attempt
+        res_d["failed"] = True
+        res_d['Error_str'] = 'Computing poolstats failed.'
+    else:
+        # Succesful attempt
+        res_d.update(stats_d)
+        res_d["failed"] = False
+        res_d['Error_str'] = ''
+
+    return res_d
+
+    
+
 
 
 def RunPoolStatsR(inp_d):

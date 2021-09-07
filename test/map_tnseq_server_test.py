@@ -64,11 +64,10 @@ class map_tnseqTest(unittest.TestCase):
         # Check returned data with
         # self.assertEqual(ret[...], ...) or other unittest methods
       
-        # Keio
-        #str
+        #str (Dyella)
         genome_ref = "63063/9/1" 
         # FASTQs: Short: 52075/4/1 # Long 52075/12/1
-        #list<str>
+        #list<str> Dyella
         fastq_ref_list = ["63063/7/1"]
         # , "62686/28/1"] 
         #str
@@ -77,7 +76,7 @@ class map_tnseqTest(unittest.TestCase):
         #gene_table_ref = "62686/5/1"  DEPRECATED
         # Models: "Custom" #Unknown # model_pKMW3_universal # model_ezTn5_Tet_Bifido 
         #None or int
-        maxReads = 50000
+        maxReads = None 
         #int
         minQuality = 5
         #int
