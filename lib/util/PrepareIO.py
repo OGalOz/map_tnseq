@@ -8,9 +8,6 @@ import json
 import shutil
 from util.validate import validate_init_params
 from util.downloaders import DownloadGenomeToFNA , DownloadFASTQs, GetGenomeOrganismName
-#from util.genbank_to_gene_table import  genbank_and_genome_fna_to_gene_table, OLD_convert_genbank_to_gene_table
-#from util.upload_pool import upload_poolfile_to_KBase
-
 
 
 """
@@ -65,8 +62,6 @@ def PrepareProgramInputs(params, cfg_d):
     cfg_d['genome_fna_fp'] = genome_fna_fp
     genome_scientific_name = GetGenomeOrganismName(cfg_d['ws'], vp['genome_ref'])
 
-    # Create genes table
-    #download_genes_table(vp['gene_table_ref'], cfg_d['dfu'], cfg_d['gene_table_fp'])
 
     # Note that this gene table will be created at workdir/g2gt_results/genes.GC
     g2gt_results = cfg_d['gt_obj'].genome_to_genetable({'genome_ref': vp['genome_ref']})
@@ -79,9 +74,6 @@ def PrepareProgramInputs(params, cfg_d):
     write_model_to_file(model_fp, model_str, past_end_str)
     cfg_d["model_fp"] = model_fp
 
-    # Downloading Model
-    # model_fp = download_model(vp['model_ref'], cfg_d['dfu'], cfg_d['model_dir'])
-    # cfg_d["model_fp"] = model_fp
 
     # FASTQs output dir
     fq_dir = os.path.join(cfg_d['tmp_dir'], "FASTQs")
@@ -134,47 +126,14 @@ def PrepareUserOutputs(vp, cfg_d):
         Upload PoolFile to make KBaseRBTnSeq.RBTS_PoolFile object.
     """
 
-    """
-    USED TO DO THIS
-    # Here we upload the pool file to KBase to make a PoolFile Object
-    if vp['KB_Pool_Bool']:
-
-        logging.info("UPLOADING POOL FILE to KBASE through DataFileUtil")
-        upload_params = {
-                'username': cfg_d['username'],
-                'genome_ref': vp['genome_ref'],
-                'gene_table_ref': vp['gene_table_ref'],
-                'model_ref': vp['model_ref'],
-                'fastq_refs': vp['fastq_ref_list'],
-                'pool_description': vp['pool_description'] ,
-                'workspace_id': cfg_d['ws_id'],
-                'ws_obj': cfg_d['ws'],
-                'poolfile_fp': cfg_d['pool_fp'],
-                'poolfile_name': vp['output_name'] + ".pool",
-                'dfu': cfg_d['dfu']
-                }
-        upload_poolfile_results = upload_poolfile_to_KBase(upload_params)
-        logging.info("Upload Pool File Results:")
-        logging.info(upload_poolfile_results)
-    """
    
 
     # We make a directory containing the resultant files
     res_dir = os.path.join(cfg_d['tmp_dir'], "results")
     os.mkdir(res_dir)
-    #shutil.copy(cfg_d["Main_HTML_report_fp"], res_dir)
-
-    if "model_test" not in cfg_d:
-        shutil.copy(cfg_d['pool_fp'], res_dir)
-        shutil.copy(cfg_d["gene_table_fp"], res_dir)
-    else:
-        if not cfg_d["model_test"]: 
-            # Here we decide which files besides HTML to return to User and place in a directory
-            # Pool File, ".surprise?", "html?"
-            shutil.copy(cfg_d['pool_fp'], res_dir)
-            shutil.copy(cfg_d["gene_table_fp"], res_dir)
-
-
+    # We move files to this directory (mutant pool & gene table)
+    shutil.copy(cfg_d['pool_fp'], res_dir)
+    shutil.copy(cfg_d["gene_table_fp"], res_dir)
 
 
     # Returning file in zipped format:-------------------------------
@@ -191,9 +150,6 @@ def PrepareUserOutputs(vp, cfg_d):
     
     # Preparing HTML output
     html_dir = os.path.join(cfg_d["tmp_dir"], "HTML")
-    #os.mkdir(html_dir)
-    #shutil.move(cfg_d['css_style_fp'], html_dir)
-    #shutil.move(cfg_d['Main_HTML_report_fp'], html_dir)
 
     HTML_report_shock_id = cfg_d['dfu'].file_to_shock({
             "file_path": html_dir,
@@ -224,14 +180,14 @@ def PrepareUserOutputs(vp, cfg_d):
 # MTS - Map Tn Seq, DRP - Design Random Pool
 def Create_MTS_DRP_config(cfg_d, vp):
     """
-    Inputs:
+    Args:
         cfg_d: (as above in PrepareProgramInputs)
             Plus:
             fastq_fp_l: (list<s>) List of file paths
             genome_fna_fp: (File path to the Genome FNA file)
 
         vp: (d) must contain all used cases below
-    Outputs:
+    Returns:
         [MTS_cfg, DRP_cfg]
     """
     # Here we create the config dicts

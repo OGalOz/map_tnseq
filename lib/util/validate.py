@@ -5,12 +5,13 @@ import re
 
 def validate_init_params(params, cfg_d):
     """
-    params: (d)
-        Must contain all the parameters passed in
-        as shown in function.
-    cfg_d: (d)
-        #models_dir: (s) Path to all models
-    Outputs:
+    Args:
+        params: (d)
+            Must contain all the parameters passed in
+            as shown in function.
+        cfg_d: (d)
+            #models_dir: (s) Path to all models
+    Returns:
         vp: (d) "Validated Params"
             genome_ref: (s)
             fastq_ref_list: (list<s>)
@@ -43,11 +44,19 @@ def validate_init_params(params, cfg_d):
         vp['tnseq_model_name'] = params['tnseq_model_name']
     else:
         raise Exception("Model Name not passed in params.")
+    # We create this dict below (ref -> 1) to check that there are no repeats of fastqs
+    existing_fq = {}
     if 'fastq_ref_list' in params:
         #fastq_ref will be a list since there can be multiple.
         fq_ref_list = params['fastq_ref_list']
         if len(fq_ref_list) == 0:
             raise Exception("There must be at least 1 FASTQ file. None found.")
+        for ref in fq_ref_list:
+            if ref in existing_fq:
+                raise Exception("Do not repeat the same FASTQ reads files: Found repeat ref: " + \
+                                ref)
+            else:
+                existing_fq[ref] = 1
         vp['fastq_ref_list'] = params['fastq_ref_list']
     else:
         raise Exception("Fastq Ref not passed in params.")
@@ -214,9 +223,11 @@ def check_output_name(op_name):
 
 def validate_custom_model(custom_model_string):
     """
-    Inputs: custom_model_string (str) String of custom model. 
+    Args: 
+        custom_model_string (str) String of custom model. 
         Should look like the other models (2 lines, etc)
-    Outputs: tested_model_string (str) String of custom model.
+    Returns: 
+        tested_model_string (str) String of custom model.
     """
 
     if len(custom_model_string) < 2:

@@ -8,7 +8,7 @@ from Bio import SeqIO
 def DownloadGenomeToFNA(gfu, genome_ref, scratch_dir):
     """
     Inputs: GFU Object, str (A/B/C), str path
-    Outputs: [fna_fp (str), gbk_fp (str)]
+    Outputs: genome_fna_fp (str) Filepath to genome fna
     """
 
     GenomeToGenbankResult = gfu.genome_to_genbank({'genome_ref': genome_ref})
@@ -35,13 +35,18 @@ def get_fa_from_scratch(scratch_dir):
     
     fna_fp = None
     scratch_files = os.listdir(scratch_dir)
+    all_fna_fps = []
     for f in scratch_files:
         if f[-2:] == "fa":
-            fna_fp = os.path.join(scratch_dir, f)
-            break
-    
-    if fna_fp is None:
-        logging.warning("Could not find Assembly FNA file in scratch (work) dir")
+            all_fna_fps.append(fna_fp)
+
+    if len(all_fna_fps) > 1:
+        raise Exception("Multiple .fa files in scratch directory. Expecting only one: " + \
+                        ", ".join(all_fna_fps))
+    elif len(all_fna_fps) == 0:
+        raise Exception("No .fa files in scratch directory. Program needs genome fna file to run.")
+    else:
+        fna_fp = all_fna_fps[0]
 
     return fna_fp
 
@@ -205,9 +210,6 @@ def DownloadFASTQs(dfu, fastq_ref_list, output_dir):
         fastq_fp_l.append(fastq_fp)
 
     return fastq_fp_l
-
-
-
 
 
 def GetGenomeOrganismName(ws, genome_ref):

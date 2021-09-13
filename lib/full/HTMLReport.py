@@ -8,6 +8,8 @@ import logging
 import json
 import shutil
 
+
+
 def CreateHTMLdir(tmp_dir, html_display_files_dir):
     """
     We create the HTML directory in the tmp dir.
@@ -407,9 +409,11 @@ def prep_int(inp_i):
 ''' Deprecated
 def Prc(flt):
     #flt is a fraction to be turned into percent and cut short to 3 decimals
+
     # returns string
     if flt <= 1.01 and flt > -0.01:
         flt = str(flt*100)
+
     else:
         return str("Percent Error? " + str(flt) )
     """

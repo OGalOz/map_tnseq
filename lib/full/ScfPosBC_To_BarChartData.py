@@ -11,18 +11,7 @@ import shutil
 """
     Notes:
         "Expanding Bar Chart" will be shortened to "EBC"
-        
-    TD:
-        Run and test output 
-    
-    We want it so the BasePair-values never go beyond 3 digits (?)
-    Switch from Mbp, to Kbp, to bp, and at the highest Gbp 
-    
-    We serve the data that has values over 1000, and let javascript on the browser
-        compute the lower values from a dict.
-
 """
-
 
 def ScfPosBC_Info_To_Scaffolds(ScfPosBC_fp, tick_range_threshold, gene_table_fp, genome_fna_fp, op_dir):
     """ We convert an insertion data format to the visualization format
@@ -82,19 +71,6 @@ def ScfPosBC_Info_To_Scaffolds(ScfPosBC_fp, tick_range_threshold, gene_table_fp,
         RemoveGenesKeyFromDict(crt_d)
 
 
-        """
-        with open(os.path.join(op_dir, fn_scf_name), "w") as f:
-            f.write(fixed_scf_name + " = " + json.dumps(crt_d))
-        """
-
-
-        """
-        scaffold_print = scaffold_name.replace('/','_')
-        with open(os.path.join(op_dir, scaffold_print + "_data_viz_d.json"), "w") as f:
-            f.write("data_viz_d = " + json.dumps(crt_d))
-        """
-
-
         crnt_scf_len = crt_d["scaffold_length"]
 
         # Creating ticks data  
@@ -115,7 +91,7 @@ def ScfPosBC_Info_To_Scaffolds(ScfPosBC_fp, tick_range_threshold, gene_table_fp,
                 "gene_loc_list": scf_locs_d[scaffold_name],
                 "gene_ids_to_desc_and_layers_d": scf_gene_id_d[scaffold_name],
                 "scaffold_sequence": scf_seq_d[scaffold_name]
-                }
+        }
 
         # This sets the name of the file: VERY IMPORTANT SHIFT
         fixed_scf_name = "scf_" + scaffold_name.replace("/","_").replace(
@@ -146,7 +122,7 @@ def ScfPosBC_Info_To_Scaffolds(ScfPosBC_fp, tick_range_threshold, gene_table_fp,
 
 def RemoveGenesKeyFromDict(inp_d):
     """
-    In this function we do a few funcs:
+    In this function:
         1. Remove the "genes" key from strand sub dicts
         2. Remove empty strand dicts once "genes" key is removed
         3. Move "barcodes" up one level so there is no longer a barcodes key

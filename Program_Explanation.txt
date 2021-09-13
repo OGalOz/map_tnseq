@@ -15,10 +15,10 @@ MapTnSeq parses a single FASTQ file each time,
 so if there are x FASTQ files, MapTnSeq will run x times,
 each time producing a table that contains 
 the following columns (in sequential order):
-    read_name (from FASTQ)
+    read_name (str from FASTQ)
     barcode (nt string)
-    scaffold (from genome)
-    position (within scaffold)
+    scaffold (str name of part from genome)
+    position (int within scaffold)
     strand (+/-)
     unique (1 if yes, 0 if no, uniqueness refers to whether genome sequence is unique).
     query beginning loc (the sequence of the transposon junction, when does it start in the genome?)
@@ -49,14 +49,19 @@ marks the read name, the barcode, the location,
 the strand and whether it mapped uniquely to the genome
 (some of the sequences after the transposon junction
 might appear multiple times in the genome).
+
 Design Random Pool runs a single time, taking as an 
-input all the tables from MapTnSeq. It combines
+input all the mentioned tables from MapTnSeq. It combines
 the barcodes from the various reads and counts the 
 number of times they occur and the ratios between
 their various mappings; if the number of times a
 barcode was read and the ratio between its most
 common mapping and the second most common mapping
 is good enough, then the barcode and its location
-is added to the poolfile, so that the poolfile only
+is added to the mutant pool, so that the mutant pool only
 contains the 'good' barcodes that pass the multiple
 thresholds.
+Within Design Random Pool, there is a component
+called "PoolStats", in which the program computes
+important statistics regarding the mutant pool.
+

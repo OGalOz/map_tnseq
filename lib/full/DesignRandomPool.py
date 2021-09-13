@@ -21,8 +21,6 @@ from full.PoolStats import RunPoolStatsPy
 
 def RunDesignRandomPool(inp_d, DEBUGPRINT):
     """
-    We run through the program, dividing each part into a separate function
-
 
     ARGS:
         inp_d: (dict) 
@@ -113,19 +111,20 @@ def RunDesignRandomPool(inp_d, DEBUGPRINT):
 def ParseInputs(input_dict):
 
     """
-    input_dict: (dict)
-        output_fp: (str) Path to pool file
-        genes_table_fp: (str) Path to genes_table
-        R_fp: (str) Path to PoolStats.R
-        R_op_fp: (str) Path to PoolStats.R output log
-        tmp_dir: (str) Path to temporary directory
-        minN: (int) Threshold (minimum number of good Reads to support a mapping).
-        minFrac: (float) Threshold (minimum fraction of reads of most common
-                    location to all others)
-        minRatio: (float) Threshold (minimum ratio of reads of most common
-                        mapping to second most common mapping).
-        maxQBeg: (int) Threshold (max query beginning for a read to pass)
-        map_tnseq_table_fps: (list of str)
+    Args:
+        input_dict: (dict)
+            output_fp: (str) Path to pool file
+            genes_table_fp: (str) Path to genes_table
+            R_fp: (str) Path to PoolStats.R
+            R_op_fp: (str) Path to PoolStats.R output log
+            tmp_dir: (str) Path to temporary directory
+            minN: (int) Threshold (minimum number of good Reads to support a mapping).
+            minFrac: (float) Threshold (minimum fraction of reads of most common
+                        location to all others)
+            minRatio: (float) Threshold (minimum ratio of reads of most common
+                            mapping to second most common mapping).
+            maxQBeg: (int) Threshold (max query beginning for a read to pass)
+            map_tnseq_table_fps: (list of str)
     """
     
     # Check strings:
@@ -160,7 +159,6 @@ def ParseInputs(input_dict):
 
 def CallPoolStatsPy(inp_d):
     """
-
     Args:
         inp_d: (dict) contains
             output_fp (str) (pool_fp) finished pool file
@@ -182,7 +180,6 @@ def CallPoolStatsPy(inp_d):
             'nEssentialGenes', 'nNotEssentialGenes', 'nEssentialGenesHit', 
             'nNotEssentialGenesHit', 'fEssentialGenesHitRatio', 
             'fNonEssentialGenesHitRatio'
-
 
     """
 
@@ -211,17 +208,19 @@ def CallPoolStatsPy(inp_d):
 
 def RunPoolStatsR(inp_d):
     """
+    Args:
+        inp_d: (dict) contains
+            R_fp (str) Path to R script 'PoolStats.R'
+            output_fp (str) (pool_fp) finished pool file
+            genes_table_fp (str) genes table file path
+            nMapped (int) 
+            R_op_fp: (str) Path to R log
+            tmp_dir: (str) Path to tmp_dir
+
     Description:
         We run an R script to get statistics regarding pool
         It actually writes the file to inp_d['R_op_fp'],
         which is the standard error output. 
-    inp_d: (dict) contains
-        R_fp (str) Path to R script 'PoolStats.R'
-        output_fp (str) (pool_fp) finished pool file
-        genes_table_fp (str) genes table file path
-        nMapped (int) 
-        R_op_fp: (str) Path to R log
-        tmp_dir: (str) Path to tmp_dir
     """
 
     R_executable = "Rscript"
@@ -244,11 +243,6 @@ def RunPoolStatsR(inp_d):
         logging.info("Succesfully ran R, log found at " + inp_d["R_op_fp"])
 
 
-
-
-
-
-
 def getChao2Estimates(totcodes, f1, f2):
     """
     All inputs are int
@@ -265,14 +259,15 @@ def getChao2Estimates(totcodes, f1, f2):
 
 def GetVariantsPrintPool(inp_dict):
     """
-    inp_dict: (dict) Contains
-        barcodeAt: (dict)
-            barcode (str) -> list<nTot, nMax, maxAt, nNext, nextAt>
-                where maxAt is a string that splits pos;
-        POOL_FH: file handle to output pool file
-        nReadsForUsable: (int)
-        nMapped: (int)
-        output_fp (str): Path to pool file?
+    Args:
+        inp_dict: (dict) Contains
+            barcodeAt: (dict)
+                barcode (str) -> list<nTot, nMax, maxAt, nNext, nextAt>
+                    where maxAt is a string that splits pos;
+            POOL_FH: file handle to output pool file
+            nReadsForUsable: (int)
+            nMapped: (int)
+            output_fp (str): Path to pool file?
     """
     
     nOut = 0
@@ -355,9 +350,9 @@ def GetVariantsPrintPool(inp_dict):
 
 def RlogToDict(R_log_fp):
     """
-    Inputs:
+    Args:
         R_log_fp: (str)
-    Outputs:
+    Returns:
         res_d: (dict) 'results dict'
             failed: (bool) True if failed.
             [Error_str]: exists if failed=True
@@ -437,23 +432,20 @@ def catch_NaN(val):
     return val
 
 
-
-
-
 def CountBarCodesPrintPool(inp_dict):
     """
-    We go through the dict barPosCount's keys, 
-    We track Categories of barcodes through "nInCategory".
-    Usable are the barcodes that passed all tests and go to the pool file
-    PastEnd are
-    NoCons
+    Description:
+        We go through the dict barPosCount's keys, 
+        We track Categories of barcodes through "nInCategory".
+        Usable are the barcodes that passed all tests and go to the pool file
 
-    Inputs:
+    Args:
         inp_dict contains:
             barPosCount: (dict) A dict which maps to dicts with each subdict 
                 being a key (scf:strand:pos) which maps to a list with 
                 [nReads, nGoodReads]
-            pastEnd_d: (dict)
+            pastEnd_d: (dict) A dictionary mapping barcode of pastEnds to num times seen 
+                            If scaffold is "pastEnd" we add it to the pastEnd dict
             minN: (int)
             POOL_FH: File Handle for pool file
             minFrac: (float)
@@ -488,7 +480,7 @@ def CountBarCodesPrintPool(inp_dict):
     nReadsForUsable = 0 
 
     """
-    key_d is a dict with a specific format:
+    Note: key_d is a dict with a specific format:
     {key1: [nReads, nGoodReads], key2: [nReads, nGoodReads, ...}
     where key1, key2, are in format scaffold:strand:position 
         where scaffold is name of scaffold (str), strand is +/-, position is int
@@ -528,7 +520,7 @@ def CountBarCodesPrintPool(inp_dict):
         # "at" will be a sorted list of keys based on their 'nReads' (0th index)
         # list is sorted by decreasing order (highest first)
         """
-        key_d is a dict with a specific format:
+        Notes: key_d is a dict with a specific format:
         {key1: [nReads, nGoodReads], key2: [nReads, nGoodReads, ...}
         where key1, key2, are in format scaffold:strand:position 
             where scaffold is name of scaffold (str), strand is +/-, position is int
@@ -633,31 +625,15 @@ def CountBarCodesPrintPool(inp_dict):
     logging.info(report_str)
 
     ret_d = {
-        
         "barcodeAt": barcodeAt,
         "f1": f1,
         "f2": f2,
         "totcodes": totcodes,
         "nReadsForUsable": nReadsForUsable
-
-        }
+    }
 
 
     return ret_d
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def InitPoolFileHandle(poolfile_path):
@@ -685,6 +661,18 @@ def InitPoolFileHandle(poolfile_path):
 
 
 def InitNewVars1():
+    """ Initializes variables
+    Returns:
+        new_vars (d):
+            nMapped (int): Total # reads considered
+            nSkipQBeg (int): Counts how many queries were skipped because the location 
+            barPosCount (d): 
+            pastEnd_d (d): (dict) A dictionary mapping barcode of pastEnds to num times seen 
+                                If scaffold is "pastEnd" we add it to the pastEnd dict
+            report_dict (d): A dict for storing report info.
+    
+
+    """
     
     nMapped = 0 # reads considered
     nSkipQBeg = 0 # Counts how many queries were skipped because the location 
@@ -747,6 +735,8 @@ def ProcessInputMapTnSeqTables(inp_dict):
             query end location
             bit score
             percent identity
+
+        We add the info from the tables to dicts
     """
     logging.info("Starting to read MapTnSeq Output Tables:\n" \
             + "\n".join(inp_dict['map_tnseq_table_fps']))

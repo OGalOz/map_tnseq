@@ -106,7 +106,9 @@
             "optional": true,
             "advanced": true,
             "text_options" : {
-                "validate_as" : "int"
+                "validate_as" : "int",
+                "min_int": 0,
+                "max_int": 100
             },
             "allow_multiple": false,
             "default_values": [ "10" ],
@@ -116,7 +118,9 @@
             "optional": true,
             "advanced": true,
             "text_options" : {
-                "validate_as" : "int"
+                "validate_as" : "int",
+                "min_int": 0,
+                "max_int": 100
             },
             "allow_multiple": false,
             "default_values": [ "90" ],
@@ -126,7 +130,8 @@
             "optional": true,
             "advanced": true,
             "text_options" : {
-                "validate_as" : "int"
+                "validate_as" : "int",
+                "min_int": 0
             },
             "allow_multiple": false,
             "default_values": [ "15" ],
@@ -147,7 +152,8 @@
             "optional": true,
             "advanced": true,
             "text_options" : {
-                "validate_as" : "float"
+                "validate_as" : "float",
+                "min_int": 0
             },
             "allow_multiple": false,
             "default_values": [ "10" ],

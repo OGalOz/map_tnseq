@@ -29,19 +29,37 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm,
                 KB_pool_bool, cfg_d, vp,
                 models_dir=None):
     """
-    All inputs are strings
+    Args:
+        map_cfg_d (str): Path to config JSON dict for MapTnSeq 
+            Among others, contains keys:
+                genome_fp: (file path to genome fna file in tmp dir)
 
-    map_cfg_d: (the dict from map_cfg_fp)
-        Among others, contains keys:
-            genome_fp: (file path to genome fna file in tmp dir)
+        drp_cfg_fp (str): Path to config JSON dict for Design Random Pool
 
-    drp_cfg_fp: 
-        Among others, contains keys:
-            genes_table_fp: (file path to genes.GC file)
+        tmp_dir (str): Path to directory
 
-    vp:
-        Among others, contains keys:
-            tnseq_model_name
+        pool_output_fp (str): Output mutant pool file path.
+
+        gnm_nm (str): Genome's scientific name.
+
+        KB_pool_bool (boolean): Should we create a Mutant Pool Object within KBase?
+
+        vp: validated params 
+            Among others, contains keys:
+                tnseq_model_name
+    Returns:
+        None
+
+    Description:
+        First we load the two config dicts to be used in MapTnSeq and Design 
+        Random Pool.
+        Then we initialize the dict we'll be using for HTML and add the
+        genome name and TnSeq model info to it.
+        Then, for each FASTQ input we run MapTnSeq and generate a TSV 
+        file to be an input to DesignRandomPool. In doing this, we make
+        a copy of the original MapTnSeq run_dict and update the variable
+        keys (specifically 'fastq_fp' and 'output_fp').
+    
             
     """
 
@@ -55,39 +73,27 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm,
     with open(map_cfg_fp, "r") as g:
         map_cfg = json.loads(g.read())["values"]
 
+    # LOADING DESIGN RANDOM POOL Config Dictionary from JSON to python
+    # to be used after map tn seq has finished running
+    with open(drp_cfg_fp, "r") as g:
+        drp_cfg = json.loads(g.read())["values"]
     
-
+    # Initializing dict to be used for HTML generation
     pre_HTML_d = {"genome_name": gnm_nm}
 
-    """
-    DO NOT DELETE: WE COULD USE THIS TO FIND THE MODEL IF UNKNOWN
-    # Here we test for a working model
-    if map_cfg["modeltest"]:
-        good_models_list = FindWorkingModel(map_cfg, models_dir)
-
-        HTML_str = GetSingleModelHTML(good_models_list)
-
-        # Print out HTML
-        with open(html_fp, "w") as f:
-            f.write(HTML_str)
-        logging.info("Wrote html file to " + html_fp)
-
-        #We return that the modeltest bool is true and that no mutant pool is created
-        return [html_fp, True]
-    """
 
     # We know what model we're using
-    model_use = map_cfg["model_fp"]
+    model_use_fp = map_cfg["model_fp"]
 
     #We get the model string
-    with open(model_use, "r") as f:
+    with open(model_use_fp, "r") as f:
         # This includes pastEnd if that's there
         model_str = f.read().rstrip()
 
     pre_HTML_d["models_info"] = {
-                "model_in_use": model_use,
+                "model_in_use": model_use_fp,
                 "model_str": model_str,
-                "model_name": os.path.basename(model_use)
+                "model_name": os.path.basename(model_use_fp)
     }
 
     # One run per fastq file
@@ -112,6 +118,8 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm,
 
         # Here we write the output filepath of the program 
         if i < 10:
+            prefix = "00"
+        elif i < 100:
             prefix = "0"
         else:
             prefix = ""
@@ -121,7 +129,7 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm,
         current_map_cfg['output_fp'] = cMTS_output_fp
         MapTS_Output_fps.append(cMTS_output_fp)
 
-        logging.info("Running map tn seq on {}.\n Output {}".format(
+        logging.info("Running MapTnSeq on {}.\n Output {}".format(
                                                 current_map_cfg["fastq_fp"], cMTS_output_fp))
 
         MTS_return_dict = RunMapTnSeq(current_map_cfg, DEBUGPRINT=False)
@@ -131,11 +139,8 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm,
         current_map_cfg = copy.deepcopy(map_cfg)
 
 
-    # LOADING DESIGN RANDOM POOL INPUT
-    with open(drp_cfg_fp, "r") as g:
-        drp_cfg = json.loads(g.read())["values"]
 
-    # Adding map tn seq table files:
+    # Adding map tn seq table files to Design Random Pool Config:
     drp_cfg["map_tnseq_table_fps"] = MapTS_Output_fps
     drp_cfg["output_fp"] =  pool_output_fp
 
@@ -208,16 +213,6 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm,
     #MH Plot Data
     MH_data_fp = os.path.join(MH_dir, "MH_Data.js")
     PosScfBCDataToZScrPointsForValues(scfPosBC_fp, MH_data_fp, "1")
-
-
-
-    """
-    HTML_str = CreateHTMLString(pre_HTML_d)
-    # Print out HTML
-    with open(html_fp, "w") as f:
-        f.write(HTML_str)
-    logging.info("Wrote html file to " + html_fp)
-    """
 
     return None
 
@@ -321,3 +316,21 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+"""
+DO NOT DELETE: WE COULD USE THIS TO FIND THE MODEL IF UNKNOWN
+# Here we test for a working model
+if map_cfg["modeltest"]:
+    good_models_list = FindWorkingModel(map_cfg, models_dir)
+
+    HTML_str = GetSingleModelHTML(good_models_list)
+
+    # Print out HTML
+    with open(html_fp, "w") as f:
+        f.write(HTML_str)
+    logging.info("Wrote html file to " + html_fp)
+
+    #We return that the modeltest bool is true and that no mutant pool is created
+    return [html_fp, True]
+"""

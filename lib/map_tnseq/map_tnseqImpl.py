@@ -59,9 +59,26 @@ class map_tnseq:
         
         Args:
             params (d) contains keys:
-                
+                'workspace_name' (str): ,
+                'genome_ref' (str): ,
+                'tnseq_model_name' (str): ,
+                'fastq_ref_list' list<str>: ,
+                'maxReads' (int): ,
+                'minQuality' (int): ,
+                'minIdentity' (int): ,
+                'minScore' (int): ,
+                'delta' (int): ,
+                'minN' (int): ,
+                'minFrac' (float): ,
+                'minRatio' (float): ,
+                'maxQBeg' (int): ,
+                'pool_description' (str): ,
+                'KB_Pool_Bool' (bool): ,
+                'output_name' (str): 
+
         Returns:
-           
+            list<output>, where output is a dict with keys "report_name" and 
+                          "report_ref"
 
         Description:
             This is the primary starting point for the program.
@@ -77,13 +94,19 @@ class map_tnseq:
             The function 'PrepareProgramInputs' downloads the needed files
             using the aforementioned objects (like 'dfu' and 'gfu') 
             and writes the config files for MapTnSeq and Design Random Pool.
-            Note
+            The details of how the MapTnSeq and Design Random Pool config
+            dicts are generated is in the file 'PrepareIO' in the function
+            'Create_MTS_DRP_config'.
+
 
         """
         # ctx is the context object
         # return variables are: output
         #BEGIN run_map_tnseq
+        
         logging.basicConfig(level=logging.DEBUG)
+
+        # Preparing main classes - dfu, gfu, genetableobj, workspace
         dfu = DataFileUtil(self.callback_url)
         gfu = GenomeFileUtil(self.callback_url)
         genetable_obj = rbts_genome_to_genetable(self.callback_url)
@@ -92,6 +115,7 @@ class map_tnseq:
         ws = Workspace(self.ws_url, token=token)
         ws_info = ws.get_workspace_info({'workspace': params['workspace_name']})
         workspace_id = ws_info[0]
+
         td = self.shared_folder
         html_fp = os.path.join(td, "MapTnSeqReport.html")
 
@@ -128,7 +152,7 @@ class map_tnseq:
         cfg_d["workspace_name"] = params["workspace_name"]
         cfg_d["Main_HTML_report_fp"] = html_fp
 
-        # Part 2: Run the program using recently created config files
+        # Part 2: Run the central part of the program using recently created config files
         CompleteRun(cfg_d["MTS_cfg_fp"], cfg_d["DRP_cfg_fp"],
                     cfg_d["tmp_dir"], pool_op_fp, genome_scientific_name,
                     vp["KB_Pool_Bool"], cfg_d, vp)
@@ -137,7 +161,7 @@ class map_tnseq:
         # Part 3: Prepare final output to return to user
         report_params = PrepareUserOutputs(vp, cfg_d)
 
-        #Returning file in zipped format:------------------------------------------------------------------
+        #Returning file in zipped format:-------------------------------------
         report_util = KBaseReport(self.callback_url)
         report_info = report_util.create_extended_report(report_params)
 

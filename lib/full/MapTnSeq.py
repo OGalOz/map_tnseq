@@ -14,23 +14,19 @@ Notes:
     Program called through "RunMapTnSeq"
     Overall scratch dir will be scratch/MapTStmp
     temporary fna file will be called "TMP.fna"
-    trunc file? will be called "TRUNC.fastq"
+    trunc file will be called "TRUNC.fastq"
     PastEndFNA will be called "PastEnd.fna"
     FASTQ file will be unzipped.
-
-    What does BLAT8 do/ output?
-
 """
 
 
 def RunMapTnSeq(input_args, DEBUGPRINT=False):
     """
-    Inputs:
-
-    input_args: (dict) All necessary 
-        keys will be listed under the function "ValidateInputs".
-    DEBUGPRINT: (bool) Used to debug and decipher the program
-        by printing variables to json files in the tmp dir
+    Args:
+        input_args: (dict) All necessary 
+            keys will be listed under the function "ValidateInputs".
+        DEBUGPRINT: (bool) Used to debug and decipher the program
+            by printing variables to json files in the tmp dir
 
     This function runs the entire process of MapTnSeq
         The variable "output_fp" in input_args is where 
@@ -186,9 +182,9 @@ def ValidateInputs(input_args):
 
 def ParseModel(model_fp):
     """
-    Inputs:
+    Args:
         model_fp: (str) is path to model file, should be 1 or 2 lines
-    Outputs:
+    Returns:
         model: (str) the string of the first line of the model file.
         pastEnd: (str) string of the second line of the model file. Could be ''
     """
@@ -293,7 +289,7 @@ def PrintOutHitsPastEnd(inp_dict):
     """
     This function writes "hits past end" to OUTPUT file handle
 
-    Inputs:
+    Args:
         hitsPastEnd (dict)
         nameToBarcode (dict)
         OUTPUT: file handle to output
@@ -323,7 +319,7 @@ def PrintOutHitsPastEnd(inp_dict):
 
 def WriteUnMappedFile(inp_dict):
     """
-    Inputs:
+    Args:
 
     inp_dict: (dict) must contain:
         unmapped_fp: (str)
@@ -388,12 +384,13 @@ def WriteUnMappedFile(inp_dict):
 
 def Map_to_genome(inp_dict):
     """
-    This function first runs BLAT8 on the Good Reads file (TMPFNA) as a query
-    and the genome FNA as a database.
-    If no pastEnd in the model, hitsPastEnd is an empty dict.
-    ot takes the results of BLAT8; for each line in the BLAT8 file, it either
-    adds it to a list to be analyzed through HandleGenomeBlat later, or analyzes
-    the current list with HandleGenomeBlat.
+    Description:
+        This function first runs BLAT8 on the Good Reads file (TMPFNA) as a query
+        and the genome FNA as a database.
+        If no pastEnd in the model, hitsPastEnd is an empty dict.
+        ot takes the results of BLAT8; for each line in the BLAT8 file, it either
+        adds it to a list to be analyzed through HandleGenomeBlat later, or analyzes
+        the current list with HandleGenomeBlat.
 
     inp_dict:
         debug: (bool)
@@ -492,19 +489,6 @@ def Map_to_genome(inp_dict):
 
 
 
-
-
-
-
-
-
-
-    
-
-
-
-
-
 # This only runs if there is a "pastEnd" part to the model (a second line)
 def pastEndBLAT8(inp_dict):
     """
@@ -514,27 +498,27 @@ def pastEndBLAT8(inp_dict):
     We keep the results in a dict called "hitsPastEnd"
 
 
-    Inputs:
+    Args:
 
-    inp_dict: (dict) must contain
-        endFNA_fp: (str) filepath to End FNA
-        tmpFNA_fp: (str) filepath to temp FNA
-        pastEnd: (str) an optional part of the end of the model
-            that contains the sequence "past the end" of the 
-            transposon that might arise from residual intact plasmid.
-        blatcmd: (str) BLAT command
-        tmp_dir: (str) path to working directory
-        minScore: (int) minimum score for mapping to genome or past-end
-        minIdentity: (int) minimum %identity for mappinf to genome or past-end
-        tileSize: (int) size of an alignment tile
-        stepSize: (int) distance between the starting bases of alignment tiles
-            (will overlap if stepSize<tileSize)
-        debug: (bool)
-    Optional:
-        unmapped
-        mapnames: (dict)
+      inp_dict: (dict) must contain
+          endFNA_fp: (str) filepath to End FNA
+          tmpFNA_fp: (str) filepath to temp FNA
+          pastEnd: (str) an optional part of the end of the model
+              that contains the sequence "past the end" of the 
+              transposon that might arise from residual intact plasmid.
+          blatcmd: (str) BLAT command
+          tmp_dir: (str) path to working directory
+          minScore: (int) minimum score for mapping to genome or past-end
+          minIdentity: (int) minimum %identity for mappinf to genome or past-end
+          tileSize: (int) size of an alignment tile
+          stepSize: (int) distance between the starting bases of alignment tiles
+              (will overlap if stepSize<tileSize)
+          debug: (bool)
+      Optional:
+          unmapped
+          mapnames: (dict)
 
-    Outputs:
+    Returns:
         hitsPastEnd: (dict) read (str) to score (float) of match to past-end sequence
             of a specific query
 
@@ -546,7 +530,7 @@ def pastEndBLAT8(inp_dict):
     with open(inp_dict['endFNA_fp'], "w") as g:
         g.write(">pastend\n{}\n".format(inp_dict['pastEnd']))
 
-    #Making the input to RunBLAT8:
+    # Making the input to RunBLAT8:
     blat8_inp_d = inp_dict
     # QueriesFile is all the succesful sequences with pieces in genome
     blat8_inp_d['queriesFile'] = inp_dict['tmpFNA_fp']
@@ -593,10 +577,6 @@ def pastEndBLAT8(inp_dict):
 
 
 
-
-
-
-
 # This function finds barcodes and end of transposon and writes remaining 
 # sequence to TMP FNA
 # FASTQ must already be unzipped
@@ -628,8 +608,8 @@ def find_barcodes_and_end_of_transposon(inp_dict):
         TRUNC is a truncated version of the fastq file with only good sequences
             from the end of the Model and the barcode is maintained in the name
 
-    Inputs:
-    inp_dict must contain:
+    Args:
+      inp_dict must contain:
         fastq_fp (str) Read from
         trunc_fp (str) Write to
         tmpFNA_fp (str) Write to
@@ -841,25 +821,25 @@ def find_barcodes_and_end_of_transposon(inp_dict):
 
 def FindBarcode(seq, quality, model, expStart, expEnd, cfg_d):
     """
-    Inputs (type and definition):
-
-    seq (str) DNA sequence
-    quality (str) quality of sequence
-    model (str) model string
-    expStart (int) Expected Start of barcode within sequence (It is the start of barcode within the model)
-    expEnd (int) Expected end of barcode within sequence (It is the end of the barcode within the model)
-    cfg_d: (dict) (config_dict)
-        wobbleAllowed (int) uncertainty in location of barcode or end of transposon,
-            on either side of expectation
-        minQuality (int) every nucleotide in a barcode must be at least this quality
-        flanking (int) number of nucleotides on each side that must match
-        debug (bool)
-        fastq_fp: (str) The path to the FASTQ file
-        line_num: (int) line number within FASTQ file of quality 
+    Args:
+        seq (str) DNA sequence
+        quality (str) quality of sequence
+        model (str) model string
+        expStart (int) Expected Start of barcode within sequence (It is the start of barcode within the model)
+        expEnd (int) Expected end of barcode within sequence (It is the end of the barcode within the model)
+        cfg_d: (dict) (config_dict)
+            wobbleAllowed (int) uncertainty in location of barcode or end of transposon,
+                on either side of expectation
+            minQuality (int) every nucleotide in a barcode must be at least this quality
+            flanking (int) number of nucleotides on each side that must match
+            debug (bool)
+            fastq_fp: (str) The path to the FASTQ file
+            line_num: (int) line number within FASTQ file of quality 
 
     Returns:
-        barcode: (str) sequence of length ~20 which is the random barcode
-        obsStart: (int) position of first nucleotide of barcode within seq
+        list<barcode, obsStart>
+            barcode: (str) sequence of length ~20 which is the random barcode
+            obsStart: (int) position of first nucleotide of barcode within seq
     """
 
     # undict for readability
@@ -913,13 +893,15 @@ def FindBarcode(seq, quality, model, expStart, expEnd, cfg_d):
 
 def FindSubstr(subseq, seq, expAt, wobble):
     """
-    Here we search for model parts pre and post barcode within a sequence
-    from reads.
+    Description:
+        Here we search for model parts pre and post barcode within a sequence
+        from reads.
 
-    subseq (str) Subsequence within string we're looking for
-    seq (str) Full sequence to search subseq within
-    expAt (int) expected at location of subseq
-    wobble (int) possible interval around expAt for which subseq can be found.
+    Args:
+        subseq (str) Subsequence within string we're looking for
+        seq (str) Full sequence to search subseq within
+        expAt (int) expected at location of subseq
+        wobble (int) possible interval around expAt for which subseq can be found.
     """
     L = len(seq)
     K = len(subseq)
@@ -933,7 +915,7 @@ def FindSubstr(subseq, seq, expAt, wobble):
 
 def FindModelEnd(seq, model, expOff, cfg_d):
     """
-    Inputs: 
+    Args: 
 
     seq: (str) String of Sequence from FASTQ
     model: (str) String of entire model (no PastEnd)
@@ -984,7 +966,7 @@ def RunBLAT8(inp_dict):
         The queries is the tmpFNA sequences - the barcodes reads
         The database is the genome FASTA file
 
-    Inputs:
+    Args:
     
     inp_dict: (dict) must contain
         queriesFile (str) In case A & B: (tmpFNA_fp) 
@@ -1025,37 +1007,34 @@ def RunBLAT8(inp_dict):
 
 def HandleGenomeBLAT(rows, hitsPastEnd, HG_d, debug):
     """
-    This function writes out reads to pre-pool table file
-    Each time this is run is on a single read name- which may correspond to a number
-        of rows in the blat output. If there are multiple hits, the length of rows 
-        input will be > 1, otherwise it is 1.
-        The rows are sorted in decreasing bit score order (already by blat8).
-    IF pastEnd is in the model, then we will have already run blat8 on all the tmpFNA sequences
-        and we compare the scores to the pastEnd scores, which are in "hitsPastEnd" dict.
-    We compare the scores for the queries with the PastEnd to the genome. "Trumping"
-        means that the score for one is greater than the other (*no political affiliation
-        implied in the term). We update hitsPastEnd dict for the read to '0' if the 
-        best genomic hit score trumps the hit-past-end score. 
+    Description:
+        This function writes out reads to pre-pool table file
+        Each time this is run is on a single read name- which may correspond to a number
+            of rows in the blat output. If there are multiple hits, the length of rows 
+            input will be > 1, otherwise it is 1.
+            The rows are sorted in decreasing bit score order (already by blat8).
+        IF pastEnd is in the model, then we will have already run blat8 on all the tmpFNA sequences
+            and we compare the scores to the pastEnd scores, which are in "hitsPastEnd" dict.
+        We compare the scores for the queries with the PastEnd to the genome. "Trumping"
+            means that the score for one is greater than the other (*no political affiliation
+            implied in the term). We update hitsPastEnd dict for the read to '0' if the 
+            best genomic hit score trumps the hit-past-end score. 
 
-
-
-
-
-    Inputs:
-    rows: list of lists, each sub list a blat8 split line (split by tab)
-    hitsPastEnd: (dict) (shortname to score against PastEnd sequence)
-        hitsPastEnd keeps track of "inGenome" sequences that are close 
-        or the same as the pastEnd sequence from the plasmid.
-    debug: (bool)
-    HG_d (dict): Handle Genome Blat dict
-        nPastEndTrumps: (int)  hit to past-end (close to) as good as hit to genome
-        nPastEndIgnored: (int) weak hit to past-end ignored 
-        nMapUnique: (int)
-        nMapped: (int)
-        nameToBarcode: (dict)
-            short_name (str) -> barcode (str)
-        delta: (int) minimum difference in score for considering a hit unique.
-        OUTPUT: file handle for output
+    Args:
+        rows: list of lists, each sub list a blat8 split line (split by tab)
+        hitsPastEnd: (dict) (shortname to score against PastEnd sequence)
+            hitsPastEnd keeps track of "inGenome" sequences that are close 
+            or the same as the pastEnd sequence from the plasmid.
+        debug: (bool)
+        HG_d (dict): Handle Genome Blat dict
+            nPastEndTrumps: (int)  hit to past-end (close to) as good as hit to genome
+            nPastEndIgnored: (int) weak hit to past-end ignored 
+            nMapUnique: (int)
+            nMapped: (int)
+            nameToBarcode: (dict)
+                short_name (str) -> barcode (str)
+            delta: (int) minimum difference in score for considering a hit unique.
+            OUTPUT: file handle for output
 
     """
     if len(rows) == 0:

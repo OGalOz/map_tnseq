@@ -44,6 +44,17 @@ class map_tnseqTest(unittest.TestCase):
         cls.callback_url = os.environ['SDK_CALLBACK_URL']
         suffix = int(time.time() * 1000)
         cls.wsName = "mapTnSeq_Test_" + str(suffix)
+        cls.MTS_Test_Defaults = {
+           'maxReads': None,
+           'minQuality': 5,
+           'minIdentity': 90,
+           'minScore': 15,
+           'delta': 5,
+           'minN': 5,
+           'minFrac': 0.75,
+           'minRatio': 8.0,
+           'maxQBeg': 3.0
+        }
         ret = cls.wsClient.create_workspace({'workspace': cls.wsName})  # noqa
 
     @classmethod

@@ -6,7 +6,7 @@ import subprocess
 #from util.bioparsing import parseFASTA
 #from BCBio import GFF
 from Bio import SeqIO
-
+import traceback
 
 
 '''
@@ -15,33 +15,6 @@ The gene table we'll build will look like:
             locusId (str):sysName (str):type (int):scaffoldId (str):begin (int):end (int):
                 strand (str +/-):name (str):desc (str):GC (float [0,1]):nTA (int)
 '''
-
-
-def convert_genbank_to_gene_table(genbank_filepath, gt_filepath, gffPrlScriptPath):
-    """
-    Deprecated
-    DO NOT USE
-    All inputs are str paths
-    """
-
-
-
-    genbank_filepath = os.path.abspath(genbank_filepath)
-    gt_filepath = os.path.abspath(gt_filepath)
-
-    in_handle = open(genbank_filepath, "r")
-    out_handle = open(gt_filepath +".gff", "w")
-    
-    GFF.write(SeqIO.parse(in_handle, "genbank"), out_handle)
-    
-    in_handle.close()
-    out_handle.close()
-
-    gffToGeneTable_command = "perl " + gffPrlScriptPath + " < " + gt_filepath + ".gff > " + gt_filepath
-    subprocess.call(gffToGeneTable_command, shell=True)
-    logging.info("Wrote Gene Table file to " + gt_filepath)
-    return 0
-
 
 
 
@@ -90,12 +63,6 @@ def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
         #print(g_features[0])
         g_feat_len = len(g_features)
 
-        """
-        scaffoldId_exists= False
-        if "scaffold_name" in config_dict:
-            scaffold_id = config_dict["scaffold_name"]
-            scaffoldId_exists = True
-        """
 
         try:
             for i in range(g_feat_len):
@@ -122,20 +89,6 @@ def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
                 nTA = "null"
 
 
-                """
-                # Scaffold Id
-                if scaffoldId_exists:
-                    if scaffold_id in g_features[i].qualifiers:
-                        scaffold = g_features[i].qualifiers[scaffold_id]
-                    else:
-                        logging.debug("Could not find scaffold id "
-                                "{} in qualifiers:".format(scaffold_id))
-                        logging.debug(g_features[i].qualifiers)
-                        scaffold = "1"
-                else:
-                    scaffold = "1"
-
-                """
 
                 # Begin
                 begin = str(current_feat.location.start + 1)
@@ -173,9 +126,11 @@ def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
                 else:
                     logging.info(f"Did not write annotation for gene with type {typ}")
         except:
+            tb = traceback.format_exc()
             logging.critical("Could not parse all features in genbank file.")
             out_FH.close()
-            raise Exception("Parsing genbank file into gene table failed")
+            raise Exception("Parsing genbank file into gene table failed." + \
+                            "\nTraceback: " + tb)
     
     out_FH.close()
 
@@ -371,6 +326,33 @@ def OLD_convert_genbank_to_gene_table(genbank_filepath, output_filepath, gff_fas
         f.write(output_file_string)
     '''
     return output_filepath
+
+def convert_genbank_to_gene_table(genbank_filepath, gt_filepath, gffPrlScriptPath):
+    """
+    Deprecated
+    DO NOT USE
+    All inputs are str paths
+    """
+
+
+
+    genbank_filepath = os.path.abspath(genbank_filepath)
+    gt_filepath = os.path.abspath(gt_filepath)
+
+    in_handle = open(genbank_filepath, "r")
+    out_handle = open(gt_filepath +".gff", "w")
+    
+    GFF.write(SeqIO.parse(in_handle, "genbank"), out_handle)
+    
+    in_handle.close()
+    out_handle.close()
+
+    gffToGeneTable_command = "perl " + gffPrlScriptPath + " < " + gt_filepath + ".gff > " + gt_filepath
+    subprocess.call(gffToGeneTable_command, shell=True)
+    logging.info("Wrote Gene Table file to " + gt_filepath)
+    return 0
+
+
 
 
 
