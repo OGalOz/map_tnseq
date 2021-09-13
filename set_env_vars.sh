@@ -10,3 +10,6 @@ ui_dir=$PWD/ui/narrative/methods/run_map_tnseq/
 uspec=$ui_dir/spec.json
 udisp=$ui_dir/display.yaml
 Trash=$PWD/../Trash
+
+# clean up
+find . -name '.DS_Store' -type f -delete
