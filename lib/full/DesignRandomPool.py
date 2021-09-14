@@ -327,6 +327,9 @@ def GetVariantsPrintPool(inp_dict):
         nOut += 1
 
     
+    if nOut == 0:
+        raise Exception("No barcodes written to mutant pool. Program exiting.")
+
     inp_dict['POOL_FH'].close()
 
     # Here we reopen the pool, and sort it by position

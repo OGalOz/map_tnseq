@@ -2,6 +2,8 @@
 import os
 import time
 import unittest
+import logging
+import copy
 from configparser import ConfigParser
 
 from map_tnseq.map_tnseqImpl import map_tnseq
@@ -45,6 +47,7 @@ class map_tnseqTest(unittest.TestCase):
         suffix = int(time.time() * 1000)
         cls.wsName = "mapTnSeq_Test_" + str(suffix)
         cls.MTS_Test_Defaults = {
+           'workspace_name': cls.wsName,
            'maxReads': None,
            'minQuality': 5,
            'minIdentity': 90,
@@ -53,7 +56,8 @@ class map_tnseqTest(unittest.TestCase):
            'minN': 5,
            'minFrac': 0.75,
            'minRatio': 8.0,
-           'maxQBeg': 3.0
+           'maxQBeg': 3.0,
+           'KB_Pool_Bool': "no"
         }
         ret = cls.wsClient.create_workspace({'workspace': cls.wsName})  # noqa
 
@@ -63,66 +67,110 @@ class map_tnseqTest(unittest.TestCase):
             cls.wsClient.delete_workspace({'workspace': cls.wsName})
             print('Test workspace was deleted')
 
-    # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
-    def test_your_method(self):
-        # Prepare test objects in workspace if needed using
-        # self.getWsClient().save_objects({'workspace': self.getWsName(),
-        #                                  'objects': []})
-        #
-        # Run your method by
-        # ret = self.getImpl().your_method(self.getContext(), parameters...)
-        #
-        # Check returned data with
-        # self.assertEqual(ret[...], ...) or other unittest methods
-      
-        #str (Dyella)
-        genome_ref = "63063/9/1" 
-        # FASTQs: Short: 52075/4/1 # Long 52075/12/1
-        #list<str> Dyella
-        fastq_ref_list = ["63063/7/1"]
-        # , "62686/28/1"] 
-        #str
-        tnseq_model_name = "pKMW3_universal"
-        #str
-        #gene_table_ref = "62686/5/1"  DEPRECATED
-        # Models: "Custom" #Unknown # model_pKMW3_universal # model_ezTn5_Tet_Bifido 
-        #None or int
-        maxReads = None 
-        #int
-        minQuality = 5
-        #int
-        minIdentity = 90
-        #int
-        minScore = 15
-        #int
-        delta = 5
-        #int
-        minN = 5 #Restriction: Must be at least 1. 
-        #float
-        minFrac = 0.75 #Range 0-1
-        #float
-        minRatio = 8.0 #Range 0 -inf.
-        #float
-        maxQBeg = 3.0
-        pool_description = "Ci Testing"
-        # yes or no
-        KB_Pool_Bool = "yes"
-        output_name = "Keio_Test_July_n1"
 
-        ret = self.serviceImpl.run_map_tnseq(self.ctx, {'workspace_name': self.wsName,
-                                                        'genome_ref': genome_ref ,
-                                                        'tnseq_model_name': tnseq_model_name,
-                                                        'fastq_ref_list': fastq_ref_list,
-                                                        'maxReads': maxReads,
-                                                        'minQuality': minQuality,
-                                                        'minIdentity': minIdentity,
-                                                        'minScore': minScore,
-                                                        'delta': delta,
-                                                        'minN': minN,
-                                                        'minFrac': minFrac,
-                                                        'minRatio': minRatio,
-                                                        'maxQBeg': maxQBeg,
-                                                        'pool_description': pool_description,
-                                                        'KB_Pool_Bool': KB_Pool_Bool,
-                                                        'output_name': output_name,
-                                                            })
+    """
+    Test options:
+        minQuality = 0
+        minIdentity = 99 
+        Multiple scaffolds in a genome
+    """
+
+    # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
+    def test1(self):
+        ##
+        ## Default Test (Quick)
+        ##
+        #"" 
+        # Dyella Japonica
+        genome_ref = "63063/9/1" 
+        fastq_ref_list = ["63063/7/1"]
+        tnseq_model_name = "pKMW3_universal"
+        pool_description = "Testing"
+        output_name = "Test1"
+        test_d = copy.deepcopy(self.MTS_Test_Defaults)
+        test_d["genome_ref"] = genome_ref
+        test_d["fastq_ref_list"] = fastq_ref_list
+        test_d["tnseq_model_name"] = tnseq_model_name
+        test_d["pool_description"] = pool_description 
+        test_d["output_name"] = output_name 
+        #test_d["yy"] = yy 
+        ret = self.serviceImpl.run_map_tnseq(self.ctx, test_d)
+        # Check ret:
+        logging.info("Finished running test 1. Results:")
+        logging.info(ret)
+        #""
+        #pass
+    def test2(self):
+        ## Test Purpose:
+        ##     Multiple FASTQ files
+        ##     & minQuality = 0 
+        #""
+
+        genome_ref = "63063/9/1" 
+        fastq_ref_list = ["63063/7/1", "63063/11/1", "63063/13/1"]
+        tnseq_model_name = "pKMW3_universal"
+        pool_description = "Testing"
+        output_name = "Test1"
+        test_d = copy.deepcopy(self.MTS_Test_Defaults)
+        test_d["genome_ref"] = genome_ref
+        test_d["fastq_ref_list"] = fastq_ref_list
+        test_d["tnseq_model_name"] = tnseq_model_name
+        test_d["pool_description"] = pool_description 
+        test_d["output_name"] = output_name 
+        test_d["minQuality"] = 0 
+        #test_d["yy"] = yy 
+        ret = self.serviceImpl.run_map_tnseq(self.ctx, test_d)
+        # Check ret:
+        logging.info("Finished running test 2. Results:")
+        logging.info(ret)
+        #""
+        #pass
+    def test3(self):
+        ## Test Purpose:
+        ##    New Genome (E Coli Keio) and FASTQs
+        ##    & minIdentity = 99
+
+        # E Coli
+        genome_ref = "63063/3/1" 
+        fastq_ref_list = ["63063/2/1"]
+        tnseq_model_name = "Sc_Tn5"
+        pool_description = "Testing"
+        output_name = "Test1"
+        test_d = copy.deepcopy(self.MTS_Test_Defaults)
+        test_d["genome_ref"] = genome_ref
+        test_d["fastq_ref_list"] = fastq_ref_list
+        test_d["tnseq_model_name"] = tnseq_model_name
+        test_d["pool_description"] = pool_description 
+        test_d["output_name"] = output_name 
+        test_d["minIdentity"] = 99
+        #test_d["yy"] = yy 
+        ret = self.serviceImpl.run_map_tnseq(self.ctx, test_d)
+        # Check ret:
+        logging.info("Finished running test 3. Results:")
+        logging.info(ret)
+        #pass
+
+    def test4(self):
+        ## Test Purpose:
+        ##    New Genome (E Coli Keio) and FASTQs
+        ##    & minIdentity = 1
+
+        # E Coli
+        genome_ref = "63063/3/1" 
+        fastq_ref_list = ["63063/2/1"]
+        tnseq_model_name = "Sc_Tn5"
+        pool_description = "Testing"
+        output_name = "Test1"
+        test_d = copy.deepcopy(self.MTS_Test_Defaults)
+        test_d["genome_ref"] = genome_ref
+        test_d["fastq_ref_list"] = fastq_ref_list
+        test_d["tnseq_model_name"] = tnseq_model_name
+        test_d["pool_description"] = pool_description 
+        test_d["output_name"] = output_name 
+        test_d["minIdentity"] = 1
+        #test_d["yy"] = yy 
+        ret = self.serviceImpl.run_map_tnseq(self.ctx, test_d)
+        # Check ret:
+        logging.info("Finished running test 4. Results:")
+        logging.info(ret)
+        #pass

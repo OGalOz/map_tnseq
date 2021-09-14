@@ -44,7 +44,7 @@ def RunPoolStatsPy(mutant_pool_fp, genes_table_fp, nTotalReads, op_dir="."):
     # have the right columns.
     pool_df = pd.read_table(mutant_pool_fp, sep="\t") 
     if pool_df.shape[0] == 0:
-        raise Exception("No rows in mutant pool: " + mutant_pool_fp)
+        raise Exception("No rows in mutant pool file - no barcodes found: " + mutant_pool_fp)
     for col_name in ["nTot", "n", "scaffold", "strand", "pos"]:
         if col_name not in pool_df.columns:
             raise Exception("Mutant pool missing column name: " + col_name)

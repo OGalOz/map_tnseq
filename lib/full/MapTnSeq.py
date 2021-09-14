@@ -65,7 +65,7 @@ def RunMapTnSeq(input_args, DEBUGPRINT=False):
 
 
     if parsed_vars['pastEnd'] is not None and parsed_vars['pastEnd'] != '':
-        # generates the dict "hitsPastEnd", runs BLAT8 
+        # generates the dict "hitsPastEnd", runs BLAT8 on PastEnd
         hitsPastEnd = pastEndBLAT8(parsed_vars)
     else:
         hitsPastEnd = {}
@@ -75,7 +75,8 @@ def RunMapTnSeq(input_args, DEBUGPRINT=False):
 
     # Creates Output File Handle, to be closed later.
     # Also writes much to MapTnSeq table output
-    OUTPUT, HG_d = Map_to_genome(parsed_vars)
+    # Runs BLAT8 on the genome
+    OUTPUT, HG_d = Map_to_genomeBLAT8(parsed_vars)
     parsed_vars['OUTPUT'] = OUTPUT
     parsed_vars.update(HG_d)
 
@@ -382,7 +383,7 @@ def WriteUnMappedFile(inp_dict):
 
 
 
-def Map_to_genome(inp_dict):
+def Map_to_genomeBLAT8(inp_dict):
     """
     Description:
         This function first runs BLAT8 on the Good Reads file (TMPFNA) as a query
@@ -399,7 +400,7 @@ def Map_to_genome(inp_dict):
         mapnames: (dict)
         tmpFNA_fp: (str)
         genome_fp: (str) One of the inputs to the program (as genome) should
-            be a FASTA file
+            be a FA file
         blatcmd: (str) (Location of blat8 in OS)
         tmp_dir: (str) path to working dir
         blatcmd: (str) Path to BLAT command, i.e. Bin/blat

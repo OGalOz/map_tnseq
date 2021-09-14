@@ -13,7 +13,7 @@ from installed_clients.WorkspaceClient import Workspace
 from installed_clients.rbts_genome_to_genetableClient import rbts_genome_to_genetable
 from Bio import SeqIO
 from full.FullProgram import CompleteRun
-from util.PrepareIO import PrepareProgramInputs, PrepareUserOutputs
+from util.PrepareIO import PrepareProgramInputs, PrepareUserOutputs, clear_dir
 #END_HEADER
 
 
@@ -105,6 +105,9 @@ class map_tnseq:
         #BEGIN run_map_tnseq
         
         logging.basicConfig(level=logging.DEBUG)
+        if len(os.listdir(self.shared_folder)) > 0:
+            logging.info("Clearing scratch directory")
+            clear_dir(self.shared_folder)
 
         # Preparing main classes - dfu, gfu, genetableobj, workspace
         dfu = DataFileUtil(self.callback_url)

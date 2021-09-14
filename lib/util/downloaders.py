@@ -38,7 +38,7 @@ def get_fa_from_scratch(scratch_dir):
     all_fna_fps = []
     for f in scratch_files:
         if f[-2:] == "fa":
-            all_fna_fps.append(fna_fp)
+            all_fna_fps.append(f)
 
     if len(all_fna_fps) > 1:
         raise Exception("Multiple .fa files in scratch directory. Expecting only one: " + \
@@ -48,7 +48,7 @@ def get_fa_from_scratch(scratch_dir):
     else:
         fna_fp = all_fna_fps[0]
 
-    return fna_fp
+    return os.path.join(scratch_dir, fna_fp)
 
 
 def download_genes_table(ref, dfu, op_fp):

@@ -29,19 +29,30 @@ def CreateHTMLdir(tmp_dir, html_display_files_dir):
     stats_dir = os.path.join(JS_dir, "StatsDisplay")
     os.mkdir(stats_dir)
 
-    shutil.move(os.path.join(html_display_files_dir, "FullDisplay_index.html"), html_dir)
-    shutil.move(os.path.join(html_display_files_dir, "FullDisplay_Defaults.js"), JS_dir)
-    shutil.move(os.path.join(html_display_files_dir, "FullDisplayFuncs.js"), JS_dir)
-    shutil.move(os.path.join(html_display_files_dir, "LayoutUtil.js"), JS_dir)
-    shutil.move(os.path.join(html_display_files_dir, "d3-zoom.min.js"), JS_dir)
-    shutil.move(os.path.join(html_display_files_dir, "d3.min.js"), JS_dir)
-    shutil.move(os.path.join(html_display_files_dir, "BCExpandingBarChartFuncs.js"), EBC_dir)
-    shutil.move(os.path.join(html_display_files_dir, "BCDefaults.js"), EBC_dir)
-    shutil.move(os.path.join(html_display_files_dir, "MakeStatsDiv.js"), stats_dir)
-    shutil.move(os.path.join(html_display_files_dir, "StatsDefaults.js"), stats_dir)
-    shutil.move(os.path.join(html_display_files_dir, "MhtnDefaults.js"), MH_dir)
-    shutil.move(os.path.join(html_display_files_dir, "MhtnPlotExpandFuncs.js"), MH_dir)
-    #shutil.move(os.path.join(html_display_files_dir, plc), res_dir)
+    shutil.copyfile(os.path.join(html_display_files_dir, "FullDisplay_index.html"),
+        os.path.join(html_dir, "FullDisplay_index.html"))
+    shutil.copyfile(os.path.join(html_display_files_dir, "FullDisplay_Defaults.js"),
+        os.path.join(JS_dir, "FullDisplay_Defaults.js"))
+    shutil.copyfile(os.path.join(html_display_files_dir, "FullDisplayFuncs.js"),
+        os.path.join(JS_dir, "FullDisplayFuncs.js"))
+    shutil.copyfile(os.path.join(html_display_files_dir, "LayoutUtil.js"),
+        os.path.join(JS_dir, "LayoutUtil.js"))
+    shutil.copyfile(os.path.join(html_display_files_dir, "d3-zoom.min.js"),
+        os.path.join(JS_dir, "d3-zoom.min.js"))
+    shutil.copyfile(os.path.join(html_display_files_dir, "d3.min.js"),
+        os.path.join(JS_dir, "d3.min.js"))
+    shutil.copyfile(os.path.join(html_display_files_dir, "BCExpandingBarChartFuncs.js"),
+        os.path.join(EBC_dir, "BCExpandingBarChartFuncs.js"))
+    shutil.copyfile(os.path.join(html_display_files_dir, "BCDefaults.js"),
+        os.path.join(EBC_dir, "BCDefaults.js"))
+    shutil.copyfile(os.path.join(html_display_files_dir, "MakeStatsDiv.js"),
+        os.path.join(stats_dir, "MakeStatsDiv.js"))
+    shutil.copyfile(os.path.join(html_display_files_dir, "StatsDefaults.js"),
+        os.path.join(stats_dir, "StatsDefaults.js"))
+    shutil.copyfile(os.path.join(html_display_files_dir, "MhtnDefaults.js"),
+        os.path.join(MH_dir, "MhtnDefaults.js"))
+    shutil.copyfile(os.path.join(html_display_files_dir, "MhtnPlotExpandFuncs.js"),
+        os.path.join(MH_dir, "MhtnPlotExpandFuncs.js"))
 
     return [stats_dir, EBC_dir, MH_dir]
     
