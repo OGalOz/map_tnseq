@@ -1,4 +1,4 @@
-dir#python3
+#python3
 import os
 import logging
 import sys
@@ -161,34 +161,21 @@ def download_table_from_ref_to_dir(ref, ret_dp, dfu):
 
 
 
-def download_fastq(dfu, fastq_refs_list, scratch_dir, output_fp):
-    # We get multiple shock objects at once.
-    get_shock_id_params = {"object_refs": fastq_refs_list, 
-            "ignore_errors": False}
-    get_objects_results = dfu.get_objects(get_shock_id_params)
-    logging.debug(get_objects_results['data'][0])
-    logging.debug(len(get_objects_results['data']))
-    
-    # We want to associate a ref with a filename and get a dict that has this
-    # association
-
-    raise Exception("STOP - INCOMPLETE")
-    fq_shock_id = get_objects_results['data'][0]['data']['lib']['file']['id']
-    fastq_download_params = {'shock_id': fq_shock_id,'file_path': fastq_fp, 'unpack':'unpack'}
-    #Here we download the fastq file itself:
-    logging.info("DOWNLOADING FASTQ FILE " + str(i))
-    file_info = dfu.shock_to_file(fastq_download_params)
-    logging.info(file_info)
-
 
 
 def DownloadFASTQs(dfu, fastq_ref_list, output_dir):
     """
-    dfu: DataFileUtil Object
-    fastq_ref_list: (list<s>) list of refs 'A/B/C' A,B,C are integers
-    output_dir: (s) Path to scratch directory or tmp_dir
+    Args:
+        dfu: DataFileUtil Object
+        fastq_ref_list: (list<s>) list of refs 'A/B/C' A,B,C are integers
+        output_dir: (s) Path to scratch directory or tmp_dir
+    Returns:
+        list<fastq_fp_l, orig_fq_fns>
+            fastq_fp_l (list<str>): List of fastq download locations
+            orig_fq_fns (list<str>): List of original fastq names
     """
     fastq_fp_l = []
+    orig_fq_fns = []
 
 
     for i in range(len(fastq_ref_list)):
@@ -199,8 +186,9 @@ def DownloadFASTQs(dfu, fastq_ref_list, output_dir):
         fastq_fp = os.path.join(output_dir, fastq_fn)
         get_shock_id_params = {"object_refs": [crnt_fastq_ref], "ignore_errors": False}
         get_objects_results = dfu.get_objects(get_shock_id_params)
-
-        # We should try to get file name from Get Objects Results
+        logging.info(get_objects_results)
+        original_file_name = get_objects_results['data'][0]['info'][1]
+        orig_fq_fns.append(original_file_name)
         fq_shock_id = get_objects_results['data'][0]['data']['lib']['file']['id']
         fastq_download_params = {'shock_id': fq_shock_id,'file_path': fastq_fp, 'unpack':'unpack'}
         #Here we download the fastq file itself:
@@ -209,7 +197,7 @@ def DownloadFASTQs(dfu, fastq_ref_list, output_dir):
         logging.info(file_info)
         fastq_fp_l.append(fastq_fp)
 
-    return fastq_fp_l
+    return [fastq_fp_l, orig_fq_fns]
 
 
 def GetGenomeOrganismName(ws, genome_ref):
@@ -253,4 +241,23 @@ def test():
     get_gene_table_config_dict(
             '/Users/omreeg/tmp/Test_Files/E_Coli_BW25113.gbk')
 
+
+def download_fastq(dfu, fastq_refs_list, scratch_dir, output_fp):
+    # We get multiple shock objects at once.
+    get_shock_id_params = {"object_refs": fastq_refs_list, 
+            "ignore_errors": False}
+    get_objects_results = dfu.get_objects(get_shock_id_params)
+    logging.debug(get_objects_results['data'][0])
+    logging.debug(len(get_objects_results['data']))
+    
+    # We want to associate a ref with a filename and get a dict that has this
+    # association
+
+    raise Exception("STOP - INCOMPLETE")
+    fq_shock_id = get_objects_results['data'][0]['data']['lib']['file']['id']
+    fastq_download_params = {'shock_id': fq_shock_id,'file_path': fastq_fp, 'unpack':'unpack'}
+    #Here we download the fastq file itself:
+    logging.info("DOWNLOADING FASTQ FILE " + str(i))
+    file_info = dfu.shock_to_file(fastq_download_params)
+    logging.info(file_info)
 

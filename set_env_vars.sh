@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 chome=$PWD
 impl=$PWD/lib/map_tnseq/map_tnseqImpl.py
 tst=$PWD/test/map_tnseq_server_test.py
@@ -10,6 +11,9 @@ ui_dir=$PWD/ui/narrative/methods/run_map_tnseq/
 uspec=$ui_dir/spec.json
 udisp=$ui_dir/display.yaml
 Trash=$PWD/../Trash
+
+#Docker fix
+docker run -it -v /var/run/docker.sock:/run/docker.sock alpine chmod g+w /run/docker.sock
 
 # clean up
 find . -name '.DS_Store' -type f -delete

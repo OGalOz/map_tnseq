@@ -77,9 +77,10 @@ def PrepareProgramInputs(params, cfg_d):
 
     # FASTQs output dir
     fq_dir = os.path.join(cfg_d['tmp_dir'], "FASTQs")
-    fastq_fp_l = DownloadFASTQs(cfg_d['dfu'], vp['fastq_ref_list'], fq_dir )
+    fastq_fp_l, orig_fq_fns = DownloadFASTQs(cfg_d['dfu'], vp['fastq_ref_list'], fq_dir )
 
     cfg_d['fastq_fp_l'] = fastq_fp_l
+    cfg_d['orig_fq_fns'] = orig_fq_fns 
 
 
     MTS_cfg_d, DRP_cfg_d = Create_MTS_DRP_config(cfg_d, vp)
@@ -97,7 +98,7 @@ def PrepareProgramInputs(params, cfg_d):
 
     MTS_cfg_d, DRP_cfg_d = None, None
 
-    pool_op_fp = os.path.join( cfg_d["tmp_dir"] ,vp["output_name"] + ".pool")
+    pool_op_fp = os.path.join(cfg_d["tmp_dir"] ,vp["output_name"] + ".pool")
 
     return [pool_op_fp, vp, genome_scientific_name]
 
@@ -214,6 +215,7 @@ def Create_MTS_DRP_config(cfg_d, vp):
             "minScore": vp["minScore"],
             "delta": vp["delta"],
             "fastq_fp_list":  cfg_d['fastq_fp_l'],
+            "orig_fq_fns":  cfg_d['orig_fq_fns'],
             "genome_fp": cfg_d['genome_fna_fp']
         }
     }
