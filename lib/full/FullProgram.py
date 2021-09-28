@@ -70,6 +70,7 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm,
 
 
     # Loading MapTNSEQ Config Dictionary from JSON to python
+    # why do we load this to JSON instead of passing it around as a python dict?
     with open(map_cfg_fp, "r") as g:
         map_cfg = json.loads(g.read())["values"]
 
@@ -116,16 +117,8 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm,
 
         current_map_cfg["fastq_fp"] = map_cfg['fastq_fp_list'][i]
 
-        # Here we write the output filepath of the program 
-        if i < 10:
-            prefix = "00"
-        elif i < 100:
-            prefix = "0"
-        else:
-            prefix = ""
-
         # (current MapTnSeq Table File)
-        cMTS_output_fp = os.path.join(tmp_dir, "MTS_Table_" + prefix + str(i) + ".tsv")
+        cMTS_output_fp = os.path.join(tmp_dir, "MTS_Table_" + str(i).zfill(3) + ".tsv")
         current_map_cfg['output_fp'] = cMTS_output_fp
         MapTS_Output_fps.append(cMTS_output_fp)
 
