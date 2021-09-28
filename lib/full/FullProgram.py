@@ -80,7 +80,7 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm,
         drp_cfg = json.loads(g.read())["values"]
     
     # Initializing dict to be used for HTML generation
-    pre_HTML_d = {"genome_name": gnm_nm}
+    pre_HTML_d = {"genome_name": gnm_nm, "orig_fq_fns": map_cfg["orig_fq_fns"]}
 
 
     # We know what model we're using
