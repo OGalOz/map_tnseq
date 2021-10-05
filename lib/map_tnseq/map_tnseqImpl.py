@@ -11,7 +11,6 @@ from installed_clients.AssemblyUtilClient import AssemblyUtil
 from installed_clients.DataFileUtilClient import DataFileUtil
 from installed_clients.WorkspaceClient import Workspace
 from installed_clients.rbts_genome_to_genetableClient import rbts_genome_to_genetable
-from Bio import SeqIO
 from full.FullProgram import CompleteRun
 from util.PrepareIO import PrepareProgramInputs, PrepareUserOutputs, clear_dir
 #END_HEADER
