@@ -66,7 +66,7 @@ def PrepareProgramInputs(params, cfg_d):
     # Note that this gene table will be created at workdir/g2gt_results/genes.GC
     g2gt_results = cfg_d['gt_obj'].genome_to_genetable({'genome_ref': vp['genome_ref']})
     logging.info(g2gt_results)
-    cfg_d['gene_table_fp'] = os.path.join(os.path.join(cfg_d['tmp_dir'], 'g2gt_results'), 'genes.GC')
+    cfg_d['gene_table_fp'] = os.path.join(cfg_d['tmp_dir'], 'g2gt_results', 'genes.GC')
 
 
     model_str, past_end_str = get_model_and_pastEnd_strs(vp['tnseq_model_name'])

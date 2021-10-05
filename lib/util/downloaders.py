@@ -37,7 +37,10 @@ def get_fa_from_scratch(scratch_dir):
     scratch_files = os.listdir(scratch_dir)
     all_fna_fps = []
     for f in scratch_files:
-        if f[-2:] == "fa":
+        # some fasta files may end with 'fasta'
+        if f.endswith('.fa'):
+            all_fna_fps.append(f)
+        if f.endswith('.fasta'):
             all_fna_fps.append(f)
 
     if len(all_fna_fps) > 1:

@@ -164,7 +164,9 @@
             "optional": true,
             "advanced": true,
             "text_options" : {
-                "validate_as" : "float"
+                "validate_as" : "float",
+                "max_float": 1.00,
+                "min_float": 0.00
             },
             "allow_multiple": false,
             "default_values": [ "0.75" ],
