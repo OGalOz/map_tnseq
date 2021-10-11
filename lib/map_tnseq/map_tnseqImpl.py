@@ -133,10 +133,7 @@ class map_tnseq:
                 "model_dir": td, 
                 "gene_table_fp": os.path.join(td, "genes.GC"),
                 "blat_cmd": "/kb/module/lib/map_tnseq/blat",
-                "unmapped_fp": os.path.join(td, "UNMAPPED.fna"),
-                "tmpFNA_fp": os.path.join(td,"TMP.fna"),
-                "trunc_fp": os.path.join(td, "TRUNC.fna"),
-                "endFNA_fp": os.path.join(td, "END.fna"),
+                "mts_tables_dir": os.path.join(td, "MTS_Tables"),
                 "R_fp": "/kb/module/lib/map_tnseq/PoolStats.R",
                 "R_op_fp": os.path.join(td, "R_results.txt"),
                 "MTS_cfg_fp": os.path.join(td, "maptnseqconfig.json"),
@@ -144,9 +141,16 @@ class map_tnseq:
                 "css_style_fp": "/kb/module/lib/map_tnseq/style.css"
         }
         
+        '''
+            "unmapped_fp": os.path.join(td, "UNMAPPED.fna"),
+            "tmpFNA_fp": os.path.join(td,"TMP.fna"),
+            "trunc_fp": os.path.join(td, "TRUNC.fna"),
+            "endFNA_fp": os.path.join(td, "END.fna"),
+        '''
+        
         # We divide the program into 3 parts:
         # Part 1: Prepare to run program: Download necessary files, create configs
-        pool_op_fp, vp, genome_scientific_name = PrepareProgramInputs(params, cfg_d)
+        pool_op_fp, vp, genome_scientific_name, mts_cfg_d, drp_cfg_d = PrepareProgramInputs(params, cfg_d)
 
 
         # Part 1.5: Prepare vars 
@@ -155,7 +159,7 @@ class map_tnseq:
         cfg_d["Main_HTML_report_fp"] = html_fp
 
         # Part 2: Run the central part of the program using recently created config files
-        CompleteRun(cfg_d["MTS_cfg_fp"], cfg_d["DRP_cfg_fp"],
+        CompleteRun(mts_cfg_d, drp_cfg_d,
                     cfg_d["tmp_dir"], pool_op_fp, genome_scientific_name,
                     vp["KB_Pool_Bool"], cfg_d, vp)
 

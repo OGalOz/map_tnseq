@@ -25,16 +25,14 @@ Note:
     designrandompool needs genes.GC, 
 """
 
-def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm, 
+def CompleteRun(map_cfg_d, drp_cfg_d, tmp_dir, pool_output_fp, gnm_nm, 
                 KB_pool_bool, cfg_d, vp,
                 models_dir=None):
     """
     Args:
-        map_cfg_d (str): Path to config JSON dict for MapTnSeq 
-            Among others, contains keys:
-                genome_fp: (file path to genome fna file in tmp dir)
+        map_cfg_d (str): Map TnSeq Config Dict 
 
-        drp_cfg_fp (str): Path to config JSON dict for Design Random Pool
+        drp_cfg_d (dict): Design Random Pool Config Dict
 
         tmp_dir (str): Path to directory
 
@@ -64,20 +62,13 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm,
     """
 
     # Checking inputs exist
-    for x in [map_cfg_fp, drp_cfg_fp]:
-        if not os.path.exists(x):
-            raise Exception(x + " does not exist, cannot run without configs")
+    for x in [map_cfg_d, drp_cfg_d]:
+        if not isinstance(x, dict):
+            raise Exception("Config dict not dict as expected, instead " + str(type(x)))
 
+    map_cfg = map_cfg_d["values"]
 
-    # Loading MapTNSEQ Config Dictionary from JSON to python
-    # why do we load this to JSON instead of passing it around as a python dict?
-    with open(map_cfg_fp, "r") as g:
-        map_cfg = json.loads(g.read())["values"]
-
-    # LOADING DESIGN RANDOM POOL Config Dictionary from JSON to python
-    # to be used after map tn seq has finished running
-    with open(drp_cfg_fp, "r") as g:
-        drp_cfg = json.loads(g.read())["values"]
+    drp_cfg = drp_cfg_d["values"]
     
     # Initializing dict to be used for HTML generation
     pre_HTML_d = {"genome_name": gnm_nm, "orig_fq_fns": map_cfg["orig_fq_fns"]}
@@ -112,15 +103,24 @@ def CompleteRun(map_cfg_fp, drp_cfg_fp, tmp_dir, pool_output_fp, gnm_nm,
     map_cfg['modeltest'] = False 
 
     current_map_cfg = copy.deepcopy(map_cfg)
+    mts_tables_dir = cfg_d["mts_tables_dir"]
 
     for i in range(num_mts_runs):
 
         current_map_cfg["fastq_fp"] = map_cfg['fastq_fp_list'][i]
 
-        # (current MapTnSeq Table File)
-        cMTS_output_fp = os.path.join(tmp_dir, "MTS_Table_" + str(i).zfill(3) + ".tsv")
+        # New code
+        current_mts_table_dir = os.path.join(mts_tables_dir, str(i).zfill(3))
+        os.mkdir(current_mts_table_dir)
+
+        cMTS_output_fp = os.path.join(current_mts_table_dir, "MTS_Table.tsv")
         current_map_cfg['output_fp'] = cMTS_output_fp
         MapTS_Output_fps.append(cMTS_output_fp)
+
+        current_map_cfg['unmapped_fp'] = os.path.join(current_mts_table_dir, 'UNMAPPED.fna')
+        current_map_cfg['tmpFNA_fp'] = os.path.join(current_mts_table_dir, 'TMP.fna')
+        current_map_cfg['trunc_fp'] = os.path.join(current_mts_table_dir, 'TRUNC.fna')
+        current_map_cfg['endFNA_fp'] = os.path.join(current_mts_table_dir, 'END.fna')
 
         logging.info("Running MapTnSeq on {}.\n Output {}".format(
                                                 current_map_cfg["fastq_fp"], cMTS_output_fp))

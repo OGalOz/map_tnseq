@@ -1,10 +1,10 @@
 #
 # define display information
 #
-name: RBTnSeq Mapping 
+name: RBTnSeq Maps to Pool
 
 tooltip: |
-    TnSeq Map Barcodes to the Genome 
+    TnSeq Map Barcodes to the Genome and Design Pool
 
 
 screenshots: []

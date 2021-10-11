@@ -32,7 +32,7 @@ def PrepareProgramInputs(params, cfg_d):
             tmpFNA_fp: (s) Path to tmp fna (write)
             trunc_fp: (s) Path to Trunc (write)
             endFNA_fp: (s) Path to endFNA (write)
-            R_fp: (s) Path to PoolStats.R file
+            ##R_fp: (s) Path to PoolStats.R file
             R_op_fp: (s) Path to write R
             MTS_cfg_fp: (s) Path to write MapTnSeq Config
             DRP_cfg_fp: (s) Path to write Design Random Pool Config
@@ -82,6 +82,8 @@ def PrepareProgramInputs(params, cfg_d):
     cfg_d['fastq_fp_l'] = fastq_fp_l
     cfg_d['orig_fq_fns'] = orig_fq_fns 
 
+    # We make the map tn seq tables directory
+    os.mkdir(cfg_d["mts_tables_dir"])
 
     MTS_cfg_d, DRP_cfg_d = Create_MTS_DRP_config(cfg_d, vp)
 
@@ -96,11 +98,10 @@ def PrepareProgramInputs(params, cfg_d):
     logging.info("Wrote both config files. MTS at {}, DRP at {}".format(
                 cfg_d["MTS_cfg_fp"], cfg_d["DRP_cfg_fp"]))
 
-    MTS_cfg_d, DRP_cfg_d = None, None
 
     pool_op_fp = os.path.join(cfg_d["tmp_dir"] ,vp["output_name"] + ".pool")
 
-    return [pool_op_fp, vp, genome_scientific_name]
+    return [pool_op_fp, vp, genome_scientific_name, MTS_cfg_d, DRP_cfg_d]
 
 
 def PrepareUserOutputs(vp, cfg_d):
@@ -135,6 +136,8 @@ def PrepareUserOutputs(vp, cfg_d):
     # We move files to this directory (mutant pool & gene table)
     shutil.copy(cfg_d['pool_fp'], res_dir)
     shutil.copy(cfg_d["gene_table_fp"], res_dir)
+    # Move the Map TnSeq Tables to the output directory
+    shutil.copytree(cfg_d["mts_tables_dir"], os.path.join(res_dir, "MTS_Tables"))
 
 
     # Returning file in zipped format:-------------------------------
