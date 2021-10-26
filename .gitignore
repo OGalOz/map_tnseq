@@ -7,4 +7,5 @@ lib/map_tnseq/MapTnSeq_Program/Test_Files/
 .trash
 x.tst
 __pycache__/
+.DS_Store
 

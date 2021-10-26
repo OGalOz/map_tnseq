@@ -207,10 +207,6 @@ def Create_MTS_DRP_config(cfg_d, vp):
             "tileSize": 11,
             "stepSize": 11,
             "blatcmd": cfg_d["blat_cmd"],
-            "unmapped_fp": cfg_d["unmapped_fp"],
-            "tmpFNA_fp": cfg_d["tmpFNA_fp"],
-            "trunc_fp": cfg_d["trunc_fp"],
-            "endFNA_fp": cfg_d["endFNA_fp"],
             "model_fp": cfg_d["model_fp"],
             "maxReads": vp["maxReads"],
             "minQuality": vp["minQuality"],
@@ -222,6 +218,12 @@ def Create_MTS_DRP_config(cfg_d, vp):
             "genome_fp": cfg_d['genome_fna_fp']
         }
     }
+    """
+            "unmapped_fp": cfg_d["unmapped_fp"],
+            "tmpFNA_fp": cfg_d["tmpFNA_fp"],
+            "trunc_fp": cfg_d["trunc_fp"],
+            "endFNA_fp": cfg_d["endFNA_fp"],
+    """
 
 
     design_random_pool_config_dict = {
