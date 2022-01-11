@@ -44,7 +44,7 @@ def upload_mutantpool_to_KBase(up):
 
     # We create the data for the object
     pool_data = {
-        "file_type": "KBaseRBTnSeq.RBTS_MutantPool",
+        "version_num": "1",
         "mutantpool": res_handle["hid"],
         # below should be shock
         "handle_type": res_handle["type"],
