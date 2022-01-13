@@ -93,6 +93,7 @@ class map_tnseqTest(unittest.TestCase):
         test_d["tnseq_model_name"] = tnseq_model_name
         test_d["pool_description"] = pool_description 
         test_d["output_name"] = output_name 
+        test_d["app_test"] = True 
         #test_d["yy"] = yy 
         ret = self.serviceImpl.run_map_tnseq(self.ctx, test_d)
         # Check ret:
@@ -118,6 +119,7 @@ class map_tnseqTest(unittest.TestCase):
         test_d["pool_description"] = pool_description 
         test_d["output_name"] = output_name 
         test_d["minQuality"] = 0 
+        test_d["app_test"] = True 
         #test_d["yy"] = yy 
         ret = self.serviceImpl.run_map_tnseq(self.ctx, test_d)
         # Check ret:
@@ -143,6 +145,7 @@ class map_tnseqTest(unittest.TestCase):
         test_d["pool_description"] = pool_description 
         test_d["output_name"] = output_name 
         test_d["minIdentity"] = 99
+        test_d["app_test"] = True 
         #test_d["yy"] = yy 
         ret = self.serviceImpl.run_map_tnseq(self.ctx, test_d)
         # Check ret:
@@ -168,6 +171,7 @@ class map_tnseqTest(unittest.TestCase):
         test_d["pool_description"] = pool_description 
         test_d["output_name"] = output_name 
         test_d["minIdentity"] = 1
+        test_d["app_test"] = True 
         #test_d["yy"] = yy 
         ret = self.serviceImpl.run_map_tnseq(self.ctx, test_d)
         # Check ret:

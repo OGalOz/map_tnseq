@@ -3,7 +3,7 @@
 import logging
 import os
 import subprocess
-#import shutil
+import shutil
 
 from installed_clients.KBaseReportClient import KBaseReport
 from installed_clients.GenomeFileUtilClient import GenomeFileUtil
@@ -104,9 +104,14 @@ class map_tnseq:
         #BEGIN run_map_tnseq
         
         logging.basicConfig(level=logging.DEBUG)
-        if len(os.listdir(self.shared_folder)) > 0:
-            logging.info("Clearing scratch directory")
-            clear_dir(self.shared_folder)
+
+        if params["app_test"]:
+            x = os.listdir(self.shared_folder)
+            if len(x) > 0:
+                shutil.rmtree(self.shared_folder)
+                logging.info("Cleaning shared folder after multiple tests.")
+                os.mkdir(self.shared_folder)
+
 
         # Preparing main classes - dfu, gfu, genetableobj, workspace
         dfu = DataFileUtil(self.callback_url)
@@ -150,7 +155,8 @@ class map_tnseq:
         
         # We divide the program into 3 parts:
         # Part 1: Prepare to run program: Download necessary files, create configs
-        pool_op_fp, vp, genome_scientific_name, mts_cfg_d, drp_cfg_d = PrepareProgramInputs(params, cfg_d)
+        ppi_res = PrepareProgramInputs(params, cfg_d)
+        pool_op_fp, vp, genome_scientific_name, mts_cfg_d, drp_cfg_d = ppi_res
 
 
         # Part 1.5: Prepare vars 
@@ -164,6 +170,8 @@ class map_tnseq:
                     vp["KB_Pool_Bool"], cfg_d, vp)
 
 
+        logging.info("Completed running MapTnSeq, preparing report.")
+        
         # Part 3: Prepare final output to return to user
         report_params = PrepareUserOutputs(vp, cfg_d)
 

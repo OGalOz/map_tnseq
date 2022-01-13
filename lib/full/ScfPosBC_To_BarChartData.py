@@ -37,8 +37,8 @@ def ScfPosBC_Info_To_Scaffolds(ScfPosBC_fp, tick_range_threshold, gene_table_fp,
     scf_len_d, scf_seq_d = GetScaffoldLengths(genome_fna_fp)
     scf_locs_d, scf_gene_id_d = GenesTableToLocsDict(gene_table_fp, scf_len_d)
 
-    logging.critical("SCF LOCS D:")
-    logging.critical(scf_locs_d)
+    #logging.critical("SCF LOCS D:")
+    #logging.critical(scf_locs_d)
 
     # Each of above dicts scf_locs_d & scf_gene_id_d are divided into scaffolds by scf_name
 
