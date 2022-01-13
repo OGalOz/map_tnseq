@@ -105,7 +105,7 @@ class map_tnseq:
         
         logging.basicConfig(level=logging.DEBUG)
 
-        if if "app_test" in params and params["app_test"]:
+        if "app_test" in params and params["app_test"]:
             x = os.listdir(self.shared_folder)
             if len(x) > 0:
                 shutil.rmtree(self.shared_folder)
