@@ -164,8 +164,9 @@ class map_tnseq:
         cfg_d["workspace_name"] = params["workspace_name"]
         cfg_d["Main_HTML_report_fp"] = html_fp
 
-        # Part 2: Run the central part of the program using recently created config files
-        CompleteRun(mts_cfg_d, drp_cfg_d,
+        # Part 2: Run the central part of the program using 
+        # the recently created config files
+        op_ref = CompleteRun(mts_cfg_d, drp_cfg_d,
                     cfg_d["tmp_dir"], pool_op_fp, genome_scientific_name,
                     vp["KB_Pool_Bool"], cfg_d, vp)
 
@@ -173,7 +174,7 @@ class map_tnseq:
         logging.info("Completed running MapTnSeq, preparing report.")
         
         # Part 3: Prepare final output to return to user
-        report_params = PrepareUserOutputs(vp, cfg_d)
+        report_params = PrepareUserOutputs(vp, cfg_d, op_ref=op_ref)
 
         #Returning file in zipped format:-------------------------------------
         report_util = KBaseReport(self.callback_url)

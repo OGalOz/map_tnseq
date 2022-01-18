@@ -143,6 +143,7 @@ def CompleteRun(map_cfg_d, drp_cfg_d, tmp_dir, pool_output_fp, gnm_nm,
 
 
     # Here we upload the mutant pool to KBase to make a mutantpool Object
+    op_ref = None
     if KB_pool_bool:
         logging.info("UPLOADING mutant pool to KBASE through DataFileUtil")
         upload_params = {
@@ -161,6 +162,7 @@ def CompleteRun(map_cfg_d, drp_cfg_d, tmp_dir, pool_output_fp, gnm_nm,
         upload_mutantpool_results = upload_mutantpool_to_KBase(upload_params)
         logging.info("Upload mutant pool Results:")
         logging.info(upload_mutantpool_results)
+        op_ref = upload_mutantpool_results['ref']
 
 
     logging.info("Beginning to create HTML Directory.")
@@ -207,7 +209,8 @@ def CompleteRun(map_cfg_d, drp_cfg_d, tmp_dir, pool_output_fp, gnm_nm,
     MH_data_fp = os.path.join(MH_dir, "MH_Data.js")
     PosScfBCDataToZScrPointsForValues(scfPosBC_fp, MH_data_fp, "1")
 
-    return None
+    # op_ref (ref to output pool) is None if no upload occured
+    return op_ref 
 
 
 

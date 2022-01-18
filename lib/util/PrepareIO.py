@@ -104,7 +104,7 @@ def PrepareProgramInputs(params, cfg_d):
     return [pool_op_fp, vp, genome_scientific_name, MTS_cfg_d, DRP_cfg_d]
 
 
-def PrepareUserOutputs(vp, cfg_d):
+def PrepareUserOutputs(vp, cfg_d, op_ref=None):
     """
     cfg_d:
         username: s,
@@ -123,6 +123,7 @@ def PrepareUserOutputs(vp, cfg_d):
         fastq_ref_list: list<s>,
         pool_description: s,
         KB_Pool_Bool: b,
+        
        
     Description:
         Upload PoolFile to make KBaseRBTnSeq.RBTS_PoolFile object.
@@ -174,6 +175,12 @@ def PrepareUserOutputs(vp, cfg_d):
             "html_window_height": 333,
             "message": "Finished Running MapTnSeq"
             }
+
+    if op_ref is not None:
+        report_params['objects_created'] = {
+                        'ref': new_ref, 
+                        'description': 'Mutant Pool Output'
+                        }
 
     report_params["file_links"] = [dir_link]
 

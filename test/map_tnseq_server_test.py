@@ -93,12 +93,14 @@ class map_tnseqTest(unittest.TestCase):
         test_d["tnseq_model_name"] = tnseq_model_name
         test_d["pool_description"] = pool_description 
         test_d["output_name"] = output_name 
+        test_d["KB_Pool_Bool"] = "yes"
         test_d["app_test"] = True 
         #test_d["yy"] = yy 
         ret = self.serviceImpl.run_map_tnseq(self.ctx, test_d)
         # Check ret:
         logging.info("Finished running test 1. Results:")
         logging.info(ret)
+        raise Exception("Stop testing")
         #""
         #pass
     def test2(self):

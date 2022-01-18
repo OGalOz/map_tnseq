@@ -83,10 +83,12 @@ def upload_mutantpool_to_KBase(up):
     dfu_object_info = up['dfu'].save_objects(save_object_params)[0]
     logging.info("dfu_object_info: ")
     logging.info(dfu_object_info)
+    raise Exception("STOP RUN^^.")
     return {
         "Name": dfu_object_info[1],
         "Type": dfu_object_info[2],
         "Date": dfu_object_info[3],
+        "ref": dfu_object_info[4],
     }
 
 
