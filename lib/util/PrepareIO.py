@@ -177,10 +177,10 @@ def PrepareUserOutputs(vp, cfg_d, op_ref=None):
             }
 
     if op_ref is not None:
-        report_params['objects_created'] = {
-                        'ref': new_ref, 
+        report_params['objects_created'] = [{
+                        'ref': op_ref, 
                         'description': 'Mutant Pool Output'
-                        }
+                        }]
 
     report_params["file_links"] = [dir_link]
 

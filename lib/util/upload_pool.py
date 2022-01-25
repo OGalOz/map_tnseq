@@ -79,16 +79,37 @@ def upload_mutantpool_to_KBase(up):
         ],
     }
 
-    # save_objects returns a list of object_infos
+    '''
+        objid - the numerical id of the object.
+        name - the name of the object.
+        type - the type of the object.
+        save_date - the save date of the object.
+        ver - the version of the object.
+        saved_by - the user that saved or copied the object.
+        wsid - the id of the workspace containing the object.
+        workspace - the name of the workspace containing the object.
+        chsum - the md5 checksum of the object.
+        size - the size of the object in bytes.
+        meta - arbitrary user-supplied metadata about
+            the object.
+        Note that refs are:
+        X/Y/Z, where X is the workspace name or id, 
+                     Y is the object name or id, 
+                 and Z is the (optional) object version.
+    '''
+    # save_objects returns a tuple of object_infos, listed above
     dfu_object_info = up['dfu'].save_objects(save_object_params)[0]
-    logging.info("dfu_object_info: ")
-    logging.info(dfu_object_info)
-    raise Exception("STOP RUN^^.")
+    doi = dfu_object_info
+    logging.info("doi: ")
+    logging.info(doi)
+    obj_ref = "/".join([str(x) for x in [doi[6], doi[0], doi[4]]])
+    logging.info("Possible ref: " + obj_ref)
     return {
-        "Name": dfu_object_info[1],
-        "Type": dfu_object_info[2],
-        "Date": dfu_object_info[3],
-        "ref": dfu_object_info[4],
+        "Name": doi[1],
+        "Type": doi[2],
+        "Date": doi[3],
+        "Size": doi[9],
+        "ref": obj_ref
     }
 
 

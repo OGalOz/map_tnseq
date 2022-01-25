@@ -100,9 +100,11 @@ class map_tnseqTest(unittest.TestCase):
         # Check ret:
         logging.info("Finished running test 1. Results:")
         logging.info(ret)
-        raise Exception("Stop testing")
+        #raise Exception("Stop testing")
         #""
         #pass
+
+    '''
     def test2(self):
         ## Test Purpose:
         ##     Multiple FASTQ files
@@ -154,7 +156,9 @@ class map_tnseqTest(unittest.TestCase):
         logging.info("Finished running test 3. Results:")
         logging.info(ret)
         #pass
-
+     
+    '''
+    '''
     def test4(self):
         ## Test Purpose:
         ##    New Genome (E Coli Keio) and FASTQs
@@ -180,3 +184,4 @@ class map_tnseqTest(unittest.TestCase):
         logging.info("Finished running test 4. Results:")
         logging.info(ret)
         #pass
+    '''
